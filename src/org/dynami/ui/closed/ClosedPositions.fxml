@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dynami.ui.closed.ClosedPositionsController">
+	<HBox>
+		<TextField fx:id="filterText" focusTraversable="true" onAction="#filterPositions" promptText="Search..." />
+		<Button onAction="#filterPositions">
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_search.gif" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Label alignment="CENTER_RIGHT" text="Closed positions" textAlignment="RIGHT" />
+	</HBox>
+   <ScrollPane  hbarPolicy="NEVER">
+      <content>
+      	<TableView fx:id="closedPositionsTable" prefHeight="400">
+      		<columns>
+      			<TableColumn fx:id="assetColumn" prefWidth="100.0" text="Asset" />
+      			<TableColumn fx:id="quantityColumn" prefWidth="40.0" text="Qt" style="-fx-alignment: CENTER-RIGHT;"/>
+      			<TableColumn fx:id="entryPriceColumn" prefWidth="80.0" text="Entry price" style="-fx-alignment: CENTER-RIGHT;"/>
+      			<TableColumn fx:id="entryTimeColumn" prefWidth="120.0" text="Entry Time" />
+      			<TableColumn fx:id="exitPriceColumn" prefWidth="80.0" text="Exit price" style="-fx-alignment: CENTER-RIGHT;"/>
+      			<TableColumn fx:id="exitTimeColumn" prefWidth="120.0" text="Exit Time" />
+      			<TableColumn fx:id="percReturnColumn" prefWidth="40.0" text="\%" style="-fx-alignment: CENTER-RIGHT;"/>
+      			<TableColumn fx:id="returnColumn" prefWidth="80.0" text="Return" style="-fx-alignment: CENTER-RIGHT;"/>
+      		</columns>
+      	</TableView>
+      </content>
+   </ScrollPane>
+</VBox>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox xmlns="http://javafx.com/javafx/8.0.40" 
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="org.dynami.ui.portfolio.PortfolioController"
+	prefWidth="3000"
+	
+	>
+	<TableView fx:id="openPositions" 
+		BorderPane.alignment="CENTER">
+		<columns>
+			<TableColumn fx:id="entryTimeColumn" prefWidth="120.0" text="Entry Time" />
+			<TableColumn fx:id="symbolColumn" prefWidth="120.0" text="Asset" />
+			<TableColumn fx:id="qtColumn" prefWidth="50.0" text="Qt" />
+			<TableColumn fx:id="priceColumn" prefWidth="70.0" text="Price" />
+			<TableColumn fx:id="percColumn" prefWidth="50.0" text="\%" />
+			<TableColumn fx:id="returnColumn" prefWidth="70.0" text="Return" />
+<!-- 			<TableColumn fx:id="deltaColumn" prefWidth="70.0" text="Delta" /> -->
+<!-- 			<TableColumn fx:id="gammaColumn" prefWidth="70.0" text="Gamma" /> -->
+<!-- 			<TableColumn fx:id="thetaColumn" prefWidth="70.0" text="Theta" /> -->
+<!-- 			<TableColumn fx:id="vegaColumn" prefWidth="70.0" text="Vega" /> -->
+<!-- 			<TableColumn fx:id="rhoColumn" prefWidth="70.0" text="Rho" /> -->
+		</columns>
+	</TableView>
+</VBox>

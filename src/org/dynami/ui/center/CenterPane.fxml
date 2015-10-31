@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.HBox?>
+<SplitPane dividerPositions="0.6" orientation="VERTICAL"
+	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+	<items>
+		<SplitPane dividerPositions="0.7" prefHeight="160.0"
+			prefWidth="200.0">
+			<items>
+				<fx:include source="/org/dynami/ui/pricechart/PriceChart.fxml" />
+				<fx:include source="/org/dynami/ui/payoff/PayoffChart.fxml" />
+			</items>
+		</SplitPane>
+		<SplitPane dividerPositions="0.7" prefHeight="160.0"
+			prefWidth="200.0">
+			<items>
+				<TabPane prefHeight="200.0" prefWidth="200.0" side="BOTTOM"
+					tabClosingPolicy="UNAVAILABLE">
+					<tabs>
+						<Tab text="EquityLine">
+							<content>
+								<fx:include source="/org/dynami/ui/equityline/EquityLineChart.fxml" />
+							</content>
+						</Tab>
+						<Tab text="Volatility">
+							<content>
+								<fx:include source="/org/dynami/ui/vola/VolaChart.fxml" />
+							</content>
+						</Tab>
+					</tabs>
+				</TabPane>
+				<BubbleChart>
+					<xAxis>
+						<NumberAxis side="BOTTOM" />
+					</xAxis>
+					<yAxis>
+						<NumberAxis side="LEFT" />
+					</yAxis>
+				</BubbleChart>
+			</items>
+		</SplitPane>
+		<HBox>
+			<fx:include source="/org/dynami/ui/portfolio/Portfolio.fxml" />
+<!-- 			<fx:include source="/org/dynami/ui/summary/Summary.fxml" /> -->
+		</HBox>
+	</items>
+</SplitPane>

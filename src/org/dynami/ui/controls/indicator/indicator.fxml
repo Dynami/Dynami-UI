@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+
+<fx:root 
+	xmlns:fx="http://javafx.com/fxml/1" 
+	type="BorderPane" 
+	stylesheets="org/dynami/ui/controls/indicator/indicator-stylesheet.css" 
+	styleClass="indicator-rect"
+	prefWidth="100.0">
+<!-- 	<left> -->
+<!-- 		<ImageView fx:id="_icon"> -->
+<!-- 			<image> -->
+<!-- 				<Image url="icons/_chart.gif" /> -->
+<!-- 			</image> -->
+<!-- 		</ImageView> -->
+<!-- 	</left> -->
+	<center>
+		<VBox spacing="5">
+			<Label fx:id="_name" styleClass="attribute-name" alignment="CENTER_LEFT" prefWidth="Infinity"/>
+			<Label fx:id="_value" styleClass="attribute-value" alignment="CENTER_RIGHT" prefWidth="Infinity"/>
+		</VBox>
+	</center>
+</fx:root>

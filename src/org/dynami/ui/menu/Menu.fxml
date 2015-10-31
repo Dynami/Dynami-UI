@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.input.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<MenuBar fx:id="menu" xmlns="http://javafx.com/javafx/8.0.40"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dynami.ui.menu.MenuController">
+	<menus>
+		<Menu mnemonicParsing="true" text="_File">
+			<items>
+				<MenuItem fx:id="openMenuItem" mnemonicParsing="true" text="_Open"
+					onAction="#open">
+					<accelerator>
+						<KeyCodeCombination alt="UP" code="O" control="DOWN"
+							meta="UP" shift="UP" shortcut="UP" />
+					</accelerator>
+				</MenuItem>
+				<MenuItem fx:id="saveMenuItem" mnemonicParsing="true" text="_Save"
+					onAction="#save">
+					<accelerator>
+						<KeyCodeCombination alt="UP" code="S" control="DOWN"
+							meta="UP" shift="UP" shortcut="UP" />
+					</accelerator>
+				</MenuItem>
+				<MenuItem mnemonicParsing="false" text="Save as..."
+					onAction="#saveAs" >
+					<accelerator>
+						<KeyCodeCombination alt="UP" code="S" control="DOWN"
+							meta="UP" shift="DOWN" shortcut="UP" />
+					</accelerator>
+				</MenuItem>
+				<SeparatorMenuItem mnemonicParsing="false" />
+				<MenuItem mnemonicParsing="true" text="Pr_eferences"
+					onAction="#preferences">
+					<accelerator>
+						<KeyCodeCombination alt="UP" code="E" control="DOWN"
+							meta="UP" shift="UP" shortcut="UP" />
+					</accelerator>
+				</MenuItem>
+				<SeparatorMenuItem mnemonicParsing="false" />
+				<MenuItem mnemonicParsing="true" text="_Close" onAction="#close" />
+			</items>
+		</Menu>
+		<Menu mnemonicParsing="false" text="Edit">
+			<items>
+				<MenuItem mnemonicParsing="false" text="Delete" />
+			</items>
+		</Menu>
+		<Menu mnemonicParsing="false" text="Help">
+			<items>
+				<MenuItem mnemonicParsing="false" text="About" />
+			</items>
+		</Menu>
+	</menus>
+</MenuBar>

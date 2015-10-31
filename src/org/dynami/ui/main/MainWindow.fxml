@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ToolBar?>
+
+<BorderPane 
+	xmlns:fx="http://javafx.com/fxml/1" 
+	xmlns="http://javafx.com/javafx/8.0.40" 
+	fx:controller="org.dynami.ui.main.MainWindowController">
+	
+	<top>
+		<VBox>
+			<fx:include source="/org/dynami/ui/menu/Menu.fxml" />
+			<fx:include source="/org/dynami/ui/toolbar/ToolBar.fxml" />
+		</VBox>
+	</top>
+	
+	<right>
+		<fx:include source="/org/dynami/ui/summary/Summary.fxml"/>
+	</right>
+	
+	<center>
+		<fx:include source="/org/dynami/ui/center/CenterPane.fxml"/>
+	</center>
+	
+	<left>
+		<fx:include source="/org/dynami/ui/sidebar/SideBar.fxml" />
+	</left>
+	
+	<bottom>
+		<fx:include source="/org/dynami/ui/status/Status.fxml"/>
+	</bottom>
+</BorderPane>

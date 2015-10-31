@@ -1,0 +1,14 @@
+.indicator-rect {
+    -fx-fill: black ;
+    /*-fx-background-color: black;*/
+    /*-fx-border-color: black ;*/
+}
+
+.attribute-name {
+	-fx-text-fill: black;
+	-fx-font-weight: bold; 
+}
+
+.attribute-value {
+	-fx-text-fill: black;
+}

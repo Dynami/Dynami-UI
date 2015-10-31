@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Tooltip?>
+
+<ToolBar fx:id="toolbar" 
+	xmlns="http://javafx.com/javafx/8.0.40"
+	xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="org.dynami.ui.toolbar.ToolBarController">
+	<items>
+		<Button fx:id="execButton" mnemonicParsing="false" text="Load" onAction="#exec">
+			<graphic>
+				<ImageView>
+					<image>
+						<Image fx:id="execIcon" url="icons/_load.gif" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button fx:id="stopButton" mnemonicParsing="false" text="Stop" onAction="#stop">
+			<graphic>
+				<ImageView>
+					<image>
+						<Image fx:id="stopIcon" url="icons/_stop.gif" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<TextField fx:id="strategyName" />
+		<ComboBox fx:id="strategies" prefWidth="150.0">
+			<tooltip>
+				<Tooltip text="Available strategies"/>
+			</tooltip>
+		</ComboBox>
+		<Button fx:id="confStratButton" mnemonicParsing="false" accessibleText="Strategy settings" onAction="#configStrategy">
+			<tooltip>
+				<Tooltip text="Strategy settings"/>
+			</tooltip>
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_config2.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<ComboBox fx:id="dataHandlers" prefWidth="150.0">
+			<tooltip>
+				<Tooltip text="Available DataService"/>
+			</tooltip>
+		</ComboBox>
+		<Button fx:id="confDataServiceButton" mnemonicParsing="false" accessibleText="Data service settings" onAction="#configDataHandler">
+			<tooltip>
+				<Tooltip text="Data service settings"/>
+			</tooltip>
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_config2.png" />
+					</image>
+				</ImageView>
+			</graphic>	
+		</Button>
+	</items>
+</ToolBar>
