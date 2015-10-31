@@ -52,7 +52,7 @@ public class PriceChartController implements Initializable {
 		yAxis.setForceZeroInRange(false);
 		yAxis.setAutoRanging(true);
 		
-		DynamiApplication.timer().get("bars", Bar.class).add(bars->{
+		DynamiApplication.timer().get("bars", Bar.class).addConsumer(bars->{
 			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
 			bars.forEach(bar->{
 				list.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.close));

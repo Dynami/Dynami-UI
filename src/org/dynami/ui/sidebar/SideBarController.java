@@ -33,10 +33,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
 public class SideBarController implements Initializable {
+	private Parent closedPositionsPane;
+	private PopOver closedPositionsPopOver;
+	
 	@FXML
 	ToolBar sideBar;
-	
-	
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
@@ -45,11 +46,13 @@ public class SideBarController implements Initializable {
 	
 	public void showClosedPositions(ActionEvent e){
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/org/dynami/ui/closed/ClosedPositions.fxml"));
-			PopOver popOver = new PopOver(root);
 			Button b = (Button)e.getSource();
-			popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
-			popOver.show(b);
+			if(closedPositionsPane == null){
+				closedPositionsPane = FXMLLoader.load(getClass().getResource("/org/dynami/ui/closed/ClosedPositions.fxml"));
+				closedPositionsPopOver = new PopOver(closedPositionsPane);
+				closedPositionsPopOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+			}
+			closedPositionsPopOver.show(b);
 		} catch (IOException e1) {
 			Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
 		}

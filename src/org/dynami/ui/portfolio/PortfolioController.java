@@ -47,7 +47,7 @@ public class PortfolioController implements Initializable {
 		qtColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 		
-		DynamiApplication.timer().get(Topics.EXECUTED_ORDER.topic, org.dynami.core.portfolio.OpenPosition.class).add((list)->{
+		DynamiApplication.timer().get(Topics.EXECUTED_ORDER.topic, org.dynami.core.portfolio.OpenPosition.class).addConsumer((list)->{
 			final ObservableList<OpenPosition> pos = FXCollections.observableArrayList();
 			list.forEach(o->{
 				pos.add(new OpenPosition(o));

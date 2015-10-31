@@ -18,22 +18,19 @@ package org.dynami.ui.controls.indicator;
 import java.io.IOException;
 import java.text.NumberFormat;
 
+import org.dynami.ui.UIUtils;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 
 public class Indicator extends BorderPane {
 //	@FXML private ImageView _icon;
 	@FXML private Label _name;
 	@FXML private Label _value;
-	
-	private static final Background redBackground = new Background( new BackgroundFill(Color.RED, null, null));
-	private static final Background greenBackground = new Background( new BackgroundFill(Color.LIGHTGREEN, null, null));
 	
 	private boolean percent = false;
 	private double value = 0;
@@ -90,9 +87,9 @@ public class Indicator extends BorderPane {
 		if(value == 0 ){
 			setBackground(Background.EMPTY);
 		} else if( value > 0){
-			setBackground(greenBackground);
+			setBackground(UIUtils.greenBackground);
 		} else {
-			setBackground(redBackground);
+			setBackground(UIUtils.redBackground);
 		}
 		
 		if(percent){

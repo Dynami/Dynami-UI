@@ -68,7 +68,7 @@ public class UITimer {
 			tempData.add(t);
 		}
 		
-		public void add(Consumer<List<T>> consumer){
+		public void addConsumer(Consumer<List<T>> consumer){
 			this.consumers.add(consumer);
 		}
 		

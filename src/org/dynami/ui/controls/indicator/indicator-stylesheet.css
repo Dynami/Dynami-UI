@@ -1,14 +1,14 @@
 .indicator-rect {
-    -fx-fill: black ;
+    -fx-fill: rgb(90,90,90) ;
     /*-fx-background-color: black;*/
-    /*-fx-border-color: black ;*/
+    -fx-border-color: white ;
 }
 
 .attribute-name {
-	-fx-text-fill: black;
+	-fx-text-fill: rgb(90,90,90);
 	-fx-font-weight: bold; 
 }
 
 .attribute-value {
-	-fx-text-fill: black;
+	-fx-text-fill: rgb(90,90,90);
 }

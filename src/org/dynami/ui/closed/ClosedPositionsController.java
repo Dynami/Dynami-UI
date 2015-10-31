@@ -16,15 +16,17 @@
 package org.dynami.ui.closed;
 
 import java.net.URL;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
+import org.dynami.ui.UIUtils;
 import org.dynami.ui.timer.UITimer.ClockBuffer;
 
 import javafx.application.Platform;
@@ -33,9 +35,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 public class ClosedPositionsController implements Initializable {
 	@FXML TextField filterText;
@@ -53,6 +57,25 @@ public class ClosedPositionsController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		closedPositionsTable.setRowFactory(new Callback<TableView<ClosedPosition>, TableRow<ClosedPosition>>() {
+			@Override
+			public TableRow<ClosedPosition> call(TableView<ClosedPosition> param) {
+				return new TableRow<ClosedPosition>(){
+					@Override
+					protected void updateItem(ClosedPosition item, boolean empty) {
+						super.updateItem(item, empty);
+						if(!empty){
+							if(item.getPercReturn()>= 0){
+								setBackground(UIUtils.greenBackground);
+							} else {
+								setBackground(UIUtils.redBackground);
+							}
+						}
+					}
+				};
+			}
+		});
+		
 		assetColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));;
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		
@@ -64,7 +87,7 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-	                setText(String.format("%.2f", price.doubleValue()));
+	            	setText(String.format("%.2f", price.doubleValue()));
 	            }
 	        }
 	    });
@@ -90,11 +113,11 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
+	            	
 	                setText(String.format("%.2f", price.doubleValue()));
 	            }
 	        }
 	    });
-		
 		exitTimeColumn.setCellValueFactory(cell->cell.getValue().exitTime());
 		exitTimeColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
 	        @Override 
@@ -116,7 +139,7 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	setText(String.format("%.3f", price.doubleValue()*100.));
+	            	setText(NumberFormat.getPercentInstance().format(price.doubleValue()));
 	            }
 	        }
 	    });
@@ -129,39 +152,29 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-	                setText(String.format("%.2f", price.doubleValue()));
+	                setText(NumberFormat.getCurrencyInstance().format(price.doubleValue()));
 	            }
 	        }
 	    });
-		
-		// if Runtime is not running
-		if(Execution.Manager.isLoaded()){
-			List<org.dynami.core.portfolio.ClosedPosition> __closed = Execution.Manager.dynami().portfolio().getClosedPosition();
-			if(__closed != null && __closed.size() > 0){
-				closedPositionsTable.getItems().addAll(__closed.stream().map(ClosedPosition::new).collect(Collectors.toList()));
-			}
-		}
 		
 		// if runtime is running
 		Execution.Manager.msg().subscribe(Topics.EXECUTED_ORDER.topic, (last, msg)->{
 			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
 			int diff = _closed.size() - count.get();
 			if(_closed.size() > 0 && diff > 0){
-				ClockBuffer<org.dynami.core.portfolio.ClosedPosition> buffer = DynamiApplication.timer().get("closed", org.dynami.core.portfolio.ClosedPosition.class);
+				ClockBuffer<ClosedPosition> buffer = DynamiApplication.timer().get("closed", ClosedPosition.class);
 				for(int i = _closed.size()-diff; i < _closed.size(); i++){
-					buffer.push(_closed.get(i));
+					buffer.push(new ClosedPosition(_closed.get(i)));
 					count.incrementAndGet();
 				}
 			}
 		});
 		
-		DynamiApplication.timer().get("closed", org.dynami.core.portfolio.ClosedPosition.class).add(list->{
+		DynamiApplication.timer().get("closed", ClosedPosition.class).addConsumer(list->{
 			if(list != null && list.size() > 0 ){
+				final List<ClosedPosition> tmp = new ArrayList<>(list);
 				Platform.runLater(()->{
-					for(org.dynami.core.portfolio.ClosedPosition cl : list){
-						closedPositionsTable.getItems().add(new ClosedPosition(cl));
-					}
-					//closedPositionsTable.getItems().addAll(list.stream().map(ClosedPosition::new).collect(Collectors.toList()));
+					closedPositionsTable.getItems().addAll(tmp);
 				});
 			}
 		});
@@ -169,10 +182,5 @@ public class ClosedPositionsController implements Initializable {
 	
 	public void filterPositions(ActionEvent e){
 		
-	}
-	
-	@Override
-	protected void finalize() throws Throwable {
-		System.out.println("ClosedPositionsController.finalize()");
 	}
 }

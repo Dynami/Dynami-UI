@@ -49,7 +49,7 @@ public class EquityLineController implements Initializable {
 		chart.getData().add(total);
 		chart.setAnimated(false);
 		
-		DynamiApplication.timer().get("equityLine", EquityLineData.class).add(bars->{
+		DynamiApplication.timer().get("equityLine", EquityLineData.class).addConsumer(bars->{
 			final List<XYChart.Data<Date,Number>> listRealised = new ArrayList<>();
 			final List<XYChart.Data<Date,Number>> listTotal = new ArrayList<>();
 			bars.forEach(bar->{
