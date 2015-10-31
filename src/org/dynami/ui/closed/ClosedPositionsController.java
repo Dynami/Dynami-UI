@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.impl.Execution;
@@ -139,7 +140,7 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	setText(NumberFormat.getPercentInstance().format(price.doubleValue()));
+	            	setText(UIUtils.PERC_NUMBER_FORMAT.format(price.doubleValue()));
 	            }
 	        }
 	    });
@@ -156,6 +157,15 @@ public class ClosedPositionsController implements Initializable {
 	            }
 	        }
 	    });
+		
+		// load previous closed positions on start-up 
+		if(Execution.Manager.isLoaded()){
+			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
+			count.set(_closed.size());
+			Platform.runLater(()->{
+				closedPositionsTable.getItems().addAll(_closed.stream().map(ClosedPosition::new).collect(Collectors.toList()));
+			});
+		}
 		
 		// if runtime is running
 		Execution.Manager.msg().subscribe(Topics.EXECUTED_ORDER.topic, (last, msg)->{

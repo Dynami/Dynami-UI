@@ -93,7 +93,7 @@ public class Indicator extends BorderPane {
 		}
 		
 		if(percent){
-			_value.setText(NumberFormat.getPercentInstance().format(value));
+			_value.setText(UIUtils.PERC_NUMBER_FORMAT.format(value));
 		} else {
 			_value.setText(NumberFormat.getCurrencyInstance().format(value));
 		}

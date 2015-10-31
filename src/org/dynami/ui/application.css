@@ -1,1 +1,10 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.popupover-header {
+	-fx-background-color: rgb(90,90,90);
+}
+
+.popupover-header-name {
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-alignment: center-right ;
+}
