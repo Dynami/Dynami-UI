@@ -40,6 +40,7 @@ import javafx.scene.layout.VBox;
 
 public class StatusController implements Initializable {
 	final String ERROR_PROMPT = "ERROR: ";
+	final String INTERNAL_ERROR_PROMPT = "INT-ERROR: ";
 	final int LENGHT = 10;
 	final AtomicReferenceArray<ErrorInfo> errors = new AtomicReferenceArray<>(LENGHT);
 	final AtomicInteger cursor = new AtomicInteger(-1);
@@ -52,7 +53,10 @@ public class StatusController implements Initializable {
 		statusBar.setText("");
 		Execution.Manager.msg().subscribe(Topics.SERVICE_STATUS.topic, (last, _msg)->{
 			ServiceStatus s = (ServiceStatus)_msg;
-			System.out.println(s);
+			Platform.runLater(()->{
+				messageType.setText(INTERNAL_ERROR_PROMPT);
+				statusBar.setText(s.message);
+			});
 		});
 
 		Execution.Manager.msg().subscribe(Topics.ERRORS.topic, (last, _msg)->{
