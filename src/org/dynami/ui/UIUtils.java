@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 public class UIUtils {
 	public static final Background redBackground = new Background( new BackgroundFill(Color.RED, null, null));
 	public static final Background greenBackground = new Background( new BackgroundFill(Color.LIGHTGREEN, null, null));
+	
 	public static NumberFormat PERC_NUMBER_FORMAT = NumberFormat.getPercentInstance();
 	static {
 		PERC_NUMBER_FORMAT.setMinimumFractionDigits(2);

@@ -29,6 +29,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DynamiApplication extends Application {
@@ -38,7 +39,15 @@ public class DynamiApplication extends Application {
 	@Override
 	public void init() throws Exception {
 		super.init();
-		Preferences.userRoot().node(DynamiApplication.class.getName()).put(PrefsConstants.BASIC.STRATS_DIR, "D:/git/Dynami-Sample-Strategy/resources/");
+		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
+		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-Sample-Strategy/resources/");
+		
+		appPrefs.putInt(PrefsConstants.TRACES.MAX_ROWS, 100);
+		appPrefs.put(PrefsConstants.TRACES.COLOR.INFO, Color.LIGHTSKYBLUE.toString());
+		appPrefs.put(PrefsConstants.TRACES.COLOR.DEBUG, Color.LIGHTGRAY.toString());
+		appPrefs.put(PrefsConstants.TRACES.COLOR.WARN, Color.ORANGE.toString());
+		appPrefs.put(PrefsConstants.TRACES.COLOR.ERROR, Color.ORANGERED.toString());
+		
 		Strategies.Register.scanStrategyDirectory();
 		DataHandler.Registry.register(TextFileDataHandler.class);
 		Execution.Manager.getServiceBus().registerDefaultServices();

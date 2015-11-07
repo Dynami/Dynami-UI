@@ -34,6 +34,9 @@
 			</graphic>
 		</Button>
 		<Button mnemonicParsing="false" onAction="#showClosedPositions">
+			<tooltip>
+				<Tooltip text="Show closed positions"/>
+			</tooltip>
 			<graphic>
 				<ImageView>
 					<image>
@@ -42,7 +45,10 @@
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button mnemonicParsing="false">
+		<Button mnemonicParsing="false" onAction="#showTraces">
+			<tooltip>
+				<Tooltip text="Show strategy traces"/>
+			</tooltip>
 			<graphic>
 				<ImageView>
 					<image>

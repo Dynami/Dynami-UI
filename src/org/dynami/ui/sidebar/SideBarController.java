@@ -34,7 +34,9 @@ import javafx.scene.control.ToolBar;
 
 public class SideBarController implements Initializable {
 	private Parent closedPositionsPane;
+	private Parent tracesPane;
 	private PopOver closedPositionsPopOver;
+	private PopOver tracesPopOver;
 	
 	@FXML
 	ToolBar sideBar;
@@ -53,6 +55,20 @@ public class SideBarController implements Initializable {
 				closedPositionsPopOver.setArrowLocation(ArrowLocation.LEFT_TOP);
 			}
 			closedPositionsPopOver.show(b);
+		} catch (IOException e1) {
+			Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+		}
+	}
+	
+	public void showTraces(ActionEvent e){
+		try {
+			Button b = (Button)e.getSource();
+			if(tracesPane == null){
+				tracesPane = FXMLLoader.load(getClass().getResource("/org/dynami/ui/traces/Traces.fxml"));
+				tracesPopOver = new PopOver(tracesPane);
+				tracesPopOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+			}
+			tracesPopOver.show(b);
 		} catch (IOException e1) {
 			Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
 		}
