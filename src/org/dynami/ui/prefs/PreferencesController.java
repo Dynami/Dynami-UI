@@ -29,7 +29,7 @@ public class PreferencesController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		prefs = Preferences.userRoot().node(DynamiApplication.class.getName());
-		prefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/git/Dynami-Sample-Strategy/resources/");
+		prefs.put(PrefsConstants.BASIC.STRATS_DIR, "../Dynami-Sample-Strategy/resources/");
 		
 	}
 
