@@ -46,9 +46,7 @@ public class PriceChartController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		series.setName("Price");
-		chart.setCreateSymbols(false);
 		chart.getData().add(series);
-		chart.setAnimated(false);
 		yAxis.setForceZeroInRange(false);
 		yAxis.setAutoRanging(true);
 		
