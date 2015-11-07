@@ -31,6 +31,9 @@ import org.dynami.ui.UIUtils;
 import org.dynami.ui.timer.UITimer.ClockBuffer;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,7 +47,7 @@ import javafx.util.Callback;
 
 public class ClosedPositionsController implements Initializable {
 	@FXML TextField filterText;
-	@FXML TableView<ClosedPosition> closedPositionsTable;
+	@FXML TableView<ClosedPosition> table;
 	@FXML TableColumn<ClosedPosition, String> assetColumn;
 	@FXML TableColumn<ClosedPosition, Long> quantityColumn;
 	@FXML TableColumn<ClosedPosition, Number> entryPriceColumn;
@@ -53,12 +56,46 @@ public class ClosedPositionsController implements Initializable {
 	@FXML TableColumn<ClosedPosition, Number> exitTimeColumn;
 	@FXML TableColumn<ClosedPosition, Number> percReturnColumn;
 	@FXML TableColumn<ClosedPosition, Number> returnColumn;
-	
+	private final ObservableList<ClosedPosition> data = FXCollections.observableArrayList();
+	private final FilteredList<ClosedPosition> filteredData = new FilteredList<>(data, p->true);
 	private final AtomicInteger count = new AtomicInteger(0);
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		closedPositionsTable.setRowFactory(new Callback<TableView<ClosedPosition>, TableRow<ClosedPosition>>() {
+		// load previous closed positions on start-up 
+		if(Execution.Manager.isLoaded()){
+			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
+			count.set(_closed.size());
+			Platform.runLater(()->{
+				data.addAll(_closed.stream().map(ClosedPosition::new).collect(Collectors.toList()));
+			});
+		}
+		
+		// if runtime is running
+		Execution.Manager.msg().subscribe(Topics.EXECUTED_ORDER.topic, (last, msg)->{
+			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
+			int diff = _closed.size() - count.get();
+			if(_closed.size() > 0 && diff > 0){
+				ClockBuffer<ClosedPosition> buffer = DynamiApplication.timer().get("closed", ClosedPosition.class);
+				for(int i = _closed.size()-diff; i < _closed.size(); i++){
+					buffer.push(new ClosedPosition(_closed.get(i)));
+					count.incrementAndGet();
+				}
+			}
+		});
+		
+		DynamiApplication.timer().get("closed", ClosedPosition.class).addConsumer(list->{
+			if(list != null && list.size() > 0 ){
+				final List<ClosedPosition> tmp = new ArrayList<>(list);
+				Platform.runLater(()->{
+					data.addAll(tmp);
+				});
+			}
+		});
+		
+		
+		table.setItems(filteredData);
+		table.setRowFactory(new Callback<TableView<ClosedPosition>, TableRow<ClosedPosition>>() {
 			@Override
 			public TableRow<ClosedPosition> call(TableView<ClosedPosition> param) {
 				return new TableRow<ClosedPosition>(){
@@ -76,7 +113,7 @@ public class ClosedPositionsController implements Initializable {
 				};
 			}
 		});
-		
+
 		assetColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));;
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		
@@ -157,40 +194,16 @@ public class ClosedPositionsController implements Initializable {
 	            }
 	        }
 	    });
-		
-		// load previous closed positions on start-up 
-		if(Execution.Manager.isLoaded()){
-			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
-			count.set(_closed.size());
-			Platform.runLater(()->{
-				closedPositionsTable.getItems().addAll(_closed.stream().map(ClosedPosition::new).collect(Collectors.toList()));
-			});
-		}
-		
-		// if runtime is running
-		Execution.Manager.msg().subscribe(Topics.EXECUTED_ORDER.topic, (last, msg)->{
-			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
-			int diff = _closed.size() - count.get();
-			if(_closed.size() > 0 && diff > 0){
-				ClockBuffer<ClosedPosition> buffer = DynamiApplication.timer().get("closed", ClosedPosition.class);
-				for(int i = _closed.size()-diff; i < _closed.size(); i++){
-					buffer.push(new ClosedPosition(_closed.get(i)));
-					count.incrementAndGet();
-				}
-			}
-		});
-		
-		DynamiApplication.timer().get("closed", ClosedPosition.class).addConsumer(list->{
-			if(list != null && list.size() > 0 ){
-				final List<ClosedPosition> tmp = new ArrayList<>(list);
-				Platform.runLater(()->{
-					closedPositionsTable.getItems().addAll(tmp);
-				});
-			}
-		});
 	}
 	
 	public void filterPositions(ActionEvent e){
-		
+		final String newValue = filterText.getText();
+		if(newValue == null || newValue.trim().equals("")){
+			filteredData.setPredicate(p->true);
+		} else {
+			filteredData.setPredicate(c-> {
+				return c.getSymbol().startsWith(newValue);
+			});
+		}
 	}
 }

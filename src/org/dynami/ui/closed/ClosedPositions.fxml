@@ -35,7 +35,7 @@ prefWidth="690">
 	</HBox>
    <ScrollPane hbarPolicy="NEVER">
       <content>
-      	<TableView fx:id="closedPositionsTable" prefWidth="690" prefHeight="400">
+      	<TableView fx:id="table" prefWidth="690" prefHeight="400">
       		<columns>
       			<TableColumn fx:id="assetColumn" prefWidth="100.0" text="Asset" />
       			<TableColumn fx:id="quantityColumn" prefWidth="40.0" text="Qt" style="-fx-alignment: CENTER-RIGHT;"/>

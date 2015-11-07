@@ -226,14 +226,16 @@ public class ToolBarController implements Initializable {
 							(!p.name().equals(""))?p.name():f.getName(), 
 							getter, 
 							setter);
-					propertyDescriptor.setShortDescription(p.description());
-					BeanProperty item = new BeanProperty(handler, propertyDescriptor);
-					item.setEditable(true);
-					items.add(item);
 					
 //					if(f.getType().equals(File.class)){
 //						propertyDescriptor.setPropertyEditorClass(FilePropertyEditor.class);
 //					}
+					
+					propertyDescriptor.setShortDescription(p.description());
+					BeanProperty item = new BeanProperty(handler, propertyDescriptor);
+					
+					item.setEditable(true);
+					items.add(item);
 					
 				} catch (Exception e1) {
 					Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
