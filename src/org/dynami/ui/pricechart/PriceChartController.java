@@ -43,6 +43,7 @@ public class PriceChartController implements Initializable {
 	
 	XYChart.Series<Date, Number> series = new XYChart.Series<>();
 	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		series.setName("Price");

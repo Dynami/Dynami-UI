@@ -1,0 +1,16 @@
+.fieldparam-box {
+	-fx-padding: 5px 5px 0px 5px;
+	-fx-border-width: 0px 0px 1px 0px;
+	-fx-border-color: #909090;
+	-fx-border-style: solid ; 
+}
+.fieldparam-name {
+	-fx-font-weight: bold;
+	-fx-font-size: 10px;
+}
+
+.fieldparam-description {
+	-fx-text-fill: #808080;
+	-fx-font-style: normal ;
+	-fx-font-size: 10px;
+}

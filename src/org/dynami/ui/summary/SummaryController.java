@@ -33,6 +33,7 @@ public class SummaryController implements Initializable {
 	@FXML Indicator realized;
 	@FXML Indicator unrealized;
 	@FXML Indicator roi;
+	@FXML Indicator hvola;
 	
 	
 	@Override
@@ -45,7 +46,6 @@ public class SummaryController implements Initializable {
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
 				double _roi = (_currentBudget/_initialBudget)-1;
-				
 				Platform.runLater(()->{
 					realized.setValue(_realized);
 					unrealized.setValue(_unrealized);

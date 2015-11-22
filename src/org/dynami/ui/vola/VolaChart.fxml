@@ -4,10 +4,16 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import extfx.scene.chart.DateAxis?>
 
-<LineChart xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<LineChart 
+	fx:id="chart"
+	xmlns="http://javafx.com/javafx/8.0.40" 
+	xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="org.dynami.ui.vola.VolaChartController"
+	>
   <xAxis>
-    <CategoryAxis side="BOTTOM" />
+     <DateAxis side="BOTTOM" />
   </xAxis>
   <yAxis>
     <NumberAxis side="LEFT" />

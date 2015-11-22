@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.geometry.Insets?>
+
+<fx:root 
+	fx:id="paramPane" 
+	stylesheets="/org/dynami/ui/controls/config/fieldparam-stylesheet.css" 
+	type="GridPane" xmlns="http://javafx.com/javafx/8.0.40" 
+	xmlns:fx="http://javafx.com/fxml/1"
+	styleClass="fieldparam-box"
+	>
+	<children>
+		<Label fx:id="name" styleClass="fieldparam-name" text="-" minWidth="100">
+			<tooltip>
+				<Tooltip fx:id="tooltip" />
+			</tooltip>
+		</Label>
+		<Label fx:id="description" styleClass="fieldparam-description" text="Description" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+		<HBox fx:id="controlsContainer"
+		alignment="CENTER_RIGHT" 
+		prefHeight="0.0" prefWidth="500" 
+		GridPane.columnIndex="1"/>
+	</children>
+	<rowConstraints>
+		<RowConstraints />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" />
+	</rowConstraints>
+	<columnConstraints>
+		<ColumnConstraints halignment="LEFT" />
+		<ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"  />
+	</columnConstraints>
+</fx:root>

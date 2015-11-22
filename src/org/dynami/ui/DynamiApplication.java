@@ -36,6 +36,7 @@ public class DynamiApplication extends Application {
 	private static final UITimer _timer = new UITimer(1000);
 	private static Stage _primaryStage;
 	
+	
 	@Override
 	public void init() throws Exception {
 		super.init();
