@@ -29,6 +29,7 @@ public class OpenPosition {
 	public DoubleProperty entryPrice = new SimpleDoubleProperty();
 	public LongProperty entryTime = new SimpleLongProperty();
 	public DoubleProperty pointValue = new SimpleDoubleProperty();
+	public DoubleProperty currentPrice = new SimpleDoubleProperty();
 	public LongProperty currentTime = new SimpleLongProperty();
 	public DoubleProperty roi = new SimpleDoubleProperty();
 	public DoubleProperty percRoi = new SimpleDoubleProperty();
@@ -40,12 +41,13 @@ public class OpenPosition {
 	
 	
 	public OpenPosition( org.dynami.core.portfolio.OpenPosition op){
-		setAssetType(op.family.name());
-		setSymbol(op.symbol);
+		setAssetType(op.asset.family.name());
+		setSymbol(op.asset.symbol);
 		setQuantity(op.quantity);
 		setEntryPrice(op.entryPrice);
 		setEntryTime(op.entryTime);
-		setPointValue(op.pointValue);
+		setCurrentPrice((op.quantity > 0)?op.asset.book.bid().price:op.asset.book.ask().price );
+		setPointValue(op.asset.pointValue);
 		setCurrentTime(op.currentTime);
 	}
 	
@@ -63,6 +65,10 @@ public class OpenPosition {
 
 	public DoubleProperty entryPrice() {
 		return entryPrice;
+	}
+	
+	public DoubleProperty currentPrice() {
+		return currentPrice;
 	}
 
 	public LongProperty entryTime() {
@@ -96,6 +102,10 @@ public class OpenPosition {
 	public Double getEntryPrice() {
 		return entryPrice.get();
 	}
+	
+	public Double getCurrentPrice() {
+		return currentPrice.get();
+	}
 
 	public Long getEntryTime() {
 		return entryTime.get();
@@ -119,6 +129,10 @@ public class OpenPosition {
 
 	public void setEntryPrice(Double entryPrice) {
 		this.entryPrice.set(entryPrice);
+	}
+	
+	public void setCurrentPrice(Double currentPrice) {
+		this.currentPrice.set(currentPrice);
 	}
 
 	public void setEntryTime(Long entryTime) {

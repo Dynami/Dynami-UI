@@ -10,6 +10,7 @@ import org.dynami.core.Event;
 import org.dynami.core.Event.Type;
 import org.dynami.core.data.Bar;
 import org.dynami.core.data.IVolatilityEngine;
+import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.data.BarData;
 import org.dynami.runtime.data.vola.CloseToCloseVolatilityEngine;
 import org.dynami.runtime.impl.Execution;
@@ -39,7 +40,7 @@ public class VolaChartController implements Initializable {
 			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
 			bars.forEach(bar->{
 				data.append(bar);
-				double lastVola = data.getVolatility(engine, 20);
+				double lastVola = data.getVolatility(engine, 20)*Math.sqrt(DUtils.YEAR_WORKDAYS);
 				list.add(new XYChart.Data<Date, Number>(new Date(bar.time), lastVola));
 			});
 			

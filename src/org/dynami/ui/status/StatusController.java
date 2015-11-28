@@ -68,6 +68,16 @@ public class StatusController implements Initializable {
 			});
 			e.printStackTrace();
 		});
+		
+		Execution.Manager.msg().subscribe(Topics.STRATEGY_ERRORS.topic, (last, _msg)->{
+			Throwable e = (Throwable)_msg;
+			Platform.runLater(()->{
+				errors.set(cursor.incrementAndGet()%LENGHT, new ErrorInfo(e));
+				messageType.setText(ERROR_PROMPT);
+				statusBar.setText(DUtils.getErrorMessage(e));
+			});
+			e.printStackTrace();
+		});
 	}
 	
 	public void displayErrors(ActionEvent e){

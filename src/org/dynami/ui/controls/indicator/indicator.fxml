@@ -11,7 +11,7 @@
 	type="BorderPane" 
 	stylesheets="org/dynami/ui/controls/indicator/indicator-stylesheet.css" 
 	styleClass="indicator-rect"
-	prefWidth="100.0">
+	prefWidth="90.0">
 <!-- 	<left> -->
 <!-- 		<ImageView fx:id="_icon"> -->
 <!-- 			<image> -->

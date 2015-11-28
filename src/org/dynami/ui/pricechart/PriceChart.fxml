@@ -6,17 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import extfx.scene.chart.DateAxis?>
 
-<LineChart fx:id="chart" 
-	animated="false"
-	legendVisible="false"
-	createSymbols="false"
-	xmlns="http://javafx.com/javafx/8.0.40" 
-	xmlns:fx="http://javafx.com/fxml/1" 
+<LineChart fx:id="chart" animated="false" legendVisible="false"
+	createSymbols="false" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="org.dynami.ui.pricechart.PriceChartController">
-<xAxis>
-    <DateAxis side="BOTTOM" />
-  </xAxis>
-  <yAxis>
-    <NumberAxis fx:id="yAxis" side="LEFT" />
-  </yAxis>  
+	<xAxis>
+		<DateAxis side="BOTTOM" />
+	</xAxis>
+	<yAxis>
+		<NumberAxis fx:id="yAxis" side="LEFT" />
+	</yAxis>
 </LineChart>

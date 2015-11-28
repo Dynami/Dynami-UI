@@ -17,16 +17,17 @@
 		<columns>
 			<TableColumn fx:id="typeColumn" prefWidth="70.0" text="Type" />
 			<TableColumn fx:id="symbolColumn" prefWidth="100.0" text="Asset" />
-			<TableColumn fx:id="qtColumn" prefWidth="50.0" text="Qt" />
+			<TableColumn fx:id="qtColumn" prefWidth="50.0" text="Qt" style="-fx-alignment: CENTER-RIGHT"/>
 			<TableColumn fx:id="entryTimeColumn" prefWidth="120.0" text="Entry Time" />
-			<TableColumn fx:id="priceColumn" prefWidth="70.0" text="Price" />
-			<TableColumn fx:id="percColumn" prefWidth="50.0" text="\%" />
-			<TableColumn fx:id="roiColumn" prefWidth="70.0" text="Return" />
-			<TableColumn fx:id="deltaColumn" prefWidth="70.0" text="Delta" />
-			<TableColumn fx:id="gammaColumn" prefWidth="70.0" text="Gamma" />
-			<TableColumn fx:id="thetaColumn" prefWidth="70.0" text="Theta" />
-			<TableColumn fx:id="vegaColumn" prefWidth="70.0" text="Vega" />
-			<TableColumn fx:id="rhoColumn" prefWidth="70.0" text="Rho" />
+			<TableColumn fx:id="entryPriceColumn" prefWidth="70.0" text="Entry Price" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="currentPriceColumn" prefWidth="70.0" text="Current Price" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="percColumn" prefWidth="50.0" text="\%" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="roiColumn" prefWidth="70.0" text="Return" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="deltaColumn" prefWidth="70.0" text="Delta" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="gammaColumn" prefWidth="70.0" text="Gamma" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="thetaColumn" prefWidth="70.0" text="Theta" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="vegaColumn" prefWidth="70.0" text="Vega" style="-fx-alignment: CENTER-RIGHT"/>
+			<TableColumn fx:id="rhoColumn" prefWidth="70.0" text="Rho" style="-fx-alignment: CENTER-RIGHT"/>
 		</columns>
 	</TableView>
 </VBox>

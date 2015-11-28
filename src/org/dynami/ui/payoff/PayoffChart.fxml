@@ -5,11 +5,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AreaChart xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<AreaChart 
+	fx:id="chart"
+	xmlns="http://javafx.com/javafx/8.0.40" 
+	xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="org.dynami.ui.payoff.PayoffChartController">
   <xAxis>
-    <CategoryAxis side="BOTTOM" />
+    <NumberAxis side="BOTTOM" />
   </xAxis>
   <yAxis>
-    <NumberAxis side="LEFT" />
+    <NumberAxis fx:id="yAxis" side="LEFT" />
   </yAxis>
 </AreaChart>

@@ -25,8 +25,11 @@ import org.dynami.ui.prefs.PrefsConstants;
 import org.dynami.ui.timer.UITimer;
 
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -35,7 +38,9 @@ import javafx.stage.Stage;
 public class DynamiApplication extends Application {
 	private static final UITimer _timer = new UITimer(1000);
 	private static Stage _primaryStage;
-	
+	public static DoubleProperty priceLowerBound = new SimpleDoubleProperty();
+	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
+	public static DoubleProperty priceTickUnit = new SimpleDoubleProperty();
 	
 	@Override
 	public void init() throws Exception {
@@ -91,5 +96,13 @@ public class DynamiApplication extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	private static NumberAxis priceAxis;
+	public static NumberAxis getSingletonAxis(){
+		if(priceAxis == null){
+			priceAxis = new NumberAxis();
+		}
+		return priceAxis;
 	}
 }

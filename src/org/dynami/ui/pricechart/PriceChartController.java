@@ -35,17 +35,16 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
 public class PriceChartController implements Initializable {
-	@FXML
-	LineChart<Date,Number> chart;
-	
-	@FXML
-	NumberAxis yAxis;
-	
+	@FXML LineChart<Date,Number> chart;
+	@FXML NumberAxis yAxis;
 	XYChart.Series<Date, Number> series = new XYChart.Series<>();
-	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		DynamiApplication.priceLowerBound.bind(yAxis.lowerBoundProperty());
+		DynamiApplication.priceUpperBound.bind(yAxis.upperBoundProperty());
+		DynamiApplication.priceTickUnit.bind(yAxis.tickUnitProperty());
+		
 		series.setName("Price");
 		chart.getData().add(series);
 		yAxis.setForceZeroInRange(false);
@@ -59,6 +58,7 @@ public class PriceChartController implements Initializable {
 			if(list.size()>0){
 				series.getData().addAll(list);
 			}
+			
 		});
 		
 		Execution.Manager.msg().subscribe(Topics.STRATEGY_EVENT.topic, (last, msg)->{

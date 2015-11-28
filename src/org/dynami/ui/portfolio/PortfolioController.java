@@ -49,7 +49,8 @@ public class PortfolioController implements Initializable {
 	@FXML TableColumn<OpenPosition, String> symbolColumn;
 	@FXML TableColumn<OpenPosition, Number> qtColumn;
 	@FXML TableColumn<OpenPosition, Number> entryTimeColumn;
-	@FXML TableColumn<OpenPosition, Number> priceColumn;
+	@FXML TableColumn<OpenPosition, Number> entryPriceColumn;
+	@FXML TableColumn<OpenPosition, Number> currentPriceColumn;
 	@FXML TableColumn<OpenPosition, Number> percColumn;
 	@FXML TableColumn<OpenPosition, Number> roiColumn;
 	
@@ -67,25 +68,24 @@ public class PortfolioController implements Initializable {
 			
 			final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
 			final List<OpenPosition> list = portfolio.getOpenPosition().stream().map(OpenPosition::new).collect(Collectors.toList());
-			list.forEach(o->{
-				// calculate roi and percent roi
-				final double roi = portfolio.unrealized(o.getSymbol());
-				final double percRoi = roi/(o.getEntryPrice()*o.getPointValue()*o.getQuantity());
-				// check if Option and in this case add greeks
-				o.setRoi(roi);
-				o.setPercRoi(percRoi);
-				if(Asset.Family.Option.name().equals(o.getAssetType())){
-					final IAssetService assets = Execution.Manager.dynami().assets();
-					Asset.Option opt = (Asset.Option)assets.getBySymbol(o.getSymbol());
-					o.setDelta(opt.greeks.delta());
-					o.setGamma(opt.greeks.gamma());
-					o.setVega(opt.greeks.vega());
-					o.setTheta(opt.greeks.theta());
-					o.setRho(opt.greeks.rho());
-				}
-			});
-			
 			Platform.runLater(()->{
+				list.forEach(o->{
+					// calculate roi and percent roi
+					final double roi = portfolio.unrealized(o.getSymbol());
+					final double percRoi = ((o.getCurrentPrice()/o.getEntryPrice())-1)*((o.getQuantity()>0)?1:-1);
+					// check if Option and in this case add greeks
+					o.setRoi(roi);
+					o.setPercRoi(percRoi);
+					if(Asset.Family.Option.name().equals(o.getAssetType())){
+						final IAssetService assets = Execution.Manager.dynami().assets();
+						Asset.Option opt = (Asset.Option)assets.getBySymbol(o.getSymbol());
+						o.setDelta(opt.greeks.delta()*o.getQuantity());
+						o.setGamma(opt.greeks.gamma()*o.getQuantity());
+						o.setVega(opt.greeks.vega()*o.getQuantity());
+						o.setTheta(opt.greeks.theta()*o.getQuantity());
+						o.setRho(opt.greeks.rho()*o.getQuantity());
+					}
+				});
 				positions.clear();
 				positions.addAll(list);
 			});
@@ -99,7 +99,7 @@ public class PortfolioController implements Initializable {
 					protected void updateItem(OpenPosition item, boolean empty) {
 						super.updateItem(item, empty);
 						if(!empty){
-							if(item.getPercRoi()>= 0){
+							if(item.getPercRoi() >= 0){
 								setBackground(UIUtils.greenBackground);
 							} else {
 								setBackground(UIUtils.redBackground);
@@ -125,8 +125,22 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		priceColumn.setCellValueFactory(cell->cell.getValue().entryPrice);
-		priceColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
+		entryPriceColumn.setCellValueFactory(cell->cell.getValue().entryPrice);
+		entryPriceColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
+	        @Override 
+	        public void updateItem(Number value, boolean empty) {
+	            super.updateItem(value, empty);
+	            if (empty) {
+	                setText(null);
+	            } else {
+	            	
+	                setText(String.format("%.2f", value.doubleValue()));
+	            }
+	        }
+	    });
+		
+		currentPriceColumn.setCellValueFactory(cell->cell.getValue().currentPrice);
+		currentPriceColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
 	        @Override 
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
