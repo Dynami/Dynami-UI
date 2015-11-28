@@ -30,6 +30,16 @@
   		<groupId>org.controlsfx</groupId>
   		<artifactId>controlsfx</artifactId>
   	</dependency>
+  	<dependency>
+  		<groupId>org.dynami</groupId>
+  		<artifactId>Dynami-Runtime</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.dynami</groupId>
+  		<artifactId>Dynami-TA</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   <groupId>org.dynami</groupId>
   <dependencyManagement>

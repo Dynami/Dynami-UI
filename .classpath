@@ -17,9 +17,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-Core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-Runtime"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-TA"/>
 	<classpathentry kind="lib" path="libs/extfx-0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
