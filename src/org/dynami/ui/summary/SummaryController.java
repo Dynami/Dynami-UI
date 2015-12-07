@@ -36,12 +36,14 @@ public class SummaryController implements Initializable {
 	@FXML Indicator unrealized;
 	@FXML Indicator roi;
 	@FXML Indicator hvola;
-	@FXML Indicator portfolioDelta;
-	
+	@FXML Indicator portfolioDelta, portfolioVega, portfolioTheta;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final AtomicReference<Double> delta = new AtomicReference<>(0.);
+		final AtomicReference<Double> vega = new AtomicReference<>(0.);
+		final AtomicReference<Double> theta = new AtomicReference<>(0.);
+		
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
@@ -51,12 +53,23 @@ public class SummaryController implements Initializable {
 				double _currentBudget = _initialBudget+_realized+_unrealized;
 				double _roi = (_currentBudget/_initialBudget)-1;
 				delta.set(0.);
+				vega.set(0.);
+				theta.set(0.);
+				
 				portfolio.getOpenPosition().forEach(o->{
 					if(o.asset.family.equals(Asset.Family.Option)){
 						double _delta = ((Asset.Option)o.asset).greeks().delta() * o.quantity * o.asset.pointValue;
 						delta.set(delta.get()+_delta);
+						
+						double _vega = ((Asset.Option)o.asset).greeks().vega() * o.quantity * o.asset.pointValue;
+						vega.set(vega.get()+_vega);
+						
+						double _theta = ((Asset.Option)o.asset).greeks().theta() * o.quantity * o.asset.pointValue;
+						theta.set(theta.get()+_theta);
 					} else {
 						delta.set(delta.get()+(o.quantity*o.asset.pointValue));
+						vega.set(vega.get()+(o.quantity*o.asset.pointValue));
+						theta.set(theta.get()+(o.quantity*o.asset.pointValue));
 					}
 				});
 				
@@ -66,7 +79,10 @@ public class SummaryController implements Initializable {
 					initialBudget.setValue(_initialBudget);
 					currentBudget.setValue(_currentBudget);
 					roi.setValue(_roi);
+					
 					portfolioDelta.setValue(delta.get());
+					portfolioVega.setValue(vega.get());
+					portfolioTheta.setValue(theta.get());
 				});
 			}
 		});

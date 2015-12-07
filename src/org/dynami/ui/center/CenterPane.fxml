@@ -9,12 +9,12 @@
 <SplitPane dividerPositions="0.6" orientation="VERTICAL"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<items>
-		<SplitPane dividerPositions="0.7" prefHeight="160.0" prefWidth="200.0" orientation="HORIZONTAL">
+		<SplitPane dividerPositions="0.7" prefHeight="Infinity" prefWidth="200.0" orientation="HORIZONTAL">
 			<items>
-				<SplitPane dividerPositions="0.7" prefHeight="160.0" prefWidth="200.0" orientation="VERTICAL">
+				<SplitPane dividerPositions="0.7" prefHeight="500.0" prefWidth="200.0" orientation="VERTICAL">
 					<items>
 						<fx:include source="/org/dynami/ui/pricechart/PriceChart.fxml" />
-						<TabPane prefHeight="200.0" prefWidth="200.0" side="BOTTOM"
+						<TabPane prefHeight="300.0" prefWidth="200.0" side="BOTTOM"
 							tabClosingPolicy="UNAVAILABLE">
 							<tabs>
 								<Tab text="EquityLine">
@@ -31,7 +31,6 @@
 						</TabPane>
 					</items>
 				</SplitPane>
-			
 				<fx:include source="/org/dynami/ui/payoff/PayoffChart.fxml" />
 			</items>
 		</SplitPane>
