@@ -23,7 +23,6 @@ import java.util.prefs.Preferences;
 
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
-import org.controlsfx.control.PropertySheet;
 import org.dynami.core.config.Config;
 import org.dynami.runtime.IDataHandler;
 import org.dynami.runtime.IExecutionManager;
@@ -33,6 +32,7 @@ import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
+import org.dynami.ui.controls.config.BooleanFieldParam;
 import org.dynami.ui.controls.config.DoubleSpinnerFieldParam;
 import org.dynami.ui.controls.config.FieldParam;
 import org.dynami.ui.controls.config.FileFieldParam;
@@ -40,12 +40,11 @@ import org.dynami.ui.controls.config.IntegerSpinnerFieldParam;
 import org.dynami.ui.controls.config.LongSpinnerFieldParam;
 import org.dynami.ui.controls.config.PropertyParam;
 import org.dynami.ui.controls.config.TextFieldParam;
+import org.dynami.ui.controls.config.TimeFrameParam;
 import org.dynami.ui.prefs.PrefsConstants;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -215,70 +214,38 @@ public class ToolBarController implements Initializable {
 					FieldParam param;
 					String name = !p.name().equals("")?p.name():f.getName();
 					String description = p.description();
-					if(f.getType().equals(Double.class)){
-						param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, handler, f), p.min(), p.max(), p.step());
-					} else if(f.getType().equals(Long.class)){
-						param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
-					} else if(f.getType().equals(Integer.class)){
-						param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, handler, f), (int)p.min(), (int)p.max(), (int)p.step());
-					} else if(f.getType().equals(File.class)){
-						param = new FileFieldParam(new PropertyParam<File>(name, description, handler, f));
-					} else {
-						param = new TextFieldParam(new PropertyParam<String>(name, description, handler, f));
-					} 
-					vbox.getChildren().add(param);
 					
-//					Method setter = handler.getClass().getDeclaredMethod(setter(f.getName()), f.getType());
-//					Method getter = handler.getClass().getDeclaredMethod(getter(f.getName(), f.getType().equals(Boolean.TYPE)));
-//
-//					PropertyDescriptor propertyDescriptor = new PropertyDescriptor(
-//							(!p.name().equals(""))?p.name():f.getName(),
-//							getter,
-//							setter);
-//					propertyDescriptor.setShortDescription(p.description());
-
-//					if(p.type().equals(Config.Type.Spinner) && f.getType().equals(Double.class)){
-//						propertyDescriptor.setPropertyEditorClass(SpinnerDoublePropertyEditor.class);
-//					} else if(p.type().equals(Config.Type.Spinner) && f.getType().equals(Integer.class)){
-//						propertyDescriptor.setPropertyEditorClass(SpinnerIntPropertyEditor.class);
-//					} else if(p.type().equals(Config.Type.Slider) ){
-//						propertyDescriptor.setPropertyEditorClass(SliderPropertyEditor.class);
-//					}
-
-//					BeanProperty item = new BeanProperty(handler, propertyDescriptor);
-//
-//
-//					item.setEditable(true);
-//					items.add(item);
-
+					if(p.type().equals(Config.Type.TimeFrame)){
+						param = new TimeFrameParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
+					} else {
+						if(f.getType().equals(Double.class)){
+							param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, handler, f), p.min(), p.max(), p.step());
+						} else if(f.getType().equals(Long.class)){
+							param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
+						} else if(f.getType().equals(Integer.class)){
+							param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, handler, f), (int)p.min(), (int)p.max(), (int)p.step());
+						} else if(f.getType().equals(File.class)){
+							param = new FileFieldParam(new PropertyParam<File>(name, description, handler, f));
+						} else if(f.getType().equals(Boolean.class)){
+							param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, handler, f));
+						} else {
+							param = new TextFieldParam(new PropertyParam<String>(name, description, handler, f));
+						} 
+					}
+					
+					vbox.getChildren().add(param);
 				} catch (Exception e1) {
 					Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
 				}
 			}
 		}
 
-//		PropertySheet sheet = new PropertySheet(items);
 		PopOver popOver = new PopOver(vbox);
 		Button b = (Button)e.getSource();
 
-		//popOver.titleProperty().set(handler.getName()+" settings");
 		popOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-//		popOver.setAutoHide(false);
-//		popOver.setHeaderAlwaysVisible(true);
 		popOver.show(b);
 	}
-
-//	private static String getter(String fieldName, boolean isBoolean){
-//		char[] cs =fieldName.toCharArray();
-//		cs[0] = Character.toUpperCase(cs[0]);
-//		return  ((isBoolean)?"is":"get")+ (new String(cs));
-//	}
-//
-//	private static String setter(String input){
-//		char[] tmp = input.toCharArray();
-//		tmp[0] = Character.toUpperCase(tmp[0]);
-//		return "set".concat(new String(tmp));
-//	}
 }
 
 

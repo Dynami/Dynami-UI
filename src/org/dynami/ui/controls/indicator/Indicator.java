@@ -32,7 +32,12 @@ public class Indicator extends BorderPane {
 	@FXML private Label _name;
 	@FXML private Label _value;
 	
-	private boolean percent = false;
+	public static enum Format {
+		Percent, Sum, Number;
+	}
+	
+//	private boolean percent = false;
+	private Format format = Format.Sum; 
 	private double value = 0;
 	
 	public Indicator(){
@@ -47,13 +52,13 @@ public class Indicator extends BorderPane {
 	}
 	
 	@FXML
-	public void setPercent(boolean percent){
-		this.percent = percent;
+	public void setFormat(Format format){
+		this.format = format;
 	}
 	
 	@FXML
-	public boolean isPercent() {
-		return percent;
+	public Format getFormat() {
+		return format;
 	}
 	
 	@FXML
@@ -92,10 +97,12 @@ public class Indicator extends BorderPane {
 			setBackground(UIUtils.redBackground);
 		}
 		
-		if(percent){
+		if(format.equals(Format.Percent)){
 			_value.setText(UIUtils.PERC_NUMBER_FORMAT.format(value));
-		} else {
+		} else if(format.equals(Format.Sum)){
 			_value.setText(NumberFormat.getCurrencyInstance().format(value));
+		} else {
+			_value.setText(NumberFormat.getNumberInstance().format(value));
 		}
 	}
 }

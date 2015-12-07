@@ -17,7 +17,11 @@ package org.dynami.ui.prefs;
 
 public class PrefsConstants {
 	public static final class BASIC {
-		public static final String STRATS_DIR = "strategies_directory";
+		public static final String STRATS_DIR = "strategies-directory";
+	}
+	
+	public static final class TIME_CHART {
+		public static final String MAX_SAMPLE_SIZE = "max-sample-size";		
 	}
 	
 	public static final class TRACES {

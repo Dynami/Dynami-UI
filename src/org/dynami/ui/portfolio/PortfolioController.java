@@ -67,7 +67,10 @@ public class PortfolioController implements Initializable {
 			if(!Execution.Manager.isLoaded()) return;
 			
 			final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
-			final List<OpenPosition> list = portfolio.getOpenPosition().stream().map(OpenPosition::new).collect(Collectors.toList());
+			final List<OpenPosition> list = portfolio.getOpenPosition()
+					.stream()
+					.map(OpenPosition::new)
+					.collect(Collectors.toList());
 			Platform.runLater(()->{
 				list.forEach(o->{
 					// calculate roi and percent roi
@@ -79,11 +82,13 @@ public class PortfolioController implements Initializable {
 					if(Asset.Family.Option.name().equals(o.getAssetType())){
 						final IAssetService assets = Execution.Manager.dynami().assets();
 						Asset.Option opt = (Asset.Option)assets.getBySymbol(o.getSymbol());
-						o.setDelta(opt.greeks.delta()*o.getQuantity());
-						o.setGamma(opt.greeks.gamma()*o.getQuantity());
-						o.setVega(opt.greeks.vega()*o.getQuantity());
-						o.setTheta(opt.greeks.theta()*o.getQuantity());
-						o.setRho(opt.greeks.rho()*o.getQuantity());
+						o.setDelta(opt.greeks.delta()*o.getQuantity()*o.getPointValue());
+						o.setGamma(opt.greeks.gamma()*o.getQuantity()*o.getPointValue());
+						o.setVega(opt.greeks.vega()*o.getQuantity()*o.getPointValue());
+						o.setTheta(opt.greeks.theta()*o.getQuantity()*o.getPointValue());
+						o.setRho(opt.greeks.rho()*o.getQuantity()*o.getPointValue());
+					} else {
+						o.setDelta(o.getQuantity()*o.getPointValue());
 					}
 				});
 				positions.clear();
@@ -104,6 +109,8 @@ public class PortfolioController implements Initializable {
 							} else {
 								setBackground(UIUtils.redBackground);
 							}
+						} else {
+							setBackground(UIUtils.defaultBackground);
 						}
 					}
 				};

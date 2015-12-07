@@ -17,7 +17,9 @@ package org.dynami.ui.summary;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.dynami.core.assets.Asset;
 import org.dynami.core.services.IPortfolioService;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.ui.DynamiApplication;
@@ -34,10 +36,12 @@ public class SummaryController implements Initializable {
 	@FXML Indicator unrealized;
 	@FXML Indicator roi;
 	@FXML Indicator hvola;
+	@FXML Indicator portfolioDelta;
 	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		final AtomicReference<Double> delta = new AtomicReference<>(0.);
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
@@ -46,12 +50,23 @@ public class SummaryController implements Initializable {
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
 				double _roi = (_currentBudget/_initialBudget)-1;
+				delta.set(0.);
+				portfolio.getOpenPosition().forEach(o->{
+					if(o.asset.family.equals(Asset.Family.Option)){
+						double _delta = ((Asset.Option)o.asset).greeks().delta() * o.quantity * o.asset.pointValue;
+						delta.set(delta.get()+_delta);
+					} else {
+						delta.set(delta.get()+(o.quantity*o.asset.pointValue));
+					}
+				});
+				
 				Platform.runLater(()->{
 					realized.setValue(_realized);
 					unrealized.setValue(_unrealized);
 					initialBudget.setValue(_initialBudget);
 					currentBudget.setValue(_currentBudget);
 					roi.setValue(_roi);
+					portfolioDelta.setValue(delta.get());
 				});
 			}
 		});

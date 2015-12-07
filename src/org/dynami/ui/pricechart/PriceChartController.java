@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import org.dynami.core.Event;
 import org.dynami.core.Event.Type;
@@ -27,6 +28,7 @@ import org.dynami.core.data.Bar;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
+import org.dynami.ui.prefs.PrefsConstants;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,6 +43,8 @@ public class PriceChartController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
+		
 		DynamiApplication.priceLowerBound.bind(yAxis.lowerBoundProperty());
 		DynamiApplication.priceUpperBound.bind(yAxis.upperBoundProperty());
 		DynamiApplication.priceTickUnit.bind(yAxis.tickUnitProperty());
@@ -56,9 +60,12 @@ public class PriceChartController implements Initializable {
 				list.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.close));
 			});
 			if(list.size()>0){
+				int exeeding = Math.max(0, series.getData().size()+list.size()-MAX_SAMPLES);  
+				if(exeeding  > 0){
+					series.getData().remove(0, exeeding-1);
+				}
 				series.getData().addAll(list);
 			}
-			
 		});
 		
 		Execution.Manager.msg().subscribe(Topics.STRATEGY_EVENT.topic, (last, msg)->{

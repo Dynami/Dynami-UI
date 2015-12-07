@@ -8,8 +8,10 @@
 	xmlns:fx="http://javafx.com/fxml/1"
 	> 
 	<Indicator fx:id="initialBudget" name="Budget" description="Initial budget value"  value="0.0"/>
-	<Indicator fx:id="realized" name="Realized" description="Closed position return"  value="0.0"/>
+	<Indicator fx:id="realized" name="Realized" description="Closed positions return"  value="0.0"/>
 	<Indicator fx:id="unrealized" name="Unrealized" description="Open positions return" value="0.0"/>
 	<Indicator fx:id="currentBudget" name="Current Budget" description="Current budget value"  value="0.0"/>
-	<Indicator fx:id="roi" name="Roi" description="Return on investment" percent="true" value="0.0"/>
+	<Indicator fx:id="roi" name="Roi" description="Return on investment" format="Percent" value="0.0"/>
+	
+	<Indicator fx:id="portfolioDelta" name="Delta" description="Portfolio delta" format="Number" value="0.0"/>
 </VBox>

@@ -15,15 +15,15 @@
 	xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="org.dynami.ui.sidebar.SideBarController">
 	<items>
-		<Button fx:id="chartButton" mnemonicParsing="false">
-			<graphic>
-				<ImageView>
-					<image>
-						<Image url="icons/_chart.gif" />
-					</image>
-				</ImageView>
-			</graphic>
-		</Button>
+<!-- 		<Button fx:id="chartButton" mnemonicParsing="false"> -->
+<!-- 			<graphic> -->
+<!-- 				<ImageView> -->
+<!-- 					<image> -->
+<!-- 						<Image url="icons/_chart.gif" /> -->
+<!-- 					</image> -->
+<!-- 				</ImageView> -->
+<!-- 			</graphic> -->
+<!-- 		</Button> -->
 		<Button fx:id="ordersButton" mnemonicParsing="false">
 			<graphic>
 				<ImageView>

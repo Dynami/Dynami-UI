@@ -9,39 +9,30 @@
 <SplitPane dividerPositions="0.6" orientation="VERTICAL"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<items>
-		<SplitPane dividerPositions="0.7" prefHeight="160.0"
-			prefWidth="200.0">
+		<SplitPane dividerPositions="0.7" prefHeight="160.0" prefWidth="200.0" orientation="HORIZONTAL">
 			<items>
-				<fx:include source="/org/dynami/ui/pricechart/PriceChart.fxml" />
+				<SplitPane dividerPositions="0.7" prefHeight="160.0" prefWidth="200.0" orientation="VERTICAL">
+					<items>
+						<fx:include source="/org/dynami/ui/pricechart/PriceChart.fxml" />
+						<TabPane prefHeight="200.0" prefWidth="200.0" side="BOTTOM"
+							tabClosingPolicy="UNAVAILABLE">
+							<tabs>
+								<Tab text="EquityLine">
+									<content>
+										<fx:include source="/org/dynami/ui/equityline/EquityLineChart.fxml" />
+									</content>
+								</Tab>
+								<Tab text="Volatility">
+									<content>
+										<fx:include source="/org/dynami/ui/vola/VolaChart.fxml" />
+									</content>
+								</Tab>
+							</tabs>
+						</TabPane>
+					</items>
+				</SplitPane>
+			
 				<fx:include source="/org/dynami/ui/payoff/PayoffChart.fxml" />
-			</items>
-		</SplitPane>
-		<SplitPane dividerPositions="0.7" prefHeight="160.0"
-			prefWidth="200.0">
-			<items>
-				<TabPane prefHeight="200.0" prefWidth="200.0" side="BOTTOM"
-					tabClosingPolicy="UNAVAILABLE">
-					<tabs>
-						<Tab text="EquityLine">
-							<content>
-								<fx:include source="/org/dynami/ui/equityline/EquityLineChart.fxml" />
-							</content>
-						</Tab>
-						<Tab text="Volatility">
-							<content>
-								<fx:include source="/org/dynami/ui/vola/VolaChart.fxml" />
-							</content>
-						</Tab>
-					</tabs>
-				</TabPane>
-				<BubbleChart>
-					<xAxis>
-						<NumberAxis side="BOTTOM" />
-					</xAxis>
-					<yAxis>
-						<NumberAxis side="LEFT" />
-					</yAxis>
-				</BubbleChart>
 			</items>
 		</SplitPane>
 		<HBox>

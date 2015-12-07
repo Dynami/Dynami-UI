@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import org.dynami.core.Event;
 import org.dynami.core.Event.Type;
@@ -16,6 +17,7 @@ import org.dynami.runtime.data.vola.CloseToCloseVolatilityEngine;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
+import org.dynami.ui.prefs.PrefsConstants;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,6 +33,7 @@ public class VolaChartController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
 		vola.setName("Historical Volatility");
 		chart.setCreateSymbols(false);
 		chart.getData().add(vola);
@@ -45,6 +48,10 @@ public class VolaChartController implements Initializable {
 			});
 			
 			if(list.size()>0){
+				int exeeding = Math.max(0, vola.getData().size()+list.size()-MAX_SAMPLES);  
+				if(exeeding  > 0){
+					vola.getData().remove(0, exeeding-1);
+				}
 				vola.getData().addAll(list);
 			}
 		});

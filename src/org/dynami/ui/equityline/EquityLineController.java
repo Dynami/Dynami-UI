@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import org.dynami.core.Event;
 import org.dynami.core.Event.Type;
@@ -27,6 +28,7 @@ import org.dynami.core.services.IPortfolioService;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
+import org.dynami.ui.prefs.PrefsConstants;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,6 +44,8 @@ public class EquityLineController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
+		
 		realized.setName("Realized");
 		total.setName("Total");
 		chart.setCreateSymbols(false);
@@ -56,7 +60,13 @@ public class EquityLineController implements Initializable {
 				listRealised.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.realized));
 				listTotal.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.realized+bar.unrealized));
 			});
+			
 			if(listRealised.size()>0){
+				int exeeding = Math.max(0, realized.getData().size()+listRealised.size()-MAX_SAMPLES);  
+				if(exeeding  > 0){
+					realized.getData().remove(0, exeeding-1);
+					total.getData().remove(0,  exeeding-1);
+				}
 				realized.getData().addAll(listRealised);
 				total.getData().addAll(listTotal);
 			}
