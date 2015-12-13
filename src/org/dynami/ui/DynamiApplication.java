@@ -42,6 +42,13 @@ public class DynamiApplication extends Application {
 	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceTickUnit = new SimpleDoubleProperty();
 	
+	@SuppressWarnings("unused")
+	private final DynamiActions actions;
+	
+	public DynamiApplication(){
+		actions = new DynamiActions();
+	}
+	
 	@Override
 	public void init() throws Exception {
 		super.init();

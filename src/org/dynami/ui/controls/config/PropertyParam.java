@@ -16,23 +16,41 @@
 package org.dynami.ui.controls.config;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+
+import org.dynami.runtime.config.ClassSettings;
 
 public class PropertyParam<T> {
 	private final String name;
 	private final String description;
 	private final Object parent;
-	private final Method getter, setter;
+//	private final Method getter, setter;
 	private final Class<?> type;
+	private final Field field;
+	private final String fieldName;
+	private final ClassSettings settings;
 	
+	public PropertyParam(String name, String description, ClassSettings settings, String fieldName) throws Exception {
+		this.name = name;
+		this.description = description;
+		this.parent = null;
+		this.type = settings.getParams().get(fieldName).getType();
+		this.field = null;
+		this.fieldName= fieldName;
+//		this.field.setAccessible(true);
+		this.settings = settings;
+	}
 	
 	public PropertyParam(String name, String description, Object parent, Field f) throws Exception {
 		this.name = name;
 		this.description = description;
 		this.parent = parent;
 		this.type = f.getType();
-		getter = parent.getClass().getDeclaredMethod(getter(f.getName(), (f.getType().equals(boolean.class) ||  f.getType().equals(Boolean.class))));
-		setter = parent.getClass().getDeclaredMethod(setter(f.getName()), f.getType());
+		this.field = f;
+		this.field.setAccessible(true);
+		this.fieldName = null;
+		this.settings = null;
+//		getter = parent.getClass().getDeclaredMethod(getter(f.getName(), (f.getType().equals(boolean.class) ||  f.getType().equals(Boolean.class))));
+//		setter = parent.getClass().getDeclaredMethod(setter(f.getName()), f.getType());
 	}
 	
 	public Class<?> getType(){
@@ -41,7 +59,12 @@ public class PropertyParam<T> {
 	
 	public void update(T t) {
 		try {
-			setter.invoke(parent, new Object[]{t});
+			if(settings != null && settings.getParams().get(fieldName) != null){
+				settings.getParams().get(fieldName).setValue(t);
+			} else {
+				field.set(parent, t);
+			}
+//			setter.invoke(parent, new Object[]{t});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,7 +73,11 @@ public class PropertyParam<T> {
 	@SuppressWarnings("unchecked")
 	public T get() {
 		try {
-			return (T)getter.invoke(parent, new Object[0]);
+			if(settings != null && settings.getParams().get(fieldName) != null){
+				return (T)settings.getParams().get(fieldName).getValue();
+			} else {
+				return (T)field.get(parent);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -65,15 +92,15 @@ public class PropertyParam<T> {
 		return description;
 	}
 	
-	private static String getter(String fieldName, boolean isBoolean){
-		char[] cs =fieldName.toCharArray();
-		cs[0] = Character.toUpperCase(cs[0]);
-		return  ((isBoolean)?"is":"get")+ (new String(cs));
-	}
-
-	private static String setter(String input){
-		char[] tmp = input.toCharArray();
-		tmp[0] = Character.toUpperCase(tmp[0]);
-		return "set".concat(new String(tmp));
-	}
+//	private static String getter(String fieldName, boolean isBoolean){
+//		char[] cs =fieldName.toCharArray();
+//		cs[0] = Character.toUpperCase(cs[0]);
+//		return  ((isBoolean)?"is":"get")+ (new String(cs));
+//	}
+//
+//	private static String setter(String input){
+//		char[] tmp = input.toCharArray();
+//		tmp[0] = Character.toUpperCase(tmp[0]);
+//		return "set".concat(new String(tmp));
+//	}
 }

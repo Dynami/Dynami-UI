@@ -15,48 +15,61 @@
  */
 package org.dynami.ui.menu;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.action.ActionMap;
+import org.dynami.runtime.models.StrategyComponents;
+import org.dynami.ui.collectors.Strategies;
+
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MenuController implements Initializable {
-	@FXML
-	MenuBar menu;
+	@FXML MenuBar menu;
+	@FXML MenuItem openMenuItem;
+	@FXML MenuItem saveMenuItem;
+	@FXML MenuItem saveAsMenuItem;
 	
-	@FXML
-	MenuItem openMenuItem;
-	
-	@FXML
-	MenuItem saveMenuItem;
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		saveMenuItem.setDisable(true);
+		saveAsMenuItem.setDisable(true);
+		ActionMap.register(this);
+		
+		Strategies.Register.selectedProperty().addListener(new ChangeListener<StrategyComponents>() {
+			@Override
+			public void changed(ObservableValue<? extends StrategyComponents> observable, StrategyComponents oldValue, StrategyComponents newValue) {
+				if(newValue != null){
+					saveMenuItem.setDisable(false);
+					saveAsMenuItem.setDisable(false);
+				} else {
+					saveMenuItem.setDisable(true);
+					saveAsMenuItem.setDisable(true);
+				}
+			}
+		});
+	}
 	
 	@FXML
 	public void open(ActionEvent e){
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select dynami file");
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("Dynami file", "*.dynami"));
-		File file = fileChooser.showOpenDialog(menu.getScene().getWindow());
-		if(file != null && file.exists() && !file.isDirectory()){
-			
-		}
+		ActionMap.action("open").handle(e);
 	}
 	
 	@FXML
 	public void save(ActionEvent e){
-		
+		ActionMap.action("save").handle(e);
 	}
 	
 	@FXML
 	public void saveAs(ActionEvent e){
-		
+		ActionMap.action("saveas").handle(e);
 	}
 	
 	@FXML
@@ -67,10 +80,5 @@ public class MenuController implements Initializable {
 	@FXML
 	public void close(ActionEvent e){
 		Platform.exit();
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		saveMenuItem.setDisable(true);
 	}
 }

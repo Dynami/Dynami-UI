@@ -5,6 +5,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <MenuBar fx:id="menu" xmlns="http://javafx.com/javafx/8.0.40"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dynami.ui.menu.MenuController">
@@ -13,6 +15,11 @@
 			<items>
 				<MenuItem fx:id="openMenuItem" mnemonicParsing="true" text="_Open"
 					onAction="#open">
+					<graphic>
+						<ImageView>
+							<Image url="/icons/_open.gif" />
+						</ImageView>
+					</graphic>
 					<accelerator>
 						<KeyCodeCombination alt="UP" code="O" control="DOWN"
 							meta="UP" shift="UP" shortcut="UP" />
@@ -20,13 +27,23 @@
 				</MenuItem>
 				<MenuItem fx:id="saveMenuItem" mnemonicParsing="true" text="_Save"
 					onAction="#save">
+					<graphic>
+						<ImageView>
+							<Image url="/icons/_save.gif" />
+						</ImageView>
+					</graphic>
 					<accelerator>
 						<KeyCodeCombination alt="UP" code="S" control="DOWN"
 							meta="UP" shift="UP" shortcut="UP" />
 					</accelerator>
 				</MenuItem>
-				<MenuItem mnemonicParsing="false" text="Save as..."
-					onAction="#saveAs" >
+				<MenuItem fx:id="saveAsMenuItem" mnemonicParsing="false" text="Save as..."
+					onAction="#saveAs">
+					<graphic>
+						<ImageView>
+							<Image url="/icons/_saveas.gif" />
+						</ImageView>
+					</graphic>
 					<accelerator>
 						<KeyCodeCombination alt="UP" code="S" control="DOWN"
 							meta="UP" shift="DOWN" shortcut="UP" />
@@ -35,6 +52,11 @@
 				<SeparatorMenuItem mnemonicParsing="false" />
 				<MenuItem mnemonicParsing="true" text="Pr_eferences"
 					onAction="#preferences">
+					<graphic>
+						<ImageView>
+							<Image url="/icons/_preferences.gif" />
+						</ImageView>
+					</graphic>
 					<accelerator>
 						<KeyCodeCombination alt="UP" code="E" control="DOWN"
 							meta="UP" shift="UP" shortcut="UP" />

@@ -26,7 +26,7 @@ public class IntegerSpinnerFieldParam extends FieldParam {
 	public IntegerSpinnerFieldParam(PropertyParam<Integer> _prop, int min, int max, int step) {
 		super(_prop.getName(), _prop.getDescription());
 		
-		SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, _prop.get(), step);
+		SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, _prop.get(), (step==0)?1:step);
 		spinner.setValueFactory(factory);
 		spinner.valueProperty().addListener(new ChangeListener<Integer>() {
 			@Override

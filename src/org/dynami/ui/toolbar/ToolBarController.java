@@ -19,7 +19,6 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
@@ -27,9 +26,11 @@ import org.dynami.core.config.Config;
 import org.dynami.runtime.IDataHandler;
 import org.dynami.runtime.IExecutionManager;
 import org.dynami.runtime.IService;
+import org.dynami.runtime.config.ClassSettings;
+import org.dynami.runtime.config.ParamSettings;
 import org.dynami.runtime.impl.Execution;
+import org.dynami.runtime.models.StrategyComponents;
 import org.dynami.runtime.topics.Topics;
-import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
 import org.dynami.ui.controls.config.BooleanFieldParam;
@@ -41,7 +42,6 @@ import org.dynami.ui.controls.config.LongSpinnerFieldParam;
 import org.dynami.ui.controls.config.PropertyParam;
 import org.dynami.ui.controls.config.TextFieldParam;
 import org.dynami.ui.controls.config.TimeFrameParam;
-import org.dynami.ui.prefs.PrefsConstants;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -68,7 +68,8 @@ public class ToolBarController implements Initializable {
 	private boolean isDataHandlerSelected = false;
 
 	private IDataHandler handler;
-
+	private StrategyComponents strategyComponents;
+	
 	@FXML
 	ToolBar toolbar;
 
@@ -76,7 +77,7 @@ public class ToolBarController implements Initializable {
 	Button execButton, stopButton, confStratButton, confDataServiceButton;
 
 	@FXML
-	ComboBox<String> strategies;
+	ComboBox<StrategyComponents> strategies;
 
 	@FXML
 	ComboBox<String>
@@ -91,9 +92,8 @@ public class ToolBarController implements Initializable {
 	public void exec(ActionEvent e) throws Exception {
 		if(LOAD.equals(execButton.getText())){
 			Execution.Manager.getServiceBus().registerService((IService)handler, 100);
-
-			final String stratDir = Preferences.userRoot().node(DynamiApplication.class.getName()).get(PrefsConstants.BASIC.STRATS_DIR, ".");
-			final String strategyJarPath = stratDir+"/"+strategies.getSelectionModel().getSelectedItem();
+			
+			final String strategyJarPath = strategies.getSelectionModel().getSelectedItem().jarName;
 
 			boolean isOk = Execution.Manager.select(null, strategyJarPath);
 			if(isOk){
@@ -135,6 +135,14 @@ public class ToolBarController implements Initializable {
 						Execution.Manager.msg().async(Topics.ERRORS.topic, e);
 					}
 				}
+			}
+		});
+		
+		strategies.valueProperty().addListener(new ChangeListener<StrategyComponents>() {
+			@Override
+			public void changed(ObservableValue<? extends StrategyComponents> observable, StrategyComponents oldValue, StrategyComponents newValue) {
+				strategyComponents = newValue;
+				Strategies.Register.setSelected(strategyComponents);
 			}
 		});
 
@@ -191,11 +199,50 @@ public class ToolBarController implements Initializable {
 		});
 	}
 
-	public void configStrategy(ActionEvent e){
+	public void configStrategy(ActionEvent e) throws Exception {
+		if(strategyComponents == null) return;
 		VBox vbox = new VBox();
-		vbox.getChildren().addAll(new Label("Hello"), new Label("World!!!"));
-
 		PopOver popOver = new PopOver(vbox);
+		for(ClassSettings c: strategyComponents.strategySettings.getSettings().values()){
+			VBox inner = new VBox();
+			Label label = new Label(c.getName());
+			label.getStyleClass().add("config-stage-title");
+			label.prefWidthProperty().bind(vbox.widthProperty());
+			inner.getChildren().add(label);
+			for(ParamSettings ps : c.getParams().values()){
+				Config.Param p = ps.getParam();
+				if(p != null){
+					try {
+						FieldParam param;
+						String name = !p.name().equals("")?p.name():ps.getName();
+						String description = p.description();
+						
+						if(p.type().equals(Config.Type.TimeFrame)){
+							param = new TimeFrameParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)p.min(), (long)p.max(), (long)p.step());
+						} else {
+							if(ps.getType().equals(Double.class) || ps.getType().equals(double.class)){
+								param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, c, ps.getFieldName()), p.min(), p.max(), p.step());
+							} else if(ps.getType().equals(Long.class) || ps.getType().equals(long.class)){
+								param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)p.min(), (long)p.max(), (long)p.step());
+							} else if(ps.getType().equals(Integer.class) || ps.getType().equals(int.class)){
+								param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, c, ps.getFieldName()), (int)p.min(), (int)p.max(), (int)p.step());
+							} else if(ps.getType().equals(Boolean.class) || ps.getType().equals(boolean.class)){
+								param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, c, ps.getFieldName()));
+							} else if(ps.getType().equals(File.class)){
+								param = new FileFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
+							} else {
+								param = new TextFieldParam(new PropertyParam<String>(name, description, c, ps.getFieldName()));
+							} 
+						}
+						inner.getChildren().add(param);
+					} catch (Exception e1) {
+						Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+					}
+				}
+			}
+			vbox.getChildren().add(inner);
+		}
+		
 		Button b = (Button)e.getSource();
 		popOver.setArrowLocation(ArrowLocation.TOP_LEFT);
 		popOver.show(b);
@@ -205,7 +252,6 @@ public class ToolBarController implements Initializable {
 		if(handler == null) return;
 
 		Field[] fields = handler.getClass().getDeclaredFields();
-//		ObservableList<PropertySheet.Item> items = FXCollections.observableArrayList();
 		VBox vbox = new VBox(5);
 		for (Field f : fields) {
 			Config.Param p = f.getAnnotation(Config.Param.class);
@@ -218,16 +264,16 @@ public class ToolBarController implements Initializable {
 					if(p.type().equals(Config.Type.TimeFrame)){
 						param = new TimeFrameParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
 					} else {
-						if(f.getType().equals(Double.class)){
+						if(f.getType().equals(Double.class) || f.getType().equals(double.class)){
 							param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, handler, f), p.min(), p.max(), p.step());
-						} else if(f.getType().equals(Long.class)){
+						} else if(f.getType().equals(Long.class) || f.getType().equals(long.class)){
 							param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
-						} else if(f.getType().equals(Integer.class)){
+						} else if(f.getType().equals(Integer.class) || f.getType().equals(int.class)){
 							param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, handler, f), (int)p.min(), (int)p.max(), (int)p.step());
+						} else if(f.getType().equals(Boolean.class) || f.getType().equals(boolean.class)){
+							param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, handler, f));
 						} else if(f.getType().equals(File.class)){
 							param = new FileFieldParam(new PropertyParam<File>(name, description, handler, f));
-						} else if(f.getType().equals(Boolean.class)){
-							param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, handler, f));
 						} else {
 							param = new TextFieldParam(new PropertyParam<String>(name, description, handler, f));
 						} 
