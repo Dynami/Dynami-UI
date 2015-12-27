@@ -16,15 +16,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 
-<VBox 
-xmlns="http://javafx.com/javafx/8.0.40" 
-xmlns:fx="http://javafx.com/fxml/1" 
-fx:controller="org.dynami.ui.traces.TracesController"
-prefWidth="690">
+<VBox xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="org.dynami.ui.traces.TracesController">
 	<HBox styleClass="popupover-header">
+		<TextField fx:id="filterText" focusTraversable="true"
+			onAction="#filterPositions" promptText="Search..." prefWidth="300" />
+		<Button onAction="#filterPositions">
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_search.gif" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
 		<ToggleButton fx:id="infoFilter" onAction="#filterPositions">
 			<tooltip>
-				<Tooltip text="Exclude info traces"/>
+				<Tooltip text="Exclude info traces" />
 			</tooltip>
 			<graphic>
 				<ImageView>
@@ -36,7 +44,7 @@ prefWidth="690">
 		</ToggleButton>
 		<ToggleButton fx:id="debugFilter" onAction="#filterPositions">
 			<tooltip>
-				<Tooltip text="Exclude debug traces"/>
+				<Tooltip text="Exclude debug traces" />
 			</tooltip>
 			<graphic>
 				<ImageView>
@@ -48,7 +56,7 @@ prefWidth="690">
 		</ToggleButton>
 		<ToggleButton fx:id="warnFilter" onAction="#filterPositions">
 			<tooltip>
-				<Tooltip text="Exclude waring traces"/>
+				<Tooltip text="Exclude waring traces" />
 			</tooltip>
 			<graphic>
 				<ImageView>
@@ -60,7 +68,7 @@ prefWidth="690">
 		</ToggleButton>
 		<ToggleButton fx:id="errorFilter" onAction="#filterPositions">
 			<tooltip>
-				<Tooltip text="Exclude error traces"/>
+				<Tooltip text="Exclude error traces" />
 			</tooltip>
 			<graphic>
 				<ImageView>
@@ -70,28 +78,13 @@ prefWidth="690">
 				</ImageView>
 			</graphic>
 		</ToggleButton>
-		<TextField fx:id="filterText" focusTraversable="true" onAction="#filterPositions" promptText="Search..." prefWidth="300"/>
-		<Button onAction="#filterPositions">
-			<graphic>
-				<ImageView>
-					<image>
-						<Image url="icons/_search.gif" />
-					</image>
-				</ImageView>
-			</graphic>
-		</Button>
-		<Label styleClass="popupover-header-name" alignment="CENTER_RIGHT" text="Strategy traces" prefWidth="600"/>
 	</HBox>
-   <ScrollPane hbarPolicy="NEVER">
-      <content>
-      	<TableView fx:id="table" prefWidth="690" prefHeight="400">
-      		<columns>
-      			<TableColumn fx:id="typeColumn" prefWidth="40" text="Type" />
-      			<TableColumn fx:id="timeColumn" prefWidth="120" text="Time" />
-      			<TableColumn fx:id="stageColumn" prefWidth="90" text="Stage"/>
-      			<TableColumn fx:id="lineColumn" prefWidth="440" text="Trace" />
-      		</columns>
-      	</TableView>
-      </content>
-   </ScrollPane>
+	<TableView fx:id="table">
+		<columns>
+			<TableColumn fx:id="typeColumn" prefWidth="40" text="Type" />
+			<TableColumn fx:id="timeColumn" prefWidth="120" text="Time" />
+			<TableColumn fx:id="stageColumn" prefWidth="90" text="Stage" />
+			<TableColumn fx:id="lineColumn" prefWidth="440" text="Trace" />
+		</columns>
+	</TableView>
 </VBox>

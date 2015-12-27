@@ -82,11 +82,13 @@ public class PortfolioController implements Initializable {
 					if(Asset.Family.Option.name().equals(o.getAssetType())){
 						final IAssetService assets = Execution.Manager.dynami().assets();
 						Asset.Option opt = (Asset.Option)assets.getBySymbol(o.getSymbol());
-						o.setDelta(opt.greeks.delta()*o.getQuantity()*o.getPointValue());
-						o.setGamma(opt.greeks.gamma()*o.getQuantity()*o.getPointValue());
-						o.setVega(opt.greeks.vega()*o.getQuantity()*o.getPointValue());
-						o.setTheta(opt.greeks.theta()*o.getQuantity()*o.getPointValue());
-						o.setRho(opt.greeks.rho()*o.getQuantity()*o.getPointValue());
+						if(opt != null){
+							o.setDelta(opt.greeks.delta()*o.getQuantity()*o.getPointValue());
+							o.setGamma(opt.greeks.gamma()*o.getQuantity()*o.getPointValue());
+							o.setVega(opt.greeks.vega()*o.getQuantity()*o.getPointValue());
+							o.setTheta(opt.greeks.theta()*o.getQuantity()*o.getPointValue());
+							o.setRho(opt.greeks.rho()*o.getQuantity()*o.getPointValue());
+						}
 					} else {
 						o.setDelta(o.getQuantity()*o.getPointValue());
 					}

@@ -37,7 +37,7 @@ public class ClosedPosition {
 		setQuantity(cl.quantity);
 		setEntryPrice(cl.entryPrice);
 		setEntryTime(cl.entryTime);
-		setExitPrice(cl.entryPrice);
+		setExitPrice(cl.exitPrice);
 		setExitTime(cl.exitTime);
 		setPercReturn(cl.percRoi());
 		setAbsReturn(cl.roi());

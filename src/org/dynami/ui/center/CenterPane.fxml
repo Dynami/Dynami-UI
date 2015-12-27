@@ -6,6 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
 <SplitPane dividerPositions="0.6" orientation="VERTICAL"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<items>
@@ -34,9 +36,18 @@
 				<fx:include source="/org/dynami/ui/payoff/PayoffChart.fxml" />
 			</items>
 		</SplitPane>
-		<HBox>
-			<fx:include source="/org/dynami/ui/portfolio/Portfolio.fxml" />
-<!-- 			<fx:include source="/org/dynami/ui/summary/Summary.fxml" /> -->
-		</HBox>
+		<TabPane side="LEFT">
+			<tabs>
+				<Tab text="Portfolio" closable="false">
+					<fx:include source="/org/dynami/ui/portfolio/Portfolio.fxml" />
+				</Tab>
+				<Tab text="Positions" closable="false">
+					<fx:include source="/org/dynami/ui/closed/ClosedPositions.fxml" />
+				</Tab>
+				<Tab text="Traces" closable="false">
+					<fx:include source="/org/dynami/ui/traces/Traces.fxml" />
+				</Tab>
+			</tabs>
+		</TabPane>
 	</items>
 </SplitPane>

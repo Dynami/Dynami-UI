@@ -31,7 +31,7 @@ public class DynamiActions {
 			selectedFile = file;
 			try {
 				StrategySettings settings = JSON.Parser.deserialize(selectedFile, StrategySettings.class);
-//				Strategies.Register.getSelectedValue().strategySettings = settings;
+				Strategies.Register.getSelectedValue().strategySettings.merge(settings);
 				
 			} catch (Exception e1) {
 				Execution.Manager.msg().async(Topics.ERRORS.topic, e1);

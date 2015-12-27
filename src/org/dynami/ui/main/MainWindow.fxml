@@ -28,7 +28,7 @@
 	</center>
 	
 	<left>
-		<fx:include source="/org/dynami/ui/sidebar/SideBar.fxml" />
+		<!-- fx:include source="/org/dynami/ui/sidebar/SideBar.fxml" /-->
 	</left>
 	
 	<bottom>

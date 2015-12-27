@@ -23,7 +23,6 @@ public class PropertyParam<T> {
 	private final String name;
 	private final String description;
 	private final Object parent;
-//	private final Method getter, setter;
 	private final Class<?> type;
 	private final Field field;
 	private final String fieldName;
@@ -36,7 +35,6 @@ public class PropertyParam<T> {
 		this.type = settings.getParams().get(fieldName).getType();
 		this.field = null;
 		this.fieldName= fieldName;
-//		this.field.setAccessible(true);
 		this.settings = settings;
 	}
 	
@@ -49,13 +47,29 @@ public class PropertyParam<T> {
 		this.field.setAccessible(true);
 		this.fieldName = null;
 		this.settings = null;
-//		getter = parent.getClass().getDeclaredMethod(getter(f.getName(), (f.getType().equals(boolean.class) ||  f.getType().equals(Boolean.class))));
-//		setter = parent.getClass().getDeclaredMethod(setter(f.getName()), f.getType());
 	}
 	
 	public Class<?> getType(){
 		return type;
 	}
+	
+//	private static Class<?> wrapPrimitive(String clazz) throws Exception {
+//		if("int".equals(clazz)){
+//			return Class.forName("java.lang.Integer");
+//		} else if("long".equals(clazz)){
+//			return Class.forName("java.lang.Long");
+//		} else if("float".equals(clazz)){
+//			return Class.forName("java.lang.Float");
+//		} else if("double".equals(clazz)){
+//			return Class.forName("java.lang.Double");
+//		} else if("short".equals(clazz)){
+//			return Class.forName("java.lang.Short");
+//		} else if("boolean".equals(clazz)){
+//			return Class.forName("java.lang.Boolean");
+//		} else {
+//			return Class.forName(clazz);
+//		}
+//	}
 	
 	public void update(T t) {
 		try {
@@ -64,7 +78,6 @@ public class PropertyParam<T> {
 			} else {
 				field.set(parent, t);
 			}
-//			setter.invoke(parent, new Object[]{t});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,16 +104,4 @@ public class PropertyParam<T> {
 	public String getDescription() {
 		return description;
 	}
-	
-//	private static String getter(String fieldName, boolean isBoolean){
-//		char[] cs =fieldName.toCharArray();
-//		cs[0] = Character.toUpperCase(cs[0]);
-//		return  ((isBoolean)?"is":"get")+ (new String(cs));
-//	}
-//
-//	private static String setter(String input){
-//		char[] tmp = input.toCharArray();
-//		tmp[0] = Character.toUpperCase(tmp[0]);
-//		return "set".concat(new String(tmp));
-//	}
 }

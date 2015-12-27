@@ -250,9 +250,13 @@ public class ToolBarController implements Initializable {
 
 	public void configDataHandler(ActionEvent e){
 		if(handler == null) return;
-
+		
 		Field[] fields = handler.getClass().getDeclaredFields();
 		VBox vbox = new VBox(5);
+		Label label = new Label(handler.getClass().getSimpleName());
+		label.getStyleClass().add("config-stage-title");
+		label.prefWidthProperty().bind(vbox.widthProperty());
+		vbox.getChildren().add(label);
 		for (Field f : fields) {
 			Config.Param p = f.getAnnotation(Config.Param.class);
 			if (p != null) {
