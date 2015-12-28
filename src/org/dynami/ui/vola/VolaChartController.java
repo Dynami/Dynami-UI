@@ -9,10 +9,10 @@ import java.util.prefs.Preferences;
 
 import org.dynami.core.Event;
 import org.dynami.core.Event.Type;
+import org.dynami.core.assets.Market;
 import org.dynami.core.data.Bar;
 import org.dynami.core.data.IVolatilityEngine;
 import org.dynami.core.data.vola.CloseToCloseVolatilityEngine;
-import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.data.BarData;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
@@ -28,31 +28,42 @@ public class VolaChartController implements Initializable {
 	@FXML
 	LineChart<Date, Number> chart;
 	final BarData data = new BarData();
-	final XYChart.Series<Date, Number> vola = new XYChart.Series<>();
+	final XYChart.Series<Date, Number> histVola = new XYChart.Series<>();
+//	final XYChart.Series<Date, Number> implVola = new XYChart.Series<>();
 	final IVolatilityEngine engine = new CloseToCloseVolatilityEngine();
+	Market market;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
-		vola.setName("Historical Volatility");
+		histVola.setName("Historical Volatility");
+//		implVola.setName("Implied Volatility");
 		chart.setCreateSymbols(false);
-		chart.getData().add(vola);
+		chart.getData().add(histVola);
 		chart.setAnimated(false);
-		
 		DynamiApplication.timer().get("_bars", Bar.class).addConsumer(bars->{
-			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
+			final List<XYChart.Data<Date,Number>> tmpHistVola = new ArrayList<>();
+//			final List<XYChart.Data<Date,Number>> tmpImplVola = new ArrayList<>();
 			bars.forEach(bar->{
 				data.append(bar);
-				double lastVola = data.getVolatility(engine, 20)*Math.sqrt(DUtils.YEAR_WORKDAYS);
-				list.add(new XYChart.Data<Date, Number>(new Date(bar.time), lastVola));
+				if(market == null){
+					market = Execution.Manager.dynami().assets().getMarketBySymbol(bar.symbol);
+				}
+				double lastVola = 0;
+				if(data.setAutoCompressionRate()){
+					lastVola = data.getVolatility(engine, 20)*engine.annualizationFactor(data.getCompression(), 20, market);
+				}
+				//double lastVola = data.getVolatility(engine, 20)*engine.annualizationFactor(data.getCompression(), 20, market);
+				tmpHistVola.add(new XYChart.Data<Date, Number>(new Date(bar.time), lastVola));
 			});
 			
-			if(list.size()>0){
-				int exeeding = Math.max(0, vola.getData().size()+list.size()-MAX_SAMPLES);  
+			if(tmpHistVola.size()>0){
+				int exeeding = Math.max(0, histVola.getData().size()+tmpHistVola.size()-MAX_SAMPLES); 
 				if(exeeding  > 0){
-					vola.getData().remove(0, exeeding-1);
+					histVola.getData().remove(0, exeeding-1);
 				}
-				vola.getData().addAll(list);
+				histVola.getData().addAll(tmpHistVola);
 			}
 		});
 		
