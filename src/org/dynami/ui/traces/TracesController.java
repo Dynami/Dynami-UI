@@ -155,29 +155,17 @@ public class TracesController implements Initializable {
 		final boolean excludeDebug = debugFilter.isSelected();
 		final boolean excludeWarn = warnFilter.isSelected();
 		final boolean excludeError = errorFilter.isSelected();
-		
-		if(!textFilter && !excludeInfo && !excludeDebug && !excludeWarn && !excludeError){
-			filteredData.setPredicate(p->true);
-		} else {
-			filteredData.setPredicate(c-> {
-				if(excludeInfo && c.getType().equals(ITraceService.Trace.Type.Info.name())){
-					return false;
-				}
-				if(excludeDebug && c.getType().equals(ITraceService.Trace.Type.Debug.name())){
-					return false;
-				}
-				if(excludeWarn && c.getType().equals(ITraceService.Trace.Type.Warn.name())){
-					return false;
-				}
-				if(excludeError && c.getType().equals(ITraceService.Trace.Type.Error.name())){
-					return false;
-				}
-				if(textFilter && c.getLine().contains(newValue)){
-					return true;
-				} else {
-					return false;
-				}
-			});
-		}
+		filteredData.setPredicate(c->{
+			if( (textFilter && c.getLine().contains(newValue)) 
+				|| (!excludeInfo && c.getType().equals(ITraceService.Trace.Type.Info.name()))
+				|| (!excludeDebug && c.getType().equals(ITraceService.Trace.Type.Debug.name()))
+				|| (!excludeWarn && c.getType().equals(ITraceService.Trace.Type.Warn.name()))
+				|| (!excludeError && c.getType().equals(ITraceService.Trace.Type.Error.name()))
+					){
+				return true;
+			} else {
+				return false;
+			}
+		});
 	}
 }
