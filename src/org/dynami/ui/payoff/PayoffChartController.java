@@ -26,14 +26,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dynami.core.assets.Asset;
-import org.dynami.core.assets.OptionChain;
 import org.dynami.core.assets.Asset.Family;
+import org.dynami.core.assets.OptionChain;
 import org.dynami.core.portfolio.OpenPosition;
 import org.dynami.core.utils.DTime;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.utils.EuropeanBlackScholes;
 import org.dynami.ui.DynamiApplication;
-import org.jquantlib.instruments.PlainVanillaPayoff;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -82,7 +81,7 @@ public class PayoffChartController implements Initializable {
 			
 			double upper = upperBound.get().doubleValue();
 			double lower = lowerBound.get().doubleValue();
-			double tick = tickUnit.get().doubleValue()/2;
+			double tick = tickUnit.get().doubleValue()/4;
 			Platform.runLater(()->{
 				priceAxis.setLowerBound(lower);
 				priceAxis.setUpperBound(upper);

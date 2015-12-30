@@ -36,7 +36,7 @@
 				<fx:include source="/org/dynami/ui/payoff/PayoffChart.fxml" />
 			</items>
 		</SplitPane>
-		<TabPane side="LEFT">
+		<TabPane side="BOTTOM">
 			<tabs>
 				<Tab text="Portfolio" closable="false">
 					<fx:include source="/org/dynami/ui/portfolio/Portfolio.fxml" />
@@ -46,6 +46,9 @@
 				</Tab>
 				<Tab text="Traces" closable="false">
 					<fx:include source="/org/dynami/ui/traces/Traces.fxml" />
+				</Tab>
+				<Tab text="Orders" closable="false">
+					<fx:include source="/org/dynami/ui/orders/OrderRequests.fxml" />
 				</Tab>
 			</tabs>
 		</TabPane>
