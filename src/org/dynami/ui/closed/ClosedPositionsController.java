@@ -20,15 +20,11 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.impl.Execution;
-import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.UIUtils;
-import org.dynami.ui.timer.UITimer.ClockBuffer;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -58,41 +54,24 @@ public class ClosedPositionsController implements Initializable {
 	@FXML TableColumn<ClosedPosition, Number> returnColumn;
 	private final ObservableList<ClosedPosition> data = FXCollections.observableArrayList();
 	private final FilteredList<ClosedPosition> filteredData = new FilteredList<>(data, p->true);
-	private final AtomicInteger count = new AtomicInteger(0);
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// load previous closed positions on start-up 
-		if(Execution.Manager.isLoaded()){
-			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
-			count.set(_closed.size());
-			Platform.runLater(()->{
-				data.addAll(_closed.stream().map(ClosedPosition::new).collect(Collectors.toList()));
-			});
-		}
-		
-		// if runtime is running
-		Execution.Manager.msg().subscribe(Topics.EXECUTED_ORDER.topic, (last, msg)->{
-			List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
-			int diff = _closed.size() - count.get();
-			if(_closed.size() > 0 && diff > 0){
-				ClockBuffer<ClosedPosition> buffer = DynamiApplication.timer().get("closed", ClosedPosition.class);
-				for(int i = _closed.size()-diff; i < _closed.size(); i++){
-					buffer.push(new ClosedPosition(_closed.get(i)));
-					count.incrementAndGet();
+		DynamiApplication.timer().addClockedFunction(()->{
+			if(Execution.Manager.isLoaded()){
+				final List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
+//				System.out.println("ClosedPositionsController.initialize(_closed: "+_closed.size()+" data: "+data.size()+")");
+				final List<ClosedPosition> tmp = new ArrayList<>();
+				if(data.size() < _closed.size()){
+					for(int i = data.size(); i < _closed.size(); i++){
+						tmp.add(new ClosedPosition(_closed.get(i)));
+					}
+					Platform.runLater(()->{
+						data.addAll(tmp);
+					});
 				}
 			}
 		});
-		
-		DynamiApplication.timer().get("closed", ClosedPosition.class).addConsumer(list->{
-			if(list != null && list.size() > 0 ){
-				final List<ClosedPosition> tmp = new ArrayList<>(list);
-				Platform.runLater(()->{
-					data.addAll(tmp);
-				});
-			}
-		});
-		
 		
 		table.setItems(filteredData);
 		table.setRowFactory(new Callback<TableView<ClosedPosition>, TableRow<ClosedPosition>>() {

@@ -34,9 +34,13 @@ public class SummaryController implements Initializable {
 	@FXML Indicator currentBudget;
 	@FXML Indicator realized;
 	@FXML Indicator unrealized;
+	@FXML Indicator margin;
+	@FXML Indicator maxMargin;
 	@FXML Indicator roi;
 	@FXML Indicator hvola;
 	@FXML Indicator portfolioDelta, portfolioVega, portfolioTheta;
+	
+	private final AtomicReference<Double> _maxMargin = new AtomicReference<>(0.1);
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -47,15 +51,20 @@ public class SummaryController implements Initializable {
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
+				double _margin = portfolio.requiredMargin();
+				if(_margin < _maxMargin.get()){
+					_maxMargin.set(_margin);
+				}
 				double _realized = portfolio.realized();
 				double _unrealized = portfolio.unrealized();
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
-				double _roi = (_currentBudget/_initialBudget)-1;
+				double _tmp = ((_realized+_unrealized)/(-_maxMargin.get()));
+				double _roi = ((_realized+_unrealized)<0.0001)?0.0:_tmp;
+				
 				delta.set(0.);
 				vega.set(0.);
 				theta.set(0.);
-				
 				portfolio.getOpenPosition().forEach(o->{
 					if(o.asset.family.equals(Asset.Family.Option)){
 						double _delta = ((Asset.Option)o.asset).greeks().delta() * o.quantity * o.asset.pointValue;
@@ -80,6 +89,8 @@ public class SummaryController implements Initializable {
 					currentBudget.setValue(_currentBudget);
 					roi.setValue(_roi);
 					
+					margin.setValue(_margin);
+					this.maxMargin.setValue(_maxMargin.get());
 					portfolioDelta.setValue(delta.get());
 					portfolioVega.setValue(vega.get());
 					portfolioTheta.setValue(theta.get());

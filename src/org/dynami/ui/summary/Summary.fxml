@@ -8,11 +8,12 @@
 	xmlns:fx="http://javafx.com/fxml/1"
 	> 
 	<Indicator fx:id="initialBudget" name="Budget" description="Initial budget value"  value="0.0"/>
+	<Indicator fx:id="currentBudget" name="Current Budget" description="Current budget value"  value="0.0"/>
 	<Indicator fx:id="realized" name="Realized" description="Closed positions return"  value="0.0"/>
 	<Indicator fx:id="unrealized" name="Unrealized" description="Open positions return" value="0.0"/>
-	<Indicator fx:id="currentBudget" name="Current Budget" description="Current budget value"  value="0.0"/>
+	<Indicator fx:id="margin" name="Margin" description="Required margin for open positions" format="Sum" value="0.0"/>
+	<Indicator fx:id="maxMargin" name="Max Margin" description="Max required margin for open positions" format="Sum" value="0.0"/>
 	<Indicator fx:id="roi" name="Roi" description="Return on investment" format="Percent" value="0.0"/>
-	
 	<Indicator fx:id="portfolioDelta" name="Delta" description="Indicates how much point positions gain whether price move in his direction" format="Number" value="0.0"/>
 	<Indicator fx:id="portfolioVega" name="Vega" description="Portfolio vega" format="Number" value="0.0"/>
 	<Indicator fx:id="portfolioTheta" name="Theta" description="Portfolio theta" format="Number" value="0.0"/>

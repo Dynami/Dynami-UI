@@ -10,8 +10,7 @@
 	xmlns:fx="http://javafx.com/fxml/1" 
 	type="BorderPane" 
 	stylesheets="org/dynami/ui/controls/indicator/indicator-stylesheet.css" 
-	styleClass="indicator-rect"
-	prefWidth="90.0">
+	styleClass="indicator-rect">
 <!-- 	<left> -->
 <!-- 		<ImageView fx:id="_icon"> -->
 <!-- 			<image> -->

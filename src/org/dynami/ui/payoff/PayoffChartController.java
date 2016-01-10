@@ -69,30 +69,37 @@ public class PayoffChartController implements Initializable {
 			}
 			
 			final AtomicLong frontExpiration = new AtomicLong(Long.MAX_VALUE);
+			final AtomicReference<Double> lastPrice = new AtomicReference<Double>(0.);
+			
 			list.forEach(o->{
-				if(list.get(0).asset instanceof Asset.DerivativeInstr){
-					String symbol = ((Asset.DerivativeInstr)list.get(0).asset).parentSymbol;
+				if(o.asset instanceof Asset.Option){
+					Asset.Option deriv = (Asset.Option)o.asset;
+					String symbol = deriv.underlyingAsset.symbol;
 					final OptionChain chain = Execution.Manager.dynami().assets().getOptionChainFor(symbol);
 					if(chain != null && chain.frontExpiration() < frontExpiration.get()){
 						frontExpiration.set( chain.frontExpiration() );
 					}
+					lastPrice.set(deriv.underlyingAsset.asTradable().lastPrice());
+				} else {
+					lastPrice.set(o.asset.lastPrice());
 				}
 			});
 			
-			double upper = upperBound.get().doubleValue();
-			double lower = lowerBound.get().doubleValue();
-			double tick = tickUnit.get().doubleValue()/4;
+			final double upper = upperBound.get().doubleValue();
+			final double lower = lowerBound.get().doubleValue();
+			final double tick = tickUnit.get().doubleValue()/4;
 			Platform.runLater(()->{
 				priceAxis.setLowerBound(lower);
 				priceAxis.setUpperBound(upper);
 				priceAxis.setTickUnit(tick);
 			});
-			int count = (int)((upper-lower)/tick);
+			final int count = (int)((upper-lower)/tick);
 			
-			List<XYChart.Series<Number, Number>> seriesCollection = new ArrayList<>();
-			Map<Number, Double> cumulativePosition = new TreeMap<>();
-			Map<Number, Double> atNowPosition = new TreeMap<>();
-			long now = DTime.Clock.getTime();
+			final List<XYChart.Series<Number, Number>> seriesCollection = new ArrayList<>();
+			final Map<Number, Double> cumulativePosition = new TreeMap<>();
+			final Map<Number, Double> atNowPosition = new TreeMap<>();
+			
+			final long now = DTime.Clock.getTime();
 			list.forEach(o->{
 				final XYChart.Series<Number, Number> series= new XYChart.Series<>();
 				series.setName(o.asset.name);
@@ -109,17 +116,16 @@ public class PayoffChartController implements Initializable {
 					
 					if(Double.isNaN(atExpirationAssetValue)) atExpirationAssetValue = 0;
 					double atExpirationReturn = (atExpirationAssetValue-o.entryPrice)*o.quantity*o.asset.pointValue;
-					
-					if(cumulativePosition.putIfAbsent(price, atExpirationReturn) != null){
-						cumulativePosition.computeIfPresent(price, (p, v)->v+atExpirationReturn);
-					}
 					if(showLegs.get()){
 						series.getData().add(new XYChart.Data<Number, Number>(
 								price,
 								atExpirationReturn
 								));
+					} else {
+						if(cumulativePosition.putIfAbsent(price, atExpirationReturn) != null){
+							cumulativePosition.computeIfPresent(price, (p, v)->v+atExpirationReturn);
+						}
 					}
-					
 					if(showAtNow.get()){
 						double atNowAssetValue = o.asset.getValueAt(price, now, EuropeanBlackScholes.OptionPricingEngine);
 						if(Double.isNaN(atNowAssetValue)) atNowAssetValue = 0;
@@ -136,16 +142,12 @@ public class PayoffChartController implements Initializable {
 				}
 			});
 			
-			
-			
-			final XYChart.Series<Number, Number> cumulativePayoff= new XYChart.Series<>();
-			cumulativePayoff.setName("Cumulative Payoff");
-			
-			cumulativePosition.keySet().stream().forEach(k->{
-				cumulativePayoff.getData().add(new XYChart.Data<Number, Number>(k, cumulativePosition.get(k)));
-			});
-			
-			seriesCollection.add(cumulativePayoff);
+			final XYChart.Series<Number, Number> lastPriceSeries= new XYChart.Series<>();
+			lastPriceSeries.setName("Current price");
+			lastPriceSeries.getData().add(new XYChart.Data<Number, Number>(lastPrice.get()-tick/4., -tick));
+			lastPriceSeries.getData().add(new XYChart.Data<Number, Number>(lastPrice.get(), 0));
+			lastPriceSeries.getData().add(new XYChart.Data<Number, Number>(lastPrice.get()+tick/4., -tick));
+			seriesCollection.add(lastPriceSeries);
 			
 			if(showAtNow.get()){
 				final XYChart.Series<Number, Number> atNowPayoff= new XYChart.Series<>();
@@ -154,6 +156,17 @@ public class PayoffChartController implements Initializable {
 					atNowPayoff.getData().add(new XYChart.Data<Number, Number>(k, atNowPosition.get(k)));
 				});
 				seriesCollection.add(atNowPayoff);
+			} 
+			
+			if(!showLegs.get()){
+				final XYChart.Series<Number, Number> cumulativePayoff= new XYChart.Series<>();
+				cumulativePayoff.setName("Cumulative Payoff");
+				
+				cumulativePosition.keySet().stream().forEach(k->{
+					cumulativePayoff.getData().add(new XYChart.Data<Number, Number>(k, cumulativePosition.get(k)));
+				});
+				
+				seriesCollection.add(cumulativePayoff);
 			}
 			
 			Platform.runLater(()->{

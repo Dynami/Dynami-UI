@@ -34,7 +34,7 @@
 				</ImageView>
 			</graphic>
 		</Button>
-		<TextField fx:id="strategyName" />
+		<!--TextField fx:id="strategyName" /-->
 		<ComboBox fx:id="strategies" prefWidth="150.0">
 			<tooltip>
 				<Tooltip text="Available strategies"/>

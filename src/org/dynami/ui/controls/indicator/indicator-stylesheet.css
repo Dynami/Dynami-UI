@@ -1,4 +1,5 @@
 .indicator-rect {
+    -fx-pref-width: 80px;
     -fx-fill: rgb(90,90,90) ;
     /*-fx-background-color: black;*/
     -fx-border-color: white ;
@@ -7,8 +8,10 @@
 .attribute-name {
 	-fx-text-fill: rgb(90,90,90);
 	-fx-font-weight: bold; 
+	-fx-font-size: 10px;
 }
 
 .attribute-value {
 	-fx-text-fill: rgb(90,90,90);
+	-fx-font-size: 10px;
 }

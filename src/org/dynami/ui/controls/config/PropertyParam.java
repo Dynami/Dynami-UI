@@ -32,7 +32,7 @@ public class PropertyParam<T> {
 		this.name = name;
 		this.description = description;
 		this.parent = null;
-		this.type = settings.getParams().get(fieldName).getType();
+		this.type = settings.getParams().get(fieldName).getParamValue().getType();
 		this.field = null;
 		this.fieldName= fieldName;
 		this.settings = settings;
@@ -74,7 +74,7 @@ public class PropertyParam<T> {
 	public void update(T t) {
 		try {
 			if(settings != null && settings.getParams().get(fieldName) != null){
-				settings.getParams().get(fieldName).setValue(t);
+				settings.getParams().get(fieldName).getParamValue().setValue(t);
 			} else {
 				field.set(parent, t);
 			}
@@ -87,7 +87,7 @@ public class PropertyParam<T> {
 	public T get() {
 		try {
 			if(settings != null && settings.getParams().get(fieldName) != null){
-				return (T)settings.getParams().get(fieldName).getValue();
+				return (T)settings.getParams().get(fieldName).getParamValue().getValue();
 			} else {
 				return (T)field.get(parent);
 			}

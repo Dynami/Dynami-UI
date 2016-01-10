@@ -51,7 +51,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,24 +69,17 @@ public class ToolBarController implements Initializable {
 	private IDataHandler handler;
 	private StrategyComponents strategyComponents;
 	
-	@FXML
-	ToolBar toolbar;
+	@FXML ToolBar toolbar;
 
-	@FXML
-	Button execButton, stopButton, confStratButton, confDataServiceButton;
+	@FXML Button execButton, stopButton, confStratButton, confDataServiceButton;
 
-	@FXML
-	ComboBox<StrategyComponents> strategies;
+	@FXML ComboBox<StrategyComponents> strategies;
 
-	@FXML
-	ComboBox<String>
-	dataHandlers;
+	@FXML ComboBox<String> dataHandlers;
 
-	@FXML
-	TextField strategyName;
+//	@FXML TextField strategyName;
 
-	@FXML
-	Image execIcon, stopIcon;
+	@FXML Image execIcon, stopIcon;
 
 	public void exec(ActionEvent e) throws Exception {
 		if(LOAD.equals(execButton.getText())){
@@ -95,7 +87,7 @@ public class ToolBarController implements Initializable {
 			
 			final String strategyJarPath = strategies.getSelectionModel().getSelectedItem().jarName;
 
-			boolean isOk = Execution.Manager.select(null, strategyJarPath);
+			boolean isOk = Execution.Manager.select(Strategies.Register.getSelectedValue().strategySettings, strategyJarPath);
 			if(isOk){
 				isOk = Execution.Manager.init(null);
 			}
@@ -198,49 +190,55 @@ public class ToolBarController implements Initializable {
 			}
 		});
 	}
-
+	
+	
+	private void applyClassSettings(final VBox vbox, final ClassSettings c) throws Exception {
+		VBox inner = new VBox();
+		Label label = new Label(c.getName());
+		label.getStyleClass().add("config-stage-title");
+		label.prefWidthProperty().bind(vbox.widthProperty());
+		inner.getChildren().add(label);
+		for(ParamSettings ps : c.getParams().values()){
+			try {
+				FieldParam param;
+				String name = ps.getName();
+				Class<?> type = ps.getParamValue().getType();
+				String description = ps.getDescription();
+				
+				if(ps.getInnerType().equals(Config.Type.TimeFrame)){
+					param = new TimeFrameParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)ps.getMin(), (long)ps.getMax(), (long)ps.getStep());
+				} else {
+					if(type.equals(Double.class) || type.equals(double.class)){
+						param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, c, ps.getFieldName()), ps.getMin(), ps.getMax(), ps.getStep());
+					} else if(type.equals(Long.class) || type.equals(long.class)){
+						param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)ps.getMin(), (long)ps.getMax(), (long)ps.getStep());
+					} else if(type.equals(Integer.class) || type.equals(int.class)){
+						param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, c, ps.getFieldName()), (int)ps.getMin(), (int)ps.getMax(), (int)ps.getStep());
+					} else if(type.equals(Boolean.class) || type.equals(boolean.class)){
+						param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, c, ps.getFieldName()));
+					} else if(type.equals(File.class)){
+						param = new FileFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
+					} else {
+						param = new TextFieldParam(new PropertyParam<String>(name, description, c, ps.getFieldName()));
+					} 
+				}
+				inner.getChildren().add(param);
+			} catch (Exception e1) {
+				Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+			}
+		}
+		vbox.getChildren().add(inner);
+	}
+	
 	public void configStrategy(ActionEvent e) throws Exception {
 		if(strategyComponents == null) return;
 		VBox vbox = new VBox();
 		PopOver popOver = new PopOver(vbox);
-		for(ClassSettings c: strategyComponents.strategySettings.getSettings().values()){
-			VBox inner = new VBox();
-			Label label = new Label(c.getName());
-			label.getStyleClass().add("config-stage-title");
-			label.prefWidthProperty().bind(vbox.widthProperty());
-			inner.getChildren().add(label);
-			for(ParamSettings ps : c.getParams().values()){
-				Config.Param p = ps.getParam();
-				if(p != null){
-					try {
-						FieldParam param;
-						String name = !p.name().equals("")?p.name():ps.getName();
-						String description = p.description();
-						
-						if(p.type().equals(Config.Type.TimeFrame)){
-							param = new TimeFrameParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)p.min(), (long)p.max(), (long)p.step());
-						} else {
-							if(ps.getType().equals(Double.class) || ps.getType().equals(double.class)){
-								param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, c, ps.getFieldName()), p.min(), p.max(), p.step());
-							} else if(ps.getType().equals(Long.class) || ps.getType().equals(long.class)){
-								param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)p.min(), (long)p.max(), (long)p.step());
-							} else if(ps.getType().equals(Integer.class) || ps.getType().equals(int.class)){
-								param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, c, ps.getFieldName()), (int)p.min(), (int)p.max(), (int)p.step());
-							} else if(ps.getType().equals(Boolean.class) || ps.getType().equals(boolean.class)){
-								param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, c, ps.getFieldName()));
-							} else if(ps.getType().equals(File.class)){
-								param = new FileFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
-							} else {
-								param = new TextFieldParam(new PropertyParam<String>(name, description, c, ps.getFieldName()));
-							} 
-						}
-						inner.getChildren().add(param);
-					} catch (Exception e1) {
-						Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
-					}
-				}
-			}
-			vbox.getChildren().add(inner);
+		
+		applyClassSettings(vbox, strategyComponents.strategySettings.getStrategy());
+		
+		for(ClassSettings c: strategyComponents.strategySettings.getStagesSettings().values()){
+			applyClassSettings(vbox, c);
 		}
 		
 		Button b = (Button)e.getSource();
