@@ -15,6 +15,7 @@
  */
 package org.dynami.ui.orders;
 
+import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.orders.OrderRequestWrapper;
 
 import javafx.beans.property.DoubleProperty;
@@ -123,7 +124,7 @@ public class OrderRequest {
 	}
 
 	public void setStatus(String status) {
-		this.status.set(status);
+		DUtils.threadSafe(()->this.status.set(status));
 	}
 
 	public Long getRequestID() {

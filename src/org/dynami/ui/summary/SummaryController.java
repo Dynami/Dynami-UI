@@ -60,7 +60,7 @@ public class SummaryController implements Initializable {
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
 				double _tmp = ((_realized+_unrealized)/(-_maxMargin.get()));
-				double _roi = ((_realized+_unrealized)<0.0001)?0.0:_tmp;
+				double _roi = ((_realized+_unrealized)<0.00001)?0.0:_tmp;
 				
 				delta.set(0.);
 				vega.set(0.);

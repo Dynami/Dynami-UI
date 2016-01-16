@@ -161,10 +161,14 @@ public class ToolBarController implements Initializable {
 				execButton.setText(LOAD);
 				execButton.setDisable(true);
 				stopButton.setDisable(true);
+				strategies.setDisable(false);
+				dataHandlers.setDisable(false);
 			} else if(newState.equals(IExecutionManager.State.Selected)){
 				execButton.setGraphic(loadIcon);
 				execButton.setText(LOAD);
 				execButton.setDisable(false);
+				strategies.setDisable(false);
+				dataHandlers.setDisable(false);
 			} else if(newState.equals(IExecutionManager.State.Initialized)){
 
 			} else if(newState.equals(IExecutionManager.State.Loaded)){
@@ -172,20 +176,28 @@ public class ToolBarController implements Initializable {
 				execButton.setText(RUN);
 				execButton.setDisable(false);
 				stopButton.setDisable(true);
+				strategies.setDisable(true);
+				dataHandlers.setDisable(true);
 			} else if(newState.equals(IExecutionManager.State.Running)){
 				execButton.setGraphic(pauseIcon);
 				execButton.setText(PAUSE);
 				execButton.setDisable(false);
 				stopButton.setDisable(false);
+				strategies.setDisable(true);
+				dataHandlers.setDisable(true);
 			} else if(newState.equals(IExecutionManager.State.Paused)){
 				execButton.setGraphic(resumeIcon);
 				execButton.setText(RESUME);
 				execButton.setDisable(false);
 				stopButton.setDisable(false);
+				strategies.setDisable(true);
+				dataHandlers.setDisable(true);
 			} else if(newState.equals(IExecutionManager.State.Stopped)){
 				execButton.setGraphic(loadIcon);
 				execButton.setText(LOAD);
 				stopButton.setDisable(true);
+				strategies.setDisable(false);
+				dataHandlers.setDisable(false);
 				checkSelection();
 			}
 		});
