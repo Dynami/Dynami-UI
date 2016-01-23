@@ -7,7 +7,7 @@
 <?import extfx.scene.chart.DateAxis?>
 
 <LineChart fx:id="chart" animated="false" legendVisible="false"
-	createSymbols="false" xmlns="http://javafx.com/javafx/8.0.40" 
+	createSymbols="false" xmlns="http://javafx.com/javafx/8.0.40"
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="org.dynami.ui.pricechart.PriceChartController"
 	prefHeight="500"

@@ -1,0 +1,16 @@
+/* ====== CANDLE STICK CHART =========================================================== */
+.candlestick-tooltip-label {
+    -fx-font-size: 0.75em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #666666;
+    -fx-padding: 2 5 2 0;
+}
+
+.close-above-open {
+    -fx-stroke: #95ce1b;
+    -fx-stroke-width: 2px;
+}
+.open-above-close {
+    -fx-stroke: #ce2700;
+    -fx-stroke-width: 2px;
+}
