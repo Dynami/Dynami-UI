@@ -39,29 +39,29 @@ public class SummaryController implements Initializable {
 	@FXML Indicator roi;
 	@FXML Indicator hvola;
 	@FXML Indicator portfolioDelta, portfolioVega, portfolioTheta;
-	
-	private final AtomicReference<Double> _maxMargin = new AtomicReference<>(0.1);
-	
+
+	private final AtomicReference<Double> _maxMargin = new AtomicReference<>(0.0);
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final AtomicReference<Double> delta = new AtomicReference<>(0.);
 		final AtomicReference<Double> vega = new AtomicReference<>(0.);
 		final AtomicReference<Double> theta = new AtomicReference<>(0.);
-		
+
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
 				double _margin = portfolio.requiredMargin();
-				if(_margin < _maxMargin.get()){
+				if(_margin > _maxMargin.get()){
 					_maxMargin.set(_margin);
 				}
 				double _realized = portfolio.realized();
 				double _unrealized = portfolio.unrealized();
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
-				double _tmp = ((_realized+_unrealized)/(-_maxMargin.get()));
-				double _roi = ((_realized+_unrealized)<0.00001)?0.0:_tmp;
-				
+				double _tmp = ((_realized+_unrealized)/(_maxMargin.get()));
+				double _roi = Math.pow((_realized+_unrealized),2)<0.0000001?0.0:_tmp;
+
 				delta.set(0.);
 				vega.set(0.);
 				theta.set(0.);
@@ -69,10 +69,10 @@ public class SummaryController implements Initializable {
 					if(o.asset.family.equals(Asset.Family.Option)){
 						double _delta = ((Asset.Option)o.asset).greeks().delta() * o.quantity * o.asset.pointValue;
 						delta.set(delta.get()+_delta);
-						
+
 						double _vega = ((Asset.Option)o.asset).greeks().vega() * o.quantity * o.asset.pointValue;
 						vega.set(vega.get()+_vega);
-						
+
 						double _theta = ((Asset.Option)o.asset).greeks().theta() * o.quantity * o.asset.pointValue;
 						theta.set(theta.get()+_theta);
 					} else {
@@ -81,16 +81,16 @@ public class SummaryController implements Initializable {
 						theta.set(theta.get()+(o.quantity*o.asset.pointValue));
 					}
 				});
-				
+
 				Platform.runLater(()->{
 					realized.setValue(_realized);
 					unrealized.setValue(_unrealized);
 					initialBudget.setValue(_initialBudget);
 					currentBudget.setValue(_currentBudget);
 					roi.setValue(_roi);
-					
+
 					margin.setValue(_margin);
-					this.maxMargin.setValue(_maxMargin.get());
+					maxMargin.setValue(-_maxMargin.get());
 					portfolioDelta.setValue(delta.get());
 					portfolioVega.setValue(vega.get());
 					portfolioTheta.setValue(theta.get());
