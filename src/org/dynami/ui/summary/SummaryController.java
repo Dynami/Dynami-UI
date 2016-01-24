@@ -52,15 +52,14 @@ public class SummaryController implements Initializable {
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
 				double _margin = portfolio.requiredMargin();
-				if(_margin > _maxMargin.get()){
+				if(_margin < 0 && _margin < _maxMargin.get()){
 					_maxMargin.set(_margin);
 				}
 				double _realized = portfolio.realized();
 				double _unrealized = portfolio.unrealized();
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
-				double _tmp = ((_realized+_unrealized)/(_maxMargin.get()));
-				double _roi = Math.pow((_realized+_unrealized),2)<0.0000001?0.0:_tmp;
+				double _roi = _maxMargin.get() != 0.0?((_realized+_unrealized)/(-_maxMargin.get())):0.0;
 
 				delta.set(0.);
 				vega.set(0.);
@@ -90,7 +89,7 @@ public class SummaryController implements Initializable {
 					roi.setValue(_roi);
 
 					margin.setValue(_margin);
-					maxMargin.setValue(-_maxMargin.get());
+					maxMargin.setValue(_maxMargin.get());
 					portfolioDelta.setValue(delta.get());
 					portfolioVega.setValue(vega.get());
 					portfolioTheta.setValue(theta.get());

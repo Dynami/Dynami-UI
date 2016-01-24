@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.prefs.Preferences;
 
 import org.dynami.core.Event;
@@ -41,28 +42,28 @@ public class EquityLineController implements Initializable {
 
 	final XYChart.Series<Date, Number> realized = new XYChart.Series<>();
 	final XYChart.Series<Date, Number> total = new XYChart.Series<>();
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
-		
+
 		realized.setName("Realized");
 		total.setName("Total");
 		chart.setCreateSymbols(false);
 		chart.getData().add(realized);
 		chart.getData().add(total);
 		chart.setAnimated(false);
-		
+
 		DynamiApplication.timer().get("equityLine", EquityLineData.class).addConsumer(bars->{
-			final List<XYChart.Data<Date,Number>> listRealised = new ArrayList<>();
-			final List<XYChart.Data<Date,Number>> listTotal = new ArrayList<>();
+			final List<XYChart.Data<Date,Number>> listRealised = new CopyOnWriteArrayList<>();
+			final List<XYChart.Data<Date,Number>> listTotal = new CopyOnWriteArrayList<>();
 			bars.forEach(bar->{
 				listRealised.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.realized));
 				listTotal.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.realized+bar.unrealized));
 			});
-			
+
 			if(listRealised.size()>0){
-				int exeeding = Math.max(0, realized.getData().size()+listRealised.size()-MAX_SAMPLES);  
+				int exeeding = Math.max(0, realized.getData().size()+listRealised.size()-MAX_SAMPLES);
 				if(exeeding  > 0){
 					realized.getData().remove(0, exeeding-1);
 					total.getData().remove(0,  exeeding-1);
@@ -77,17 +78,17 @@ public class EquityLineController implements Initializable {
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
 				double realized = portfolio.realized();
 				double unrealized = portfolio.unrealized();
-				
+
 				DynamiApplication.timer().get("equityLine", EquityLineData.class).push(new EquityLineData(e.bar.time, realized, unrealized));
 			}
 		});
 	}
-	
+
 	public static class EquityLineData {
 		final public long time;
 		final public double realized;
 		final public double unrealized;
-		
+
 		public EquityLineData(long time, double realized, double unrealized) {
 			this.time = time;
 			this.realized = realized;

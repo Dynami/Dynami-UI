@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.prefs.Preferences;
 
 import org.dynami.core.services.IOrderService.Status;
@@ -41,7 +42,7 @@ public class OrderRequestsController implements Initializable {
 	@FXML TableColumn<OrderRequest, Number> entryTimeColumn;
 	@FXML TableColumn<OrderRequest, String> notesColumn;
 	@FXML TableColumn<OrderRequest, String> statusColumn;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
@@ -50,21 +51,24 @@ public class OrderRequestsController implements Initializable {
 			OrderRequestWrapper request = (OrderRequestWrapper)msg;
 			DynamiApplication.timer().get("order_requests", OrderRequest.class).push(new OrderRequest(request));
 		});
-		
+
+		final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 		DynamiApplication.timer().addClockedFunction(()->{
 			data.forEach(r->{
-				if(!r.getStatus().equals(Status.Executed.name()) 
+				if(!r.getStatus().equals(Status.Executed.name())
 						&& !r.getStatus().equals(Status.Cancelled.name())
 						&& !r.getStatus().equals(Status.Rejected.name())){
 					Status status = Execution.Manager.dynami().orders().getOrderStatus(r.getRequestID());
 					if(!status.name().equals(r.getStatus())){
 						// update order request status
-						r.setStatus(status.name());
+						rwl.writeLock().lock();
+						try { r.setStatus(status.name()); }
+						finally { rwl.writeLock().unlock(); }
 					}
 				}
 			});
 		});
-		
+
 		DynamiApplication.timer().get("order_requests", OrderRequest.class).addConsumer(list->{
 			if(list != null && list.size() > 0 ){
 				final List<OrderRequest> tmp = new ArrayList<>(list);
@@ -77,7 +81,7 @@ public class OrderRequestsController implements Initializable {
 				});
 			}
 		});
-		
+
 		table.setItems(filteredData);
 		requestIdColumn.setCellValueFactory(new PropertyValueFactory<>("requestID"));
 		requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("requestType"));
@@ -85,10 +89,10 @@ public class OrderRequestsController implements Initializable {
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		notesColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-		
+
 		entryTimeColumn.setCellValueFactory(cell->cell.getValue().entryTime);
 		entryTimeColumn.setCellFactory(col -> new TableCell<OrderRequest, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number time, boolean empty) {
 	            super.updateItem(time, empty);
 	            if (empty) {
@@ -100,20 +104,20 @@ public class OrderRequestsController implements Initializable {
 	    });
 		entryPriceColumn.setCellValueFactory(cell->cell.getValue().entryPrice);
 		entryPriceColumn.setCellFactory(col -> new TableCell<OrderRequest, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	
+
 	                setText(String.format("%.2f", value.doubleValue()));
 	            }
 	        }
 	    });
 	}
-	
+
 	public void filter(ActionEvent e){
-		
+
 	}
 }

@@ -29,7 +29,6 @@ import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.controls.chart.BarStickChart;
-import org.dynami.ui.controls.chart.CandleStickChart;
 import org.dynami.ui.prefs.PrefsConstants;
 
 import extfx.scene.chart.DateAxis;
@@ -73,9 +72,8 @@ public class CandleChartController implements Initializable {
 			bars.forEach(bar->{
 				list.add(new XYChart.Data<Date, Number>(
 						new Date(bar.time),
-						bar.open,
+						bar.high,
 						bar
-						//new CandleStickChart.CandleStickExtraValues(bar)
 						));
 				;
 			});

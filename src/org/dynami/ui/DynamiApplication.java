@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package org.dynami.ui;
-	
+
 import java.util.prefs.Preferences;
 
 import org.dynami.runtime.handlers.TextFileDataHandler;
@@ -41,38 +41,38 @@ public class DynamiApplication extends Application {
 	public static DoubleProperty priceLowerBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceTickUnit = new SimpleDoubleProperty();
-	
+
 	@SuppressWarnings("unused")
 	private final DynamiActions actions;
-	
+
 	public DynamiApplication(){
 		actions = new DynamiActions();
 	}
-	
+
 	@Override
 	public void init() throws Exception {
 		super.init();
 		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
 		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-Sample-Strategy/resources/");
-		
-		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
-		
+
+		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 100);
+
 		appPrefs.putInt(PrefsConstants.TRACES.MAX_ROWS, 100);
 		appPrefs.put(PrefsConstants.TRACES.COLOR.INFO, Color.LIGHTSKYBLUE.toString());
 		appPrefs.put(PrefsConstants.TRACES.COLOR.DEBUG, Color.LIGHTGRAY.toString());
 		appPrefs.put(PrefsConstants.TRACES.COLOR.WARN, Color.ORANGE.toString());
 		appPrefs.put(PrefsConstants.TRACES.COLOR.ERROR, Color.ORANGERED.toString());
-		
+
 		Strategies.Register.scanStrategyDirectory();
 		DataHandler.Registry.register(TextFileDataHandler.class);
 		Execution.Manager.getServiceBus().registerDefaultServices();
 	}
-	
-	
+
+
 	public static UITimer timer(){
 		return _timer;
 	}
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -90,23 +90,23 @@ public class DynamiApplication extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Stage getPrimaryStage() {
 		return _primaryStage;
 	}
-	
-	
+
+
 	@Override
 	public void stop() throws Exception {
 		_timer.dispose();
 		Execution.Manager.msg().dispose();
 		Execution.Manager.dispose();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	private static NumberAxis priceAxis;
 	public static NumberAxis getSingletonAxis(){
 		if(priceAxis == null){

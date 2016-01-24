@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.dynami.core.data.Bar;
 
-import extfx.scene.chart.DateAxis;
 import javafx.animation.FadeTransition;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
@@ -51,7 +50,8 @@ public class BarStickChart extends XYChart<Date, Number> {
     }
 
     /** Called to update and layout the content for the plot */
-    @Override protected void layoutPlotChildren() {
+    @Override
+    protected void layoutPlotChildren() {
         // we have nothing to layout if no data is present
         if (getData() == null) {
             return;
@@ -65,26 +65,20 @@ public class BarStickChart extends XYChart<Date, Number> {
                 double x = getXAxis().getDisplayPosition(getCurrentDisplayedXValue(item));
                 double y = getYAxis().getDisplayPosition(getCurrentDisplayedYValue(item));
                 Node itemNode = item.getNode();
-                Bar extra = (Bar) item.getExtraValue();
-                if (itemNode instanceof BarStick && extra != null) {
+                Bar bar = (Bar) item.getExtraValue();
+                if (itemNode instanceof BarStick && bar != null) {
                     BarStick node = (BarStick) itemNode;
-                    double open = getYAxis().getDisplayPosition(extra.getOpen());
-                    double close = getYAxis().getDisplayPosition(extra.getClose());
-                    double high = getYAxis().getDisplayPosition(extra.getHigh());
-                    double low = getYAxis().getDisplayPosition(extra.getLow());
+
+                    double open = getYAxis().getDisplayPosition(bar.getOpen());
+                    double close = getYAxis().getDisplayPosition(bar.getClose());
+                    double high = getYAxis().getDisplayPosition(bar.getHigh());
+                    double low = getYAxis().getDisplayPosition(bar.getLow());
 
                     // calculate candle width
-                    double candleWidth = -1;
-                    if (getXAxis() instanceof DateAxis) {
-                    	DateAxis xa = (DateAxis) getXAxis();
-                        candleWidth =  xa.getTickLength() * 0.90; // use 90% width between ticks
-                    }
-                    // update candle
-                    node.update(x, close - y, open - y, high - y, low - y, candleWidth);
-                    //node.updateTooltip(item.getYValue().doubleValue(), extra.getClose(), extra.getHigh(), extra.getLow());
+                    double candleWidth =  getXAxis().getTickLength() * 0.90; // use 90% width between ticks
 
-                    // position the candle
-                    node.setLayoutX(x);
+                    node.update((bar.close>=bar.open), x, close - y, open - y, high - y, low - y, candleWidth);
+//                   node.setLayoutX(x);
                     node.setLayoutY(y);
                 }
             }
@@ -95,9 +89,21 @@ public class BarStickChart extends XYChart<Date, Number> {
     protected void dataItemChanged(Data<Date, Number> item) {
     }
 
+    private Node createNode(int seriesIndex, final Data<Date, Number> item, int itemIndex) {
+        Node stick = item.getNode();
+        // check if candle has already been created
+        if (stick instanceof BarStick) {
+            //((BarStick) candle).setSeriesAndDataStyleClasses("series" + seriesIndex, "data" + itemIndex);
+        } else {
+            stick = new BarStick();
+            item.setNode(stick);
+        }
+        return stick;
+    }
+
     @Override
     protected void dataItemAdded(Series<Date, Number> series, int itemIndex, Data<Date, Number> item) {
-        Node node = item.getNode(); //createNode(getData().indexOf(series), item, itemIndex);
+        Node node = createNode(getData().indexOf(series), item, itemIndex);
         if (shouldAnimate()) {
             node.setOpacity(0);
             getPlotChildren().add(node);
@@ -107,10 +113,6 @@ public class BarStickChart extends XYChart<Date, Number> {
             ft.play();
         } else {
             getPlotChildren().add(node);
-        }
-        // always draw average line on top
-        if (series.getNode() != null) {
-            series.getNode().toFront();
         }
     }
 
@@ -224,39 +226,24 @@ public class BarStickChart extends XYChart<Date, Number> {
     	private Line highLowLine = new Line();
     	private Line openLine = new Line();
     	private Line closeLine = new Line();
-//    	private Region bar = new Region();
-//    	private String seriesStyleClass;
-//    	private String dataStyleClass;
-    	private boolean openAboveClose = true;
-//    	private Tooltip tooltip = new Tooltip();
 
-    	public BarStick(String seriesStyleClass, String dataStyleClass) {
+    	public BarStick() {
     		setAutoSizeChildren(false);
     		getChildren().addAll(highLowLine
     				, openLine
     				, closeLine
     				);
-//    		this.seriesStyleClass = seriesStyleClass;
-//    		this.dataStyleClass = dataStyleClass;
-//    		updateStyleClasses();
-//    		tooltip.setGraphic(new TooltipContent());
-//    		Tooltip.install(highLowLine, tooltip);
     	}
 
-//    	public void setSeriesAndDataStyleClasses(String seriesStyleClass, String dataStyleClass) {
-//    		this.seriesStyleClass = seriesStyleClass;
-//    		this.dataStyleClass = dataStyleClass;
-//    		updateStyleClasses();
-//    	}
 
-    	public void update(double timeOffset, double closeOffset, double openOffset, double highOffset, double lowOffset, double candleWidth) {
-    		openAboveClose = closeOffset > 0;
-//    		updateStyleClasses();
-    		String styleClass = (openAboveClose)?"open-above-close":"close-above-open";
-    		highLowLine.setStartY(highOffset);
+    	public void update(boolean closeAboveOpen, double timeOffset, double closeOffset, double openOffset, double highOffset, double lowOffset, double candleWidth) {
+    		String styleClass = (closeAboveOpen)?"close-above-open":"open-above-close";
+
     		highLowLine.setStartX(timeOffset);
     		highLowLine.setEndX(timeOffset);
+    		highLowLine.setStartY(highOffset);
     		highLowLine.setEndY(lowOffset);
+
     		highLowLine.getStyleClass().add(styleClass);
 
     		openLine.setStartY(openOffset);
@@ -270,21 +257,7 @@ public class BarStickChart extends XYChart<Date, Number> {
     		closeLine.setEndY(closeOffset);
     		closeLine.setEndX(timeOffset+candleWidth/2);
     		closeLine.getStyleClass().add(styleClass);
-
     	}
-
-//    	public void updateTooltip(double open, double close, double high, double low) {
-//    		TooltipContent tooltipContent = (TooltipContent) tooltip.getGraphic();
-//    		tooltipContent.update(open, close, high, low);
-//          tooltip.setText("Open: "+open+"\nClose: "+close+"\nHigh: "+high+"\nLow: "+low);
-//    	}
-
-//    	private void updateStyleClasses() {
-//    		getStyleClass().setAll("candlestick-candle", seriesStyleClass, dataStyleClass);
-//    		highLowLine.getStyleClass().setAll("candlestick-line", seriesStyleClass, dataStyleClass, openAboveClose ? "open-above-close" : "close-above-open");
-//    		bar.getStyleClass().setAll("candlestick-bar", seriesStyleClass, dataStyleClass,
-//    				openAboveClose ? "open-above-close" : "close-above-open");
-//    	}
     }
 
 
@@ -321,41 +294,6 @@ public class BarStickChart extends XYChart<Date, Number> {
     		lowValue.setText(Double.toString(low));
     	}
     }
-
-
-//    public static class CandleStickExtraValues {
-//    	private final double close;
-//    	private final double high;
-//    	private final double low;
-//    	private final double open;
-//
-//    	public CandleStickExtraValues(Bar b){
-//    		this(b.open, b.high, b.low, b.close);
-//    	}
-//
-//    	public CandleStickExtraValues(double open, double high, double low, double close) {
-//    		this.close = close;
-//    		this.high = high;
-//    		this.low = low;
-//    		this.open = open;
-//    	}
-//
-//    	public double getClose() {
-//    		return close;
-//    	}
-//
-//    	public double getHigh() {
-//    		return high;
-//    	}
-//
-//    	public double getLow() {
-//    		return low;
-//    	}
-//
-//    	public double getOpen() {
-//    		return open;
-//    	}
-//    }
 }
 
 
