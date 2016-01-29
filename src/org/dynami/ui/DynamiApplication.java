@@ -55,7 +55,7 @@ public class DynamiApplication extends Application {
 		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
 		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-Sample-Strategy/resources/");
 
-		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 100);
+		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
 
 		appPrefs.putInt(PrefsConstants.TRACES.MAX_ROWS, 100);
 		appPrefs.put(PrefsConstants.TRACES.COLOR.INFO, Color.LIGHTSKYBLUE.toString());

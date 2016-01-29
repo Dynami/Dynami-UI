@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -78,6 +79,7 @@ public class BarStickChart extends XYChart<Date, Number> {
                     double candleWidth =  getXAxis().getTickLength() * 0.90; // use 90% width between ticks
 
                     node.update((bar.close>=bar.open), x, close - y, open - y, high - y, low - y, candleWidth);
+                    node.updateTooltip(bar);
 //                   node.setLayoutX(x);
                     node.setLayoutY(y);
                 }
@@ -226,6 +228,7 @@ public class BarStickChart extends XYChart<Date, Number> {
     	private Line highLowLine = new Line();
     	private Line openLine = new Line();
     	private Line closeLine = new Line();
+    	private Tooltip tooltip = new Tooltip();
 
     	public BarStick() {
     		setAutoSizeChildren(false);
@@ -233,6 +236,8 @@ public class BarStickChart extends XYChart<Date, Number> {
     				, openLine
     				, closeLine
     				);
+    		tooltip.setGraphic(new TooltipContent());
+    		Tooltip.install(this, tooltip);
     	}
 
 
@@ -257,6 +262,11 @@ public class BarStickChart extends XYChart<Date, Number> {
     		closeLine.setEndY(closeOffset);
     		closeLine.setEndX(timeOffset+candleWidth/2);
     		closeLine.getStyleClass().add(styleClass);
+    	}
+
+    	public void updateTooltip(Bar bar) {
+    		TooltipContent tooltipContent = (TooltipContent)tooltip.getGraphic();
+    		tooltipContent.update(bar.open, bar.close, bar.high, bar.low);
     	}
     }
 
