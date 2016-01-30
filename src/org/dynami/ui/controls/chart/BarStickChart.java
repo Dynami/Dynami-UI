@@ -6,12 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dynami.core.data.Bar;
+import org.dynami.core.utils.DUtils;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
@@ -19,6 +23,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
@@ -266,12 +271,13 @@ public class BarStickChart extends XYChart<Date, Number> {
 
     	public void updateTooltip(Bar bar) {
     		TooltipContent tooltipContent = (TooltipContent)tooltip.getGraphic();
-    		tooltipContent.update(bar.open, bar.close, bar.high, bar.low);
+    		tooltipContent.update(bar);
     	}
     }
 
 
     public static class TooltipContent extends GridPane {
+    	private Label timeValue = new Label();
     	private Label openValue = new Label();
     	private Label closeValue = new Label();
     	private Label highValue = new Label();
@@ -282,26 +288,34 @@ public class BarStickChart extends XYChart<Date, Number> {
     		Label close = new Label("CLOSE:");
     		Label high = new Label("HIGH:");
     		Label low = new Label("LOW:");
+//    		time.getStyleClass().add("candlestick-tooltip-label");
     		open.getStyleClass().add("candlestick-tooltip-label");
     		close.getStyleClass().add("candlestick-tooltip-label");
     		high.getStyleClass().add("candlestick-tooltip-label");
     		low.getStyleClass().add("candlestick-tooltip-label");
-    		setConstraints(open, 0, 0);
-    		setConstraints(openValue, 1, 0);
-    		setConstraints(close, 0, 1);
-    		setConstraints(closeValue, 1, 1);
-    		setConstraints(high, 0, 2);
-    		setConstraints(highValue, 1, 2);
-    		setConstraints(low, 0, 3);
-    		setConstraints(lowValue, 1, 3);
-    		getChildren().addAll(open, openValue, close, closeValue, high, highValue, low, lowValue);
+    		setConstraints(timeValue, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS, new Insets(2));
+
+    		setConstraints(open, 0, 1);
+    		setConstraints(openValue, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS, new Insets(2));
+
+    		setConstraints(close, 0, 2);
+    		setConstraints(closeValue, 1, 2, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS, new Insets(2));
+
+    		setConstraints(high, 0, 3);
+    		setConstraints(highValue, 1, 3, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS, new Insets(2));
+
+    		setConstraints(low, 0, 4);
+    		setConstraints(lowValue, 1, 4, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS, new Insets(2));
+
+    		getChildren().addAll(timeValue, open, openValue, close, closeValue, high, highValue, low, lowValue);
     	}
 
-    	public void update(double open, double close, double high, double low) {
-    		openValue.setText(Double.toString(open));
-    		closeValue.setText(Double.toString(close));
-    		highValue.setText(Double.toString(high));
-    		lowValue.setText(Double.toString(low));
+    	public void update(Bar bar) {
+    		timeValue.setText(DUtils.LONG_DATE_FORMAT.format(bar.time));
+    		openValue.setText(Double.toString(bar.open));
+    		closeValue.setText(Double.toString(bar.close));
+    		highValue.setText(Double.toString(bar.high));
+    		lowValue.setText(Double.toString(bar.low));
     	}
     }
 }
