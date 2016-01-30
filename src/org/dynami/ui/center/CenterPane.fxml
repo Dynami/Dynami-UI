@@ -8,14 +8,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
-<SplitPane dividerPositions="0.6" orientation="VERTICAL"
+<SplitPane dividerPositions="0.8" orientation="VERTICAL"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<items>
-		<SplitPane dividerPositions="0.7" prefHeight="Infinity" prefWidth="200.0" orientation="HORIZONTAL">
+		<SplitPane dividerPositions="0.9" prefHeight="700" prefWidth="200.0" orientation="HORIZONTAL">
 			<items>
-				<SplitPane dividerPositions="0.7" prefHeight="500.0" prefWidth="200.0" orientation="VERTICAL">
+				<SplitPane dividerPositions="0.6" prefHeight="700.0" prefWidth="200.0" orientation="VERTICAL">
 					<items>
-<!-- 						<fx:include source="/org/dynami/ui/pricechart/PriceChart.fxml" /> -->
 						<fx:include source="/org/dynami/ui/pricechart/CandleChart.fxml" />
 						<TabPane prefHeight="300.0" prefWidth="200.0" side="BOTTOM"
 							tabClosingPolicy="UNAVAILABLE">
