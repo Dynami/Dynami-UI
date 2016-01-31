@@ -47,6 +47,11 @@ public class OrderRequestsController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
 		MAX_ROWS = appPrefs.getInt(PrefsConstants.TRACES.MAX_ROWS, 50);
+
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->data.clear());
+		});
+
 		Execution.Manager.msg().subscribe(Topics.ORDER_REQUESTS.topic, (last, msg)->{
 			OrderRequestWrapper request = (OrderRequestWrapper)msg;
 			DynamiApplication.timer().get("order_requests", OrderRequest.class).push(new OrderRequest(request));

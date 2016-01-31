@@ -54,9 +54,13 @@ public class ClosedPositionsController implements Initializable {
 	@FXML TableColumn<ClosedPosition, Number> returnColumn;
 	private final ObservableList<ClosedPosition> data = FXCollections.observableArrayList();
 	private final FilteredList<ClosedPosition> filteredData = new FilteredList<>(data, p->true);
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->data.clear());
+		});
+
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPosition();
@@ -72,7 +76,7 @@ public class ClosedPositionsController implements Initializable {
 				}
 			}
 		});
-		
+
 		table.setItems(filteredData);
 		table.setRowFactory(new Callback<TableView<ClosedPosition>, TableRow<ClosedPosition>>() {
 			@Override
@@ -87,6 +91,8 @@ public class ClosedPositionsController implements Initializable {
 							} else {
 								setBackground(UIUtils.redBackground);
 							}
+						} else {
+							setBackground(UIUtils.defaultBackground);
 						}
 					}
 				};
@@ -95,10 +101,10 @@ public class ClosedPositionsController implements Initializable {
 
 		assetColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));;
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-		
+
 		entryPriceColumn.setCellValueFactory(cell->cell.getValue().entryPrice());
 		entryPriceColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number price, boolean empty) {
 	            super.updateItem(price, empty);
 	            if (empty) {
@@ -108,10 +114,10 @@ public class ClosedPositionsController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		entryTimeColumn.setCellValueFactory(cell->cell.getValue().entryTime());
 		entryTimeColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number time, boolean empty) {
 	            super.updateItem(time, empty);
 	            if (empty) {
@@ -121,23 +127,23 @@ public class ClosedPositionsController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		exitPriceColumn.setCellValueFactory(cell->cell.getValue().exitPrice());
 		exitPriceColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number price, boolean empty) {
 	            super.updateItem(price, empty);
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	
+
 	                setText(String.format("%.2f", price.doubleValue()));
 	            }
 	        }
 	    });
 		exitTimeColumn.setCellValueFactory(cell->cell.getValue().exitTime());
 		exitTimeColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number time, boolean empty) {
 	            super.updateItem(time, empty);
 	            if (empty) {
@@ -147,10 +153,10 @@ public class ClosedPositionsController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		percReturnColumn.setCellValueFactory(cell->cell.getValue().percReturn());
 		percReturnColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number price, boolean empty) {
 	            super.updateItem(price, empty);
 	            if (empty) {
@@ -160,10 +166,10 @@ public class ClosedPositionsController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		returnColumn.setCellValueFactory(cell->cell.getValue().absReturn());
 		returnColumn.setCellFactory(col -> new TableCell<ClosedPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number price, boolean empty) {
 	            super.updateItem(price, empty);
 	            if (empty) {
@@ -174,7 +180,7 @@ public class ClosedPositionsController implements Initializable {
 	        }
 	    });
 	}
-	
+
 	public void filterPositions(ActionEvent e){
 		final String newValue = filterText.getText();
 		if(newValue == null || newValue.trim().equals("")){

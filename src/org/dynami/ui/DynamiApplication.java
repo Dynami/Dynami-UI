@@ -37,6 +37,8 @@ import javafx.stage.Stage;
 
 public class DynamiApplication extends Application {
 	private static final UITimer _timer = new UITimer(1000);
+	public static final String RESET_TOPIC = "RESET_UI";
+
 	private static Stage _primaryStage;
 	public static DoubleProperty priceLowerBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
@@ -53,7 +55,7 @@ public class DynamiApplication extends Application {
 	public void init() throws Exception {
 		super.init();
 		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
-		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-Sample-Strategy/resources/");
+		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-UI/resources/");
 
 		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
 
@@ -77,15 +79,20 @@ public class DynamiApplication extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			_timer.start();
+
+//			final Screen screen = Screen.getPrimary();
+//			final Rectangle2D bounds = screen.getVisualBounds();
 			_primaryStage = primaryStage;
+
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("main/MainWindow.fxml"));
 			Scene scene = new Scene(root,1024,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.getIcons().add(new Image("icons/_dynami.png"));
-			primaryStage.setTitle("Dynami");
-			primaryStage.setScene(scene);
-			primaryStage.sizeToScene();
-			primaryStage.show();
+			_primaryStage.getIcons().add(new Image("icons/_dynami.png"));
+			_primaryStage.setTitle("Dynami");
+			_primaryStage.setScene(scene);
+			_primaryStage.sizeToScene();
+//			_primaryStage.setMaximized(true);
+			_primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

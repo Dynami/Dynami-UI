@@ -88,6 +88,10 @@ public class CandleChartController implements Initializable {
 			}
 		});
 
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->series.getData().clear());
+		});
+
 		Execution.Manager.msg().subscribe(Topics.STRATEGY_EVENT.topic, (last, msg)->{
 			final Event e = (Event)msg;
 			if(e.is(Type.OnBarClose)){

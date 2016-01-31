@@ -47,7 +47,21 @@ public class SummaryController implements Initializable {
 		final AtomicReference<Double> delta = new AtomicReference<>(0.);
 		final AtomicReference<Double> vega = new AtomicReference<>(0.);
 		final AtomicReference<Double> theta = new AtomicReference<>(0.);
-
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->{
+				_maxMargin.set(0.);
+				currentBudget.setValue(initialBudget.getValue());
+				realized.setValue(0);
+				unrealized.setValue(0);
+				margin.setValue(0);
+				maxMargin.setValue(0);
+				roi.setValue(0);
+//				hvola.setValue(0);
+				portfolioDelta.setValue(0);
+				portfolioVega.setValue(0);
+				portfolioTheta.setValue(0);
+			});
+		});
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();

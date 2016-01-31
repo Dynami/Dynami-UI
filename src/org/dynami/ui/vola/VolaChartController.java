@@ -19,6 +19,7 @@ import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.prefs.PrefsConstants;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -32,8 +33,8 @@ public class VolaChartController implements Initializable {
 //	final XYChart.Series<Date, Number> implVola = new XYChart.Series<>();
 	final IVolatilityEngine engine = new CloseToCloseVolatilityEngine();
 	Market market;
-	
-	
+
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
@@ -42,6 +43,11 @@ public class VolaChartController implements Initializable {
 		chart.setCreateSymbols(false);
 		chart.getData().add(histVola);
 		chart.setAnimated(false);
+
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()-> histVola.getData().clear());
+		});
+
 		DynamiApplication.timer().get("_bars", Bar.class).addConsumer(bars->{
 			final List<XYChart.Data<Date,Number>> tmpHistVola = new ArrayList<>();
 //			final List<XYChart.Data<Date,Number>> tmpImplVola = new ArrayList<>();
@@ -57,16 +63,16 @@ public class VolaChartController implements Initializable {
 				//double lastVola = data.getVolatility(engine, 20)*engine.annualizationFactor(data.getCompression(), 20, market);
 				tmpHistVola.add(new XYChart.Data<Date, Number>(new Date(bar.time), lastVola));
 			});
-			
+
 			if(tmpHistVola.size()>0){
-				int exeeding = Math.max(0, histVola.getData().size()+tmpHistVola.size()-MAX_SAMPLES); 
+				int exeeding = Math.max(0, histVola.getData().size()+tmpHistVola.size()-MAX_SAMPLES);
 				if(exeeding  > 0){
 					histVola.getData().remove(0, exeeding-1);
 				}
 				histVola.getData().addAll(tmpHistVola);
 			}
 		});
-		
+
 		Execution.Manager.msg().subscribe(Topics.STRATEGY_EVENT.topic, (last, msg)->{
 			final Event e = (Event)msg;
 			if(e.is(Type.OnBarClose)){

@@ -44,7 +44,7 @@ import javafx.util.Callback;
 public class PortfolioController implements Initializable {
 	private final ObservableList<OpenPosition> positions = FXCollections.observableArrayList();
 	@FXML TableView<OpenPosition> table;
-	
+
 	@FXML TableColumn<OpenPosition, String> typeColumn;
 	@FXML TableColumn<OpenPosition, String> symbolColumn;
 	@FXML TableColumn<OpenPosition, Number> qtColumn;
@@ -53,19 +53,24 @@ public class PortfolioController implements Initializable {
 	@FXML TableColumn<OpenPosition, Number> currentPriceColumn;
 	@FXML TableColumn<OpenPosition, Number> percColumn;
 	@FXML TableColumn<OpenPosition, Number> roiColumn;
-	
+
 	@FXML TableColumn<OpenPosition, Number> deltaColumn;
 	@FXML TableColumn<OpenPosition, Number> gammaColumn;
 	@FXML TableColumn<OpenPosition, Number> vegaColumn;
 	@FXML TableColumn<OpenPosition, Number> thetaColumn;
 	@FXML TableColumn<OpenPosition, Number> rhoColumn;
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
 		table.setItems(positions);
+
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()-> positions.clear());
+		});
+
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(!Execution.Manager.isLoaded()) return;
-			
+
 			final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
 			final List<OpenPosition> list = portfolio.getOpenPosition()
 					.stream()
@@ -97,7 +102,7 @@ public class PortfolioController implements Initializable {
 				positions.addAll(list);
 			});
 		});
-		
+
 		table.setRowFactory(new Callback<TableView<OpenPosition>, TableRow<OpenPosition>>() {
 			@Override
 			public TableRow<OpenPosition> call(TableView<OpenPosition> param) {
@@ -118,13 +123,13 @@ public class PortfolioController implements Initializable {
 				};
 			}
 		});
-		
+
 		typeColumn.setCellValueFactory(new PropertyValueFactory<>("assetType"));
 		symbolColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));
 		qtColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		entryTimeColumn.setCellValueFactory(cell->cell.getValue().entryTime());
 		entryTimeColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number time, boolean empty) {
 	            super.updateItem(time, empty);
 	            if (empty) {
@@ -136,35 +141,35 @@ public class PortfolioController implements Initializable {
 	    });
 		entryPriceColumn.setCellValueFactory(cell->cell.getValue().entryPrice);
 		entryPriceColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	
+
 	                setText(String.format("%.2f", value.doubleValue()));
 	            }
 	        }
 	    });
-		
+
 		currentPriceColumn.setCellValueFactory(cell->cell.getValue().currentPrice);
 		currentPriceColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	
+
 	                setText(String.format("%.2f", value.doubleValue()));
 	            }
 	        }
 	    });
-		
+
 		percColumn.setCellValueFactory(cell->cell.getValue().percRoi());
 		percColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
@@ -174,10 +179,10 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		roiColumn.setCellValueFactory(cell->cell.getValue().roi());
 		roiColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number price, boolean empty) {
 	            super.updateItem(price, empty);
 	            if (empty) {
@@ -187,10 +192,10 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		deltaColumn.setCellValueFactory(cell->cell.getValue().delta());
 		deltaColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
@@ -200,10 +205,10 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		gammaColumn.setCellValueFactory(cell->cell.getValue().gamma());
 		gammaColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
@@ -213,10 +218,10 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		vegaColumn.setCellValueFactory(cell->cell.getValue().vega());
 		vegaColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
@@ -226,10 +231,10 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		thetaColumn.setCellValueFactory(cell->cell.getValue().theta());
 		thetaColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {
@@ -239,10 +244,10 @@ public class PortfolioController implements Initializable {
 	            }
 	        }
 	    });
-		
+
 		rhoColumn.setCellValueFactory(cell->cell.getValue().rho());
 		rhoColumn.setCellFactory(col -> new TableCell<OpenPosition, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number value, boolean empty) {
 	            super.updateItem(value, empty);
 	            if (empty) {

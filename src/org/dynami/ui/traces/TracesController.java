@@ -26,6 +26,7 @@ import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
+import org.dynami.ui.UIUtils;
 import org.dynami.ui.prefs.PrefsConstants;
 import org.dynami.ui.timer.UITimer.ClockBuffer;
 
@@ -59,13 +60,13 @@ public class TracesController implements Initializable {
 	@FXML ToggleButton debugFilter;
 	@FXML ToggleButton warnFilter;
 	@FXML ToggleButton errorFilter;
-	
+
 	private Background infoColor, debugColor, warnColor, errorColor;
 	private int MAX_ROWS = 30;
-	
+
 	private final ObservableList<Trace> data = FXCollections.observableArrayList();
 	private final FilteredList<Trace> filteredData = new FilteredList<>(data, p->true);
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
@@ -73,9 +74,13 @@ public class TracesController implements Initializable {
 		debugColor = new Background(new BackgroundFill(Color.web(appPrefs.get(PrefsConstants.TRACES.COLOR.DEBUG, Color.BEIGE.toString())), null, null));
 		warnColor = new Background(new BackgroundFill(Color.web(appPrefs.get(PrefsConstants.TRACES.COLOR.WARN, Color.BEIGE.toString())), null, null));
 		errorColor = new Background(new BackgroundFill(Color.web(appPrefs.get(PrefsConstants.TRACES.COLOR.ERROR, Color.BEIGE.toString())), null, null));
-		
+
 		MAX_ROWS = appPrefs.getInt(PrefsConstants.TRACES.MAX_ROWS, 50);
-		// load previous closed positions on start-up 
+
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->data.clear());
+		});
+		// load previous closed positions on start-up
 		if(Execution.Manager.isLoaded()){
 //			List<ITraceService.Trace> _closed = Execution.Manager.dynami().trace();
 //			count.set(_closed.size());
@@ -83,14 +88,14 @@ public class TracesController implements Initializable {
 //				data.addAll(_closed.stream().map(Trace::new).collect(Collectors.toList()));
 //			});
 		}
-		
+
 		// if runtime is running
 		Execution.Manager.msg().subscribe(Topics.TRACE.topic, (last, msg)->{
 			ITraceService.Trace t = (ITraceService.Trace)msg;
 			ClockBuffer<Trace> buffer = DynamiApplication.timer().get("traces", Trace.class);
 			buffer.push(new Trace(t));
 		});
-		
+
 		DynamiApplication.timer().get("traces", Trace.class).addConsumer(list->{
 			if(list != null && list.size() > 0 ){
 				final List<Trace> tmp = new ArrayList<>(list);
@@ -103,7 +108,7 @@ public class TracesController implements Initializable {
 				});
 			}
 		});
-		
+
 		table.setItems(filteredData);
 		table.setRowFactory(new Callback<TableView<Trace>, TableRow<Trace>>() {
 			@Override
@@ -122,7 +127,7 @@ public class TracesController implements Initializable {
 							} else if(ITraceService.Trace.Type.Error.name().equals(item.getType())){
 								setBackground(errorColor);
 							} else {
-								
+								setBackground(UIUtils.defaultBackground);
 							}
 						}
 					}
@@ -133,10 +138,10 @@ public class TracesController implements Initializable {
 		typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 		stageColumn.setCellValueFactory(new PropertyValueFactory<>("stage"));
 		lineColumn.setCellValueFactory(new PropertyValueFactory<>("line"));
-		
+
 		timeColumn.setCellValueFactory(cell->cell.getValue().timeProperty());
 		timeColumn.setCellFactory(col -> new TableCell<Trace, Number>() {
-	        @Override 
+	        @Override
 	        public void updateItem(Number time, boolean empty) {
 	            super.updateItem(time, empty);
 	            if (empty) {
@@ -147,7 +152,7 @@ public class TracesController implements Initializable {
 	        }
 	    });
 	}
-	
+
 	public void filterPositions(ActionEvent e){
 		final String newValue = filterText.getText();
 		final boolean textFilter = (newValue != null && !newValue.trim().equals(""));
@@ -156,7 +161,7 @@ public class TracesController implements Initializable {
 		final boolean excludeWarn = warnFilter.isSelected();
 		final boolean excludeError = errorFilter.isSelected();
 		filteredData.setPredicate(c->{
-			if( (textFilter && c.getLine().contains(newValue)) 
+			if( (textFilter && c.getLine().contains(newValue))
 				|| (!excludeInfo && c.getType().equals(ITraceService.Trace.Type.Info.name()))
 				|| (!excludeDebug && c.getType().equals(ITraceService.Trace.Type.Debug.name()))
 				|| (!excludeWarn && c.getType().equals(ITraceService.Trace.Type.Warn.name()))

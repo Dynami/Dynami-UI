@@ -16,7 +16,6 @@
 package org.dynami.ui.equityline;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -31,6 +30,7 @@ import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.prefs.PrefsConstants;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -53,6 +53,13 @@ public class EquityLineController implements Initializable {
 		chart.getData().add(realized);
 		chart.getData().add(total);
 		chart.setAnimated(false);
+
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->{
+				realized.getData().clear();
+				total.getData().clear();
+			});
+		});
 
 		DynamiApplication.timer().get("equityLine", EquityLineData.class).addConsumer(bars->{
 			final List<XYChart.Data<Date,Number>> listRealised = new CopyOnWriteArrayList<>();

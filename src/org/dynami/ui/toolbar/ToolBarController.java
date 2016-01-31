@@ -31,6 +31,7 @@ import org.dynami.runtime.config.ParamSettings;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.models.StrategyComponents;
 import org.dynami.runtime.topics.Topics;
+import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
 import org.dynami.ui.controls.config.BooleanFieldParam;
@@ -68,23 +69,29 @@ public class ToolBarController implements Initializable {
 
 	private IDataHandler handler;
 	private StrategyComponents strategyComponents;
-	
+
 	@FXML ToolBar toolbar;
-
 	@FXML Button execButton, stopButton, confStratButton, confDataServiceButton;
-
 	@FXML ComboBox<StrategyComponents> strategies;
-
 	@FXML ComboBox<String> dataHandlers;
-
 //	@FXML TextField strategyName;
-
 	@FXML Image execIcon, stopIcon;
 
 	public void exec(ActionEvent e) throws Exception {
 		if(LOAD.equals(execButton.getText())){
+			if(((IService)handler).isDisposed()){
+				try {
+					String handlerName = dataHandlers.selectionModelProperty().getValue().getSelectedItem();
+					handler = DataHandler.Registry.getHandler(handlerName).newInstance();
+				} catch (InstantiationException | IllegalAccessException ex) {
+					Execution.Manager.msg().async(Topics.ERRORS.topic, ex);
+				}
+			}
+			System.out.println("ToolBarController.exec() "+handler);
 			Execution.Manager.getServiceBus().registerService((IService)handler, 100);
-			
+
+			Execution.Manager.msg().sync(DynamiApplication.RESET_TOPIC, null);
+
 			final String strategyJarPath = strategies.getSelectionModel().getSelectedItem().jarName;
 
 			boolean isOk = Execution.Manager.select(Strategies.Register.getSelectedValue().strategySettings, strategyJarPath);
@@ -104,7 +111,9 @@ public class ToolBarController implements Initializable {
 	}
 
 	public void stop(ActionEvent e){
-		Execution.Manager.stop();
+		if(Execution.Manager.stop()){
+			Execution.Manager.dispose();
+		}
 	}
 
 
@@ -129,7 +138,7 @@ public class ToolBarController implements Initializable {
 				}
 			}
 		});
-		
+
 		strategies.valueProperty().addListener(new ChangeListener<StrategyComponents>() {
 			@Override
 			public void changed(ObservableValue<? extends StrategyComponents> observable, StrategyComponents oldValue, StrategyComponents newValue) {
@@ -202,8 +211,8 @@ public class ToolBarController implements Initializable {
 			}
 		});
 	}
-	
-	
+
+
 	private void applyClassSettings(final VBox vbox, final ClassSettings c) throws Exception {
 		VBox inner = new VBox();
 		Label label = new Label(c.getName());
@@ -216,7 +225,7 @@ public class ToolBarController implements Initializable {
 				String name = ps.getName();
 				Class<?> type = ps.getParamValue().getType();
 				String description = ps.getDescription();
-				
+
 				if(ps.getInnerType().equals(Config.Type.TimeFrame)){
 					param = new TimeFrameParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)ps.getMin(), (long)ps.getMax(), (long)ps.getStep());
 				} else {
@@ -232,7 +241,7 @@ public class ToolBarController implements Initializable {
 						param = new FileFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
 					} else {
 						param = new TextFieldParam(new PropertyParam<String>(name, description, c, ps.getFieldName()));
-					} 
+					}
 				}
 				inner.getChildren().add(param);
 			} catch (Exception e1) {
@@ -241,18 +250,18 @@ public class ToolBarController implements Initializable {
 		}
 		vbox.getChildren().add(inner);
 	}
-	
+
 	public void configStrategy(ActionEvent e) throws Exception {
 		if(strategyComponents == null) return;
 		VBox vbox = new VBox();
 		PopOver popOver = new PopOver(vbox);
-		
+
 		applyClassSettings(vbox, strategyComponents.strategySettings.getStrategy());
-		
+
 		for(ClassSettings c: strategyComponents.strategySettings.getStagesSettings().values()){
 			applyClassSettings(vbox, c);
 		}
-		
+
 		Button b = (Button)e.getSource();
 		popOver.setArrowLocation(ArrowLocation.TOP_LEFT);
 		popOver.show(b);
@@ -260,7 +269,7 @@ public class ToolBarController implements Initializable {
 
 	public void configDataHandler(ActionEvent e){
 		if(handler == null) return;
-		
+
 		Field[] fields = handler.getClass().getDeclaredFields();
 		VBox vbox = new VBox(5);
 		Label label = new Label(handler.getClass().getSimpleName());
@@ -274,7 +283,7 @@ public class ToolBarController implements Initializable {
 					FieldParam param;
 					String name = !p.name().equals("")?p.name():f.getName();
 					String description = p.description();
-					
+
 					if(p.type().equals(Config.Type.TimeFrame)){
 						param = new TimeFrameParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
 					} else {
@@ -290,9 +299,9 @@ public class ToolBarController implements Initializable {
 							param = new FileFieldParam(new PropertyParam<File>(name, description, handler, f));
 						} else {
 							param = new TextFieldParam(new PropertyParam<String>(name, description, handler, f));
-						} 
+						}
 					}
-					
+
 					vbox.getChildren().add(param);
 				} catch (Exception e1) {
 					Execution.Manager.msg().async(Topics.ERRORS.topic, e1);

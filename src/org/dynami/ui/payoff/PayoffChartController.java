@@ -58,7 +58,9 @@ public class PayoffChartController implements Initializable {
 		DynamiApplication.priceUpperBound.addListener((obs, oldValue, newValue)->upperBound.set(newValue));
 		DynamiApplication.priceLowerBound.addListener((obs, oldValue, newValue)->lowerBound.set(newValue));
 		DynamiApplication.priceTickUnit.addListener((obs, oldValue, newValue)->tickUnit.set(newValue.doubleValue()));
-
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()-> chart.getData().clear());
+		});
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(!Execution.Manager.isLoaded()) return;
 			final List<OpenPosition> list = Execution.Manager.dynami().portfolio().getOpenPosition();
