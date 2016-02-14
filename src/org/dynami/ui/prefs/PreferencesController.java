@@ -44,7 +44,6 @@ public class PreferencesController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		storedPreferences = Preferences.userRoot().node(DynamiApplication.class.getName());
 		//DynamiPrefs.Basic.prefs().read(preferences);
-
 		TreeItem<PrefsItem> root = new TreeItem<PrefsItem>(new PrefsItem(null, "General", ""));
 		for(DynamiPrefs p:prefsPages){
 			final Prefs prefsNode = p.prefs();
@@ -71,9 +70,6 @@ public class PreferencesController implements Initializable {
 		if(newValue != null && !newValue.trim().equals("")){
 			items.forEach(n->{
 				if(newValue.contains(n.getValue().name)){
-
-
-
 //					node.getGraphic().setVisible(true);
 				} else {
 //					node.getGraphic().setVisible(false);
