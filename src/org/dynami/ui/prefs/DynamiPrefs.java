@@ -15,22 +15,25 @@
  */
 package org.dynami.ui.prefs;
 
-public class PrefsConstants {
-	public static final class BASIC {
-		public static final String STRATS_DIR = "strategies-directory";
+import org.dynami.ui.prefs.data.BasicPrefs;
+import org.dynami.ui.prefs.data.Prefs;
+import org.dynami.ui.prefs.data.TracesPrefs;
+
+public enum DynamiPrefs {
+	Basic(new BasicPrefs()),
+	Traces(new TracesPrefs());
+
+	private final Prefs prefs;
+	DynamiPrefs(Prefs prefs){
+		this.prefs = prefs;
 	}
-	
-	public static final class TIME_CHART {
-		public static final String MAX_SAMPLE_SIZE = "max-sample-size";		
+
+	@SuppressWarnings("unchecked")
+	public <T extends Prefs> T prefs(Class<T> clazz){
+		return (T)prefs;
 	}
-	
-	public static final class TRACES {
-		public static final String MAX_ROWS = "traces-max-rows";
-		public static final class COLOR {
-			public static final String INFO = "traces-color-info";
-			public static final String DEBUG = "traces-color-debug";
-			public static final String WARN = "traces-color-warning";
-			public static final String ERROR = "traces-color-error";
-		}
+
+	public Prefs  prefs(){
+		return prefs;
 	}
 }

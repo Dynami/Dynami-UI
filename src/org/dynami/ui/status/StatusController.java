@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 import org.controlsfx.control.StatusBar;
+import org.controlsfx.dialog.Dialogs;
 import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.IServiceBus.ServiceStatus;
 import org.dynami.runtime.impl.Execution;
@@ -44,10 +45,10 @@ public class StatusController implements Initializable {
 	final int LENGHT = 10;
 	final AtomicReferenceArray<ErrorInfo> errors = new AtomicReferenceArray<>(LENGHT);
 	final AtomicInteger cursor = new AtomicInteger(-1);
-	
+
 	@FXML StatusBar statusBar;
 	@FXML Label messageType;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		statusBar.setText("");
@@ -67,8 +68,9 @@ public class StatusController implements Initializable {
 				statusBar.setText(DUtils.getErrorMessage(e));
 			});
 			e.printStackTrace();
+			Dialogs.create().showException(e);
 		});
-		
+
 		Execution.Manager.msg().subscribe(Topics.STRATEGY_ERRORS.topic, (last, _msg)->{
 			Throwable e = (Throwable)_msg;
 			Platform.runLater(()->{
@@ -79,10 +81,10 @@ public class StatusController implements Initializable {
 			e.printStackTrace();
 		});
 	}
-	
+
 	public void displayErrors(ActionEvent e){
 		VBox vbox = new VBox();
-		
+
 		if(cursor.get() < 0){
 			vbox.getChildren().add(new Label("No errors occurred"));
 		} else {
@@ -94,30 +96,30 @@ public class StatusController implements Initializable {
 				Label errorMsg = new Label(DUtils.getErrorMessage(info.error));
 				errorMsg.setAlignment(Pos.CENTER_LEFT);
 				Label time = new Label(DUtils.LONG_DATE_FORMAT.format(info.time));
-				time.setAlignment(Pos.CENTER_RIGHT);			
+				time.setAlignment(Pos.CENTER_RIGHT);
 				HBox errorPaneCaption = new HBox();
 				errorPaneCaption.getChildren().addAll(errorMsg, time);
 				// trace error
 				Label stackTrace = new Label(info.error.toString());
-				
+
 				errorPane.getChildren().addAll(errorPaneCaption, stackTrace);
 				vbox.getChildren().add(errorPane);
 			}
 		}
-		
+
 		PopOver popOver = new PopOver(vbox);
 		popOver.setArrowLocation(ArrowLocation.BOTTOM_RIGHT);
 		Button b = (Button)e.getSource();
 		popOver.show(b);
 	}
-	
+
 	private static class ErrorInfo {
 		public final Throwable error;
 		public final long time = System.currentTimeMillis();
 		public ErrorInfo(Throwable error){
 			this.error = error;
 		}
-		
-		
+
+
 	}
 }

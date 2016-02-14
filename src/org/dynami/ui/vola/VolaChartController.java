@@ -17,7 +17,7 @@ import org.dynami.runtime.data.BarData;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
-import org.dynami.ui.prefs.PrefsConstants;
+import org.dynami.ui.prefs.data.PrefsConstants;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

@@ -10,17 +10,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeItem?>
+<?import javafx.scene.Node?>
+<?import javafx.scene.layout.BorderPane?>
 
 
-<MasterDetailPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
-	<masterNode >
-		<VBox >
-			<TextField text="search"/>
-			<TreeView>
-			</TreeView>
+<MasterDetailPane
+	fx:id="main"
+	prefWidth="600"
+	prefHeight="400"
+	dividerPosition="0.3"
+	fx:controller="org.dynami.ui.prefs.PreferencesController"
+	xmlns="http://javafx.com/javafx/8.0.40"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<masterNode>
+		<VBox>
+			<!-- TextField fx:id="searchText" focusTraversable="true" promptText="Search..." accessibleText="Search" onAction="#filter"/-->
+			<TreeView fx:id="tree"/>
 		</VBox>
 	</masterNode>
 	<detailNode>
-		<Label text="detail"/>
+		<BorderPane fx:id="detailPane" />
 	</detailNode>
 </MasterDetailPane>

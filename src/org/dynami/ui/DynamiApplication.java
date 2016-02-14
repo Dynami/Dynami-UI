@@ -15,13 +15,10 @@
  */
 package org.dynami.ui;
 
-import java.util.prefs.Preferences;
-
 import org.dynami.runtime.handlers.TextFileDataHandler;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
-import org.dynami.ui.prefs.PrefsConstants;
 import org.dynami.ui.timer.UITimer;
 
 import javafx.application.Application;
@@ -32,7 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DynamiApplication extends Application {
@@ -54,16 +50,16 @@ public class DynamiApplication extends Application {
 	@Override
 	public void init() throws Exception {
 		super.init();
-		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
-		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-UI/resources/");
+//		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
+//		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-UI/resources/");
 
-		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
+//		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
 
-		appPrefs.putInt(PrefsConstants.TRACES.MAX_ROWS, 100);
-		appPrefs.put(PrefsConstants.TRACES.COLOR.INFO, Color.LIGHTSKYBLUE.toString());
-		appPrefs.put(PrefsConstants.TRACES.COLOR.DEBUG, Color.LIGHTGRAY.toString());
-		appPrefs.put(PrefsConstants.TRACES.COLOR.WARN, Color.ORANGE.toString());
-		appPrefs.put(PrefsConstants.TRACES.COLOR.ERROR, Color.ORANGERED.toString());
+//		appPrefs.putInt(PrefsConstants.TRACES.MAX_ROWS, 100);
+//		appPrefs.put(PrefsConstants.TRACES.COLOR.INFO, Color.LIGHTSKYBLUE.toString());
+//		appPrefs.put(PrefsConstants.TRACES.COLOR.DEBUG, Color.LIGHTGRAY.toString());
+//		appPrefs.put(PrefsConstants.TRACES.COLOR.WARN, Color.ORANGE.toString());
+//		appPrefs.put(PrefsConstants.TRACES.COLOR.ERROR, Color.ORANGERED.toString());
 
 		Strategies.Register.scanStrategyDirectory();
 		DataHandler.Registry.register(TextFileDataHandler.class);
@@ -84,10 +80,10 @@ public class DynamiApplication extends Application {
 //			final Rectangle2D bounds = screen.getVisualBounds();
 			_primaryStage = primaryStage;
 
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("main/MainWindow.fxml"));
+			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("/org/dynami/ui/main/MainWindow.fxml"));
 			Scene scene = new Scene(root,1024,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			_primaryStage.getIcons().add(new Image("icons/_dynami.png"));
+			_primaryStage.getIcons().add(new Image("/icons/_dynami.png"));
 			_primaryStage.setTitle("Dynami");
 			_primaryStage.setScene(scene);
 			_primaryStage.sizeToScene();

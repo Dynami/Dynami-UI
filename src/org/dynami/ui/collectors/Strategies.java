@@ -24,7 +24,7 @@ import java.util.prefs.Preferences;
 import org.dynami.runtime.impl.StrategyClassLoader;
 import org.dynami.runtime.models.StrategyComponents;
 import org.dynami.ui.DynamiApplication;
-import org.dynami.ui.prefs.PrefsConstants;
+import org.dynami.ui.prefs.data.PrefsConstants;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;

@@ -27,7 +27,7 @@ import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.UIUtils;
-import org.dynami.ui.prefs.PrefsConstants;
+import org.dynami.ui.prefs.data.PrefsConstants;
 import org.dynami.ui.timer.UITimer.ClockBuffer;
 
 import javafx.application.Platform;
