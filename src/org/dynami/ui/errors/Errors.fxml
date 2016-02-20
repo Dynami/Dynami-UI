@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Label?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dynami.ui.errors.ErrorsController">
+	<HBox styleClass="popupover-header" HBox.hgrow="ALWAYS">
+		<ToggleButton fx:id="strategyFilter" onAction="#filter">
+			<tooltip>
+				<Tooltip text="Strategy error" />
+			</tooltip>
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_dynami.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</ToggleButton>
+		<ToggleButton fx:id="internalFilter" onAction="#filter">
+			<tooltip>
+				<Tooltip text="Internal error" />
+			</tooltip>
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_internal.gif" />
+					</image>
+				</ImageView>
+			</graphic>
+		</ToggleButton>
+		<ToggleButton fx:id="userInterfaceFilter" onAction="#filter">
+			<tooltip>
+				<Tooltip text="User Interface error" />
+			</tooltip>
+			<graphic>
+				<ImageView>
+					<image>
+						<Image url="icons/_chart.gif" />
+					</image>
+				</ImageView>
+			</graphic>
+		</ToggleButton>
+	</HBox>
+	<TableView fx:id="table">
+		<columns>
+			<TableColumn fx:id="timeColumn" prefWidth="100.0" text="Time" style="-fx-alignment: CENTER-RIGHT;"/>
+			<TableColumn fx:id="typeColumn" prefWidth="60.0" text="Type" style="-fx-alignment: CENTER-LEFT;"/>
+			<TableColumn fx:id="msgColumn" prefWidth="260.0" text="Message" style="-fx-alignment: CENTER-LEFT;"/>
+		</columns>
+	</TableView>
+</VBox>
+
