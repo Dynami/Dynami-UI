@@ -102,7 +102,7 @@ public class MenuController implements Initializable {
 					controller.saveAll();
 				});
 		} catch (Exception e1) {
-			Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+			Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 		}
 	}
 

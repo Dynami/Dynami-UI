@@ -84,7 +84,7 @@ public class ToolBarController implements Initializable {
 					String handlerName = dataHandlers.selectionModelProperty().getValue().getSelectedItem();
 					handler = DataHandler.Registry.getHandler(handlerName).newInstance();
 				} catch (InstantiationException | IllegalAccessException ex) {
-					Execution.Manager.msg().async(Topics.ERRORS.topic, ex);
+					Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, ex);
 				}
 			}
 			System.out.println("ToolBarController.exec() "+handler);
@@ -133,7 +133,7 @@ public class ToolBarController implements Initializable {
 					try {
 						handler = DataHandler.Registry.getHandler(newValue).newInstance();
 					} catch (InstantiationException | IllegalAccessException e) {
-						Execution.Manager.msg().async(Topics.ERRORS.topic, e);
+						Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e);
 					}
 				}
 			}
@@ -245,7 +245,7 @@ public class ToolBarController implements Initializable {
 				}
 				inner.getChildren().add(param);
 			} catch (Exception e1) {
-				Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+				Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 			}
 		}
 		vbox.getChildren().add(inner);
@@ -304,7 +304,7 @@ public class ToolBarController implements Initializable {
 
 					vbox.getChildren().add(param);
 				} catch (Exception e1) {
-					Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+					Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 				}
 			}
 		}

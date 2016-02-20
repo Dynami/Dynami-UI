@@ -33,7 +33,7 @@ public class DynamiActions {
 				StrategySettings settings = JSON.Parser.deserialize(selectedFile, StrategySettings.class);
 				Strategies.Register.getSelectedValue().strategySettings.merge(settings);
 			} catch (Exception e1) {
-				Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+				Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 			}
 		}
 	}
@@ -44,7 +44,7 @@ public class DynamiActions {
 			try {
 				JSON.Parser.serialize(selectedFile, Strategies.Register.getSelectedValue().strategySettings);
 			} catch (Exception e1) {
-				Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+				Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 			}
 		} else {
 			saveAs(e);
@@ -62,7 +62,7 @@ public class DynamiActions {
 			try {
 				JSON.Parser.serialize(selectedFile, Strategies.Register.getSelectedValue().strategySettings);
 			} catch (Exception e1) {
-				Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+				Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 			}
 		}
 	}

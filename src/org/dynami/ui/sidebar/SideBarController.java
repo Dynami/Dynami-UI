@@ -56,7 +56,7 @@ public class SideBarController implements Initializable {
 			}
 			closedPositionsPopOver.show(b);
 		} catch (IOException e1) {
-			Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+			Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class SideBarController implements Initializable {
 			}
 			tracesPopOver.show(b);
 		} catch (IOException e1) {
-			Execution.Manager.msg().async(Topics.ERRORS.topic, e1);
+			Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
 		}
 	}
 }

@@ -99,7 +99,7 @@ public class ClosedPositionsController implements Initializable {
 			}
 		});
 
-		assetColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));;
+		assetColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
 		entryPriceColumn.setCellValueFactory(cell->cell.getValue().entryPrice());

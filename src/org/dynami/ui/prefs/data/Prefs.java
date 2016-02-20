@@ -61,7 +61,7 @@ public abstract class Prefs {
 				}
 			}
 		} catch (Exception e) {
-			Execution.Manager.msg().async(Topics.ERRORS.topic, e);
+			Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e);
 		}
 	}
 
@@ -131,13 +131,13 @@ public abstract class Prefs {
 				}
 			}
 		} catch (Exception e) {
-			Execution.Manager.msg().async(Topics.ERRORS.topic, e);
+			Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e);
 		} finally {
 			try {
 				preferences.flush();
 				preferences.sync();
 			} catch (BackingStoreException e) {
-				Execution.Manager.msg().async(Topics.ERRORS.topic, e);
+				Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e);
 			}
 		}
 	}

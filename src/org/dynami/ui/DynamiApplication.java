@@ -15,6 +15,10 @@
  */
 package org.dynami.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.runtime.handlers.TextFileDataHandler;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.ui.collectors.DataHandler;
@@ -34,11 +38,12 @@ import javafx.stage.Stage;
 public class DynamiApplication extends Application {
 	private static final UITimer _timer = new UITimer(1000);
 	public static final String RESET_TOPIC = "RESET_UI";
-
+	private static final List<Throwable> startUpErrors = new ArrayList<>();
 	private static Stage _primaryStage;
 	public static DoubleProperty priceLowerBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceTickUnit = new SimpleDoubleProperty();
+
 
 	@SuppressWarnings("unused")
 	private final DynamiActions actions;
@@ -50,22 +55,10 @@ public class DynamiApplication extends Application {
 	@Override
 	public void init() throws Exception {
 		super.init();
-//		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
-//		appPrefs.put(PrefsConstants.BASIC.STRATS_DIR, "D:/dynami-repo/Dynami-UI/resources/");
-
-//		appPrefs.putInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
-
-//		appPrefs.putInt(PrefsConstants.TRACES.MAX_ROWS, 100);
-//		appPrefs.put(PrefsConstants.TRACES.COLOR.INFO, Color.LIGHTSKYBLUE.toString());
-//		appPrefs.put(PrefsConstants.TRACES.COLOR.DEBUG, Color.LIGHTGRAY.toString());
-//		appPrefs.put(PrefsConstants.TRACES.COLOR.WARN, Color.ORANGE.toString());
-//		appPrefs.put(PrefsConstants.TRACES.COLOR.ERROR, Color.ORANGERED.toString());
-
-		Strategies.Register.scanStrategyDirectory();
-		DataHandler.Registry.register(TextFileDataHandler.class);
-		Execution.Manager.getServiceBus().registerDefaultServices();
+		try { Strategies.Register.scanStrategyDirectory(); } catch (Throwable e) { startUpErrors.add(e); }
+		try { DataHandler.Registry.register(TextFileDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
+		try { Execution.Manager.getServiceBus().registerDefaultServices();} catch (Throwable e) { startUpErrors.add(e); }
 	}
-
 
 	public static UITimer timer(){
 		return _timer;
@@ -76,8 +69,6 @@ public class DynamiApplication extends Application {
 		try {
 			_timer.start();
 
-//			final Screen screen = Screen.getPrimary();
-//			final Rectangle2D bounds = screen.getVisualBounds();
 			_primaryStage = primaryStage;
 
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("/org/dynami/ui/main/MainWindow.fxml"));
@@ -87,10 +78,10 @@ public class DynamiApplication extends Application {
 			_primaryStage.setTitle("Dynami");
 			_primaryStage.setScene(scene);
 			_primaryStage.sizeToScene();
-//			_primaryStage.setMaximized(true);
 			_primaryStage.show();
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			e.printStackTrace();
+			new ExceptionDialog(e).showAndWait();
 		}
 	}
 
@@ -108,6 +99,14 @@ public class DynamiApplication extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	public static List<Throwable> getStartUpErrors(){
+		try {
+			return startUpErrors;
+		} finally {
+			//startUpErrors.clear();
+		}
 	}
 
 	private static NumberAxis priceAxis;
