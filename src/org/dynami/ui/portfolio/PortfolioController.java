@@ -72,14 +72,14 @@ public class PortfolioController implements Initializable {
 			if(!Execution.Manager.isLoaded()) return;
 
 			final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
-			final List<OpenPosition> list = portfolio.getOpenPosition()
+			final List<OpenPosition> list = portfolio.getOpenPositions()
 					.stream()
 					.map(OpenPosition::new)
 					.collect(Collectors.toList());
 			Platform.runLater(()->{
 				list.forEach(o->{
 					// calculate roi and percent roi
-					final double roi = portfolio.unrealized(o.getSymbol());
+					final double roi = portfolio.unrealised(o.getSymbol());
 					final double percRoi = ((o.getCurrentPrice()/o.getEntryPrice())-1)*((o.getQuantity()>0)?1:-1);
 					// check if Option and in this case add greeks
 					o.setRoi(roi);

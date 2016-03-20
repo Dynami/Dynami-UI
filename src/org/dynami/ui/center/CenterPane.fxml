@@ -50,6 +50,9 @@
 				<Tab text="Orders" closable="false">
 					<fx:include source="/org/dynami/ui/orders/OrderRequests.fxml" />
 				</Tab>
+				<!-- Tab text="Dashboard" closable="false">
+					<fx:include source="/org/dynami/ui/dashboard/Dashboard.fxml" />
+				</Tab -->
 			</tabs>
 		</TabPane>
 	</items>

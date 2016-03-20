@@ -63,7 +63,7 @@ public class PayoffChartController implements Initializable {
 		});
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(!Execution.Manager.isLoaded()) return;
-			final List<OpenPosition> list = Execution.Manager.dynami().portfolio().getOpenPosition();
+			final List<OpenPosition> list = Execution.Manager.dynami().portfolio().getOpenPositions();
 
 			if(list.size() == 0){
 				Platform.runLater(chart.getData()::clear);

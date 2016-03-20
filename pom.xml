@@ -45,6 +45,10 @@
 			<groupId>org.reactfx</groupId>
 			<artifactId>reactfx</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>eu.hansolo</groupId>
+			<artifactId>medusa</artifactId>
+		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
 	<dependencyManagement>

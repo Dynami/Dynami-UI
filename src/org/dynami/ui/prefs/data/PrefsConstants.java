@@ -25,6 +25,10 @@ public class PrefsConstants {
 		public static final String MAX_SAMPLE_SIZE = "time-chart_max-sample-size";
 	}
 
+	public static final class COMMISSION {
+		public static final String PER_CONTRACT = "commission_per-contract";
+	}
+
 	public static final class TRACES {
 		public static final String MAX_ROWS = "traces_max-rows";
 

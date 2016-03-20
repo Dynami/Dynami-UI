@@ -88,7 +88,11 @@ public class ToolBarController implements Initializable {
 				}
 			}
 			System.out.println("ToolBarController.exec() "+handler);
-			Execution.Manager.getServiceBus().registerService((IService)handler, 100);
+			IService oldService = Execution.Manager.getServiceBus().registerService((IService)handler, 100);
+			if(oldService != null){
+				oldService.dispose();
+				oldService = null;
+			}
 
 			Execution.Manager.msg().sync(DynamiApplication.RESET_TOPIC, null);
 
@@ -259,7 +263,9 @@ public class ToolBarController implements Initializable {
 		applyClassSettings(vbox, strategyComponents.strategySettings.getStrategy());
 
 		for(ClassSettings c: strategyComponents.strategySettings.getStagesSettings().values()){
-			applyClassSettings(vbox, c);
+			if(c != null && c.getName() != null && !c.getName().equals("")){
+				applyClassSettings(vbox, c);
+			}
 		}
 
 		Button b = (Button)e.getSource();

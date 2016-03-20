@@ -69,16 +69,16 @@ public class SummaryController implements Initializable {
 				if(_margin < 0 && _margin < _maxMargin.get()){
 					_maxMargin.set(_margin);
 				}
-				double _realized = portfolio.realized();
-				double _unrealized = portfolio.unrealized();
+				double _realized = portfolio.realised();
+				double _unrealized = portfolio.unrealised();
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
-				double _roi = _maxMargin.get() != 0.0?((_realized+_unrealized)/(-_maxMargin.get())):0.0;
+				double _roi = (_currentBudget/_initialBudget)-1;
 
 				delta.set(0.);
 				vega.set(0.);
 				theta.set(0.);
-				portfolio.getOpenPosition().forEach(o->{
+				portfolio.getOpenPositions().forEach(o->{
 					if(o.asset.family.equals(Asset.Family.Option)){
 						double _delta = ((Asset.Option)o.asset).greeks().delta() * o.quantity * o.asset.pointValue;
 						delta.set(delta.get()+_delta);

@@ -46,12 +46,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 
 public class PrefsPage {
-    private final Prefs data;
+    //private final Prefs data;
     private final VBox node = new VBox(5);
     private final List<ParameterField<?>> parameters = new ArrayList<>();
 
     public PrefsPage(Prefs data){
-        this.data = data;
+        //this.data = data;
         Prefs.Panel panel = data.getClass().getAnnotation(Prefs.Panel.class);
         if(panel != null){
         	Label desc = new Label(panel.description());
@@ -86,6 +86,8 @@ public class PrefsPage {
 						field = new ParameterColorField(new ParameterProperty<Color>(parameter, f, data));
 	        		} else if(parameter.type().equals(Prefs.Type.Integer)){
 	        			field = new ParameterIntegerField(new ParameterProperty<Integer>(parameter, f, data));
+	        		} else if(parameter.type().equals(Prefs.Type.Double)){
+	        			field = new ParameterDoubleField(new ParameterProperty<Double>(parameter, f, data));
 	        		} else {
 	        			field = new ParameterStringField(new ParameterProperty<String>(parameter, f, data));
 	        		}
@@ -157,6 +159,28 @@ public class PrefsPage {
     	}
     }
 
+    private static class ParameterDoubleField extends ParameterField<Double> {
+    	final Spinner<Double> field;
+    	public ParameterDoubleField(ParameterProperty<Double> property) {
+    		super(property);
+    		field = new Spinner<>();//TextField(String.valueOf(property.get()));
+    		SpinnerValueFactory<Double> factory = new SpinnerValueFactory.DoubleSpinnerValueFactory(Double.MIN_VALUE, Double.MAX_VALUE, property.get().doubleValue(), .1);
+    		field.setValueFactory(factory);
+    		field.valueProperty().addListener(new ChangeListener<Double>() {
+    			@Override
+    			public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+    				property.update(newValue);
+    			}
+    		});
+    		container.getChildren().add(field);
+		}
+
+    	@Override
+    	public void update() {
+    		property.update(field.valueProperty().get());
+    	}
+    }
+
     private static class ParameterColorField extends ParameterField<Color> {
     	final ColorPicker field;
 
@@ -197,23 +221,23 @@ public class PrefsPage {
     }
 
     private static class ParameterProperty<T> {
-    	private final Prefs.Parameter parameter;
+//    	private final Prefs.Parameter parameter;
     	private final Object parent;
     	private final Field field;
 //    	private final Class<?> javaType;
-    	private boolean dirty = false;
+//    	private boolean dirty = false;
 
     	public ParameterProperty(Prefs.Parameter parameter, Field field, Object parent) throws Exception {
     		this.parent = parent;
     		this.field = field;
-    		this.parameter = parameter;
+//    		this.parameter = parameter;
     	}
 
     	public void update(Object t) {
     		try {
     			field.setAccessible(true);
     			field.set(parent, t);
-    			dirty = true;
+//    			dirty = true;
     		} catch (Exception e) {
     			e.printStackTrace();
     		}
@@ -229,12 +253,12 @@ public class PrefsPage {
     		}
     	}
 
-    	public void saved(){
-    		dirty = false;
-    	}
-
-    	public boolean isDirty() {
-			return dirty;
-		}
+//    	public void saved(){
+//    		dirty = false;
+//    	}
+//
+//    	public boolean isDirty() {
+//			return dirty;
+//		}
     }
 }

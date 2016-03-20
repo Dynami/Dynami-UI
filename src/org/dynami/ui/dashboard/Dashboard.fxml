@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import eu.hansolo.medusa.Gauge?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<HBox
+	fx:id="gauges"
+	fx:controller="org.dynami.ui.dashboard.DashboardController"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<padding>
+		<Insets bottom="5" top="5" left="2" right="2" />
+	</padding>
+</HBox>

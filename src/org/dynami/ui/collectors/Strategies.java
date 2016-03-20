@@ -58,7 +58,6 @@ public enum Strategies {
 				this.strategies.add(loader.getStrategyComponents());
 			} catch (Exception e) {
 				Execution.Manager.msg().async(Topics.UI_ERRORS.topic, e);
-				e.printStackTrace();
 			} finally {
 				try { if(loader!=null)loader.close();} catch (Exception e2) {}
 			}

@@ -36,14 +36,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class DynamiApplication extends Application {
-	private static final UITimer _timer = new UITimer(1000);
+	private static final UITimer _timer = new UITimer(250);
 	public static final String RESET_TOPIC = "RESET_UI";
 	private static final List<Throwable> startUpErrors = new ArrayList<>();
 	private static Stage _primaryStage;
 	public static DoubleProperty priceLowerBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceTickUnit = new SimpleDoubleProperty();
-
 
 	@SuppressWarnings("unused")
 	private final DynamiActions actions;

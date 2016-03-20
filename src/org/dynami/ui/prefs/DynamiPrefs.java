@@ -16,11 +16,13 @@
 package org.dynami.ui.prefs;
 
 import org.dynami.ui.prefs.data.BasicPrefs;
+import org.dynami.ui.prefs.data.CommissionPrefs;
 import org.dynami.ui.prefs.data.Prefs;
 import org.dynami.ui.prefs.data.TracesPrefs;
 
 public enum DynamiPrefs {
 	Basic(new BasicPrefs()),
+	Commissions(new CommissionPrefs()),
 	Traces(new TracesPrefs());
 
 	private final Prefs prefs;

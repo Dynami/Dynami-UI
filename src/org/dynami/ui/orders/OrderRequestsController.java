@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.prefs.Preferences;
 
 import org.dynami.core.services.IOrderService.Status;
@@ -57,7 +56,6 @@ public class OrderRequestsController implements Initializable {
 			DynamiApplication.timer().get("order_requests", OrderRequest.class).push(new OrderRequest(request));
 		});
 
-		final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 		DynamiApplication.timer().addClockedFunction(()->{
 			data.forEach(r->{
 				if(!r.getStatus().equals(Status.Executed.name())
@@ -65,10 +63,7 @@ public class OrderRequestsController implements Initializable {
 						&& !r.getStatus().equals(Status.Rejected.name())){
 					Status status = Execution.Manager.dynami().orders().getOrderStatus(r.getRequestID());
 					if(!status.name().equals(r.getStatus())){
-						// update order request status
-						rwl.writeLock().lock();
-						try { r.setStatus(status.name()); }
-						finally { rwl.writeLock().unlock(); }
+						Platform.runLater(()->r.setStatus(status.name()));
 					}
 				}
 			});
