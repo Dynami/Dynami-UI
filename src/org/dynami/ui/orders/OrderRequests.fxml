@@ -34,7 +34,7 @@
 	<TableView fx:id="table">
 		<columns>
 			<TableColumn fx:id="requestIdColumn" prefWidth="100.0" text="Request ID"/>
-			<TableColumn fx:id="requestTypeColumn" prefWidth="100.0" text="Request Type"/>
+			<!-- TableColumn fx:id="requestTypeColumn" prefWidth="100.0" text="Request Type"/ -->
 			<TableColumn fx:id="statusColumn" prefWidth="120.0" text="Status" />
 			<TableColumn fx:id="assetColumn" prefWidth="100.0" text="Asset"/>
 			<TableColumn fx:id="quantityColumn" prefWidth="40.0" text="Qt" style="-fx-alignment: CENTER-RIGHT;" />

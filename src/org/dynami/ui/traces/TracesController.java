@@ -78,7 +78,8 @@ public class TracesController implements Initializable {
 		MAX_ROWS = appPrefs.getInt(PrefsConstants.TRACES.MAX_ROWS, 50);
 
 		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
-			Platform.runLater(()->data.clear());
+			Platform.runLater(()-> data.clear());
+			Platform.runLater(()-> filteredData.clear());
 		});
 		// load previous closed positions on start-up
 		if(Execution.Manager.isLoaded()){

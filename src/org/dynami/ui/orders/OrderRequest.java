@@ -16,62 +16,63 @@
 package org.dynami.ui.orders;
 
 import org.dynami.core.utils.DUtils;
-import org.dynami.runtime.orders.OrderRequestWrapper;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class OrderRequest {
-	public LongProperty requestID = new SimpleLongProperty();
+	public IntegerProperty requestID = new SimpleIntegerProperty();
 	public StringProperty requestType = new SimpleStringProperty();
 	public StringProperty symbol = new SimpleStringProperty();
-	public LongProperty quantity = new SimpleLongProperty(); 
+	public LongProperty quantity = new SimpleLongProperty();
 	public DoubleProperty entryPrice = new SimpleDoubleProperty();
 	public LongProperty entryTime = new SimpleLongProperty();
 	public StringProperty notes = new SimpleStringProperty();
 	public StringProperty status = new SimpleStringProperty();
-	
+
 	public OrderRequest() {}
-	
-	public OrderRequest(OrderRequestWrapper wrapper){
-		requestID.set(wrapper.getRequest().id);
-		requestType.set(wrapper.getRequest().getClass().getSimpleName());
-		symbol.set(wrapper.getRequest().symbol);
-		quantity.set(wrapper.getRequest().quantity);
-		entryPrice.set(wrapper.getPrice());
-		entryTime.set(wrapper.getRequest().time);
-		notes.set(wrapper.getRequest().note);
+
+	public OrderRequest(org.dynami.core.orders.OrderRequest wrapper){
+		requestID.set(wrapper.id);
+		requestType.set("Limit");
+		symbol.set(wrapper.symbol);
+		quantity.set(wrapper.quantity);
+		entryPrice.set(wrapper.price);
+		entryTime.set(wrapper.time);
+		notes.set(wrapper.note);
 		status.set(wrapper.getStatus().name());
 	}
-	
-	public LongProperty requestID(){
+
+	public IntegerProperty requestID(){
 		return requestID;
 	}
-	
+
 	public StringProperty requestType(){
 		return requestType;
 	}
-		
+
 	public StringProperty symbol(){
 		return symbol;
 	}
-	
+
 	public LongProperty quantity(){
 		return quantity;
 	}
-	
+
 	public DoubleProperty entryPrice(){
 		return entryPrice;
 	}
-	
+
 	public LongProperty entryTime(){
 		return entryTime;
 	}
-	
+
 	public StringProperty notes(){
 		return notes;
 	}
@@ -127,11 +128,11 @@ public class OrderRequest {
 		DUtils.threadSafe(()->this.status.set(status));
 	}
 
-	public Long getRequestID() {
+	public Integer getRequestID() {
 		return requestID.get();
 	}
 
-	public void setRequestID(Long requestID) {
+	public void setRequestID(Integer requestID) {
 		this.requestID.set(requestID);
 	}
 

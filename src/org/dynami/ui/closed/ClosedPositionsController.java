@@ -59,12 +59,12 @@ public class ClosedPositionsController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
 			Platform.runLater(()->data.clear());
+			Platform.runLater(()-> filteredData.clear());
 		});
 
 		DynamiApplication.timer().addClockedFunction(()->{
 			if(Execution.Manager.isLoaded()){
 				final List<org.dynami.core.portfolio.ClosedPosition> _closed = Execution.Manager.dynami().portfolio().getClosedPositions();
-//				System.out.println("ClosedPositionsController.initialize(_closed: "+_closed.size()+" data: "+data.size()+")");
 				final List<ClosedPosition> tmp = new ArrayList<>();
 				if(data.size() < _closed.size()){
 					for(int i = data.size(); i < _closed.size(); i++){

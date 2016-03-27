@@ -9,7 +9,6 @@ import java.util.prefs.Preferences;
 import org.dynami.core.services.IOrderService.Status;
 import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.impl.Execution;
-import org.dynami.runtime.orders.OrderRequestWrapper;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.prefs.data.PrefsConstants;
@@ -34,7 +33,7 @@ public class OrderRequestsController implements Initializable {
 	@FXML TextField filterText;
 	@FXML TableView<OrderRequest> table;
 	@FXML TableColumn<OrderRequest, Number> requestIdColumn;
-	@FXML TableColumn<OrderRequest, String> requestTypeColumn;
+//	@FXML TableColumn<OrderRequest, String> requestTypeColumn;
 	@FXML TableColumn<OrderRequest, String> assetColumn;
 	@FXML TableColumn<OrderRequest, Number> quantityColumn;
 	@FXML TableColumn<OrderRequest, Number> entryPriceColumn;
@@ -52,20 +51,22 @@ public class OrderRequestsController implements Initializable {
 		});
 
 		Execution.Manager.msg().subscribe(Topics.ORDER_REQUESTS.topic, (last, msg)->{
-			OrderRequestWrapper request = (OrderRequestWrapper)msg;
+			org.dynami.core.orders.OrderRequest request = (org.dynami.core.orders.OrderRequest)msg;
 			DynamiApplication.timer().get("order_requests", OrderRequest.class).push(new OrderRequest(request));
 		});
 
 		DynamiApplication.timer().addClockedFunction(()->{
-			data.forEach(r->{
-				if(!r.getStatus().equals(Status.Executed.name())
-						&& !r.getStatus().equals(Status.Cancelled.name())
-						&& !r.getStatus().equals(Status.Rejected.name())){
-					Status status = Execution.Manager.dynami().orders().getOrderStatus(r.getRequestID());
-					if(!status.name().equals(r.getStatus())){
-						Platform.runLater(()->r.setStatus(status.name()));
+			Platform.runLater(()->{
+				data.forEach(r->{
+					if(!r.getStatus().equals(Status.Executed.name())
+							&& !r.getStatus().equals(Status.Cancelled.name())
+							&& !r.getStatus().equals(Status.Rejected.name())){
+						Status status = Execution.Manager.dynami().orders().getOrderStatus(r.getRequestID());
+						if(!status.name().equals(r.getStatus())){
+							Platform.runLater(()->r.setStatus(status.name()));
+						}
 					}
-				}
+				});
 			});
 		});
 
@@ -84,7 +85,7 @@ public class OrderRequestsController implements Initializable {
 
 		table.setItems(filteredData);
 		requestIdColumn.setCellValueFactory(new PropertyValueFactory<>("requestID"));
-		requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("requestType"));
+//		requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("requestType"));
 		assetColumn.setCellValueFactory(new PropertyValueFactory<>("symbol"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		notesColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));

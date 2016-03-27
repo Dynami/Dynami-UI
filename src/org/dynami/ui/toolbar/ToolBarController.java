@@ -87,7 +87,6 @@ public class ToolBarController implements Initializable {
 					Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, ex);
 				}
 			}
-			System.out.println("ToolBarController.exec() "+handler);
 			IService oldService = Execution.Manager.getServiceBus().registerService((IService)handler, 100);
 			if(oldService != null){
 				oldService.dispose();
@@ -153,7 +152,6 @@ public class ToolBarController implements Initializable {
 
 		execButton.setDisable(true);
 		stopButton.setDisable(true);
-
 		execButton.setGraphic(loadIcon);
 
 		strategies.getItems().addAll(Strategies.Register.getStrategies());
@@ -172,7 +170,7 @@ public class ToolBarController implements Initializable {
 			if(newState.equals(IExecutionManager.State.NonActive)){
 				execButton.setGraphic(loadIcon);
 				execButton.setText(LOAD);
-				execButton.setDisable(true);
+				checkSelection();
 				stopButton.setDisable(true);
 				strategies.setDisable(false);
 				dataHandlers.setDisable(false);
@@ -183,7 +181,7 @@ public class ToolBarController implements Initializable {
 				strategies.setDisable(false);
 				dataHandlers.setDisable(false);
 			} else if(newState.equals(IExecutionManager.State.Initialized)){
-
+				// do nothing
 			} else if(newState.equals(IExecutionManager.State.Loaded)){
 				execButton.setGraphic(runIcon);
 				execButton.setText(RUN);
@@ -208,10 +206,10 @@ public class ToolBarController implements Initializable {
 			} else if(newState.equals(IExecutionManager.State.Stopped)){
 				execButton.setGraphic(loadIcon);
 				execButton.setText(LOAD);
+				execButton.setDisable(false);
 				stopButton.setDisable(true);
 				strategies.setDisable(false);
 				dataHandlers.setDisable(false);
-				checkSelection();
 			}
 		});
 	}
