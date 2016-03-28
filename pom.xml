@@ -34,12 +34,10 @@
 		<dependency>
 			<groupId>org.dynami</groupId>
 			<artifactId>Dynami-Runtime</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dynami</groupId>
 			<artifactId>Dynami-TA</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reactfx</groupId>
@@ -48,6 +46,10 @@
 		<dependency>
 			<groupId>eu.hansolo</groupId>
 			<artifactId>medusa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dynami</groupId>
+			<artifactId>Dynami-Core</artifactId>
 		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
@@ -67,6 +69,21 @@
 				<groupId>org.reactfx</groupId>
 				<artifactId>reactfx</artifactId>
 				<version>2.0-M4u1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dynami</groupId>
+				<artifactId>Dynami-Runtime</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dynami</groupId>
+				<artifactId>Dynami-TA</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dynami</groupId>
+				<artifactId>Dynami-Core</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

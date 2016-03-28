@@ -27,13 +27,13 @@ public class FileFieldParam extends FieldParam {
 	public FileFieldParam(PropertyParam<File> _prop) {
 		super(_prop.getName(), _prop.getDescription());
 		final File f = _prop.get();
-		
+
 		text.setEditable(false);
 		text.setText(f.getAbsolutePath());
 		button.setOnAction((event)->{
 			FileChooser fileChooser = new FileChooser();
 			if(f != null){
-				fileChooser.setInitialFileName(f.getName());
+				fileChooser.setInitialFileName(f.getAbsolutePath());
 				fileChooser.setInitialDirectory(f.getParentFile());
 			}
 			File ff = fileChooser.showOpenDialog(paramPane.getScene().getWindow());
@@ -42,7 +42,7 @@ public class FileFieldParam extends FieldParam {
 				text.setText(ff.getAbsolutePath());
 			}
 		});
-		
+
 		controlsContainer.getChildren().addAll(text, button);
 	}
 }
