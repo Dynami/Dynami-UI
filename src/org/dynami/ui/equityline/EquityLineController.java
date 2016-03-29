@@ -45,8 +45,8 @@ public class EquityLineController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
-
+		final int MAX_SAMPLES = Preferences.userRoot().node(PrefsConstants.PREFS_NODE).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 200);
+		System.out.println("EquityLineController.initialize() MAX_SAMPLES "+MAX_SAMPLES);
 		realized.setName("Realized");
 		total.setName("Total");
 		chart.setCreateSymbols(false);

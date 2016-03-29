@@ -82,7 +82,7 @@ public enum Strategies {
 	}
 
 	Strategies(){
-		final Preferences prefs = Preferences.userRoot().node(DynamiApplication.class.getName());
+		final Preferences prefs = Preferences.userRoot().node(PrefsConstants.PREFS_NODE);
 		strategyDir = prefs.get(PrefsConstants.BASIC.STRATS_DIR, ".");
 	}
 }

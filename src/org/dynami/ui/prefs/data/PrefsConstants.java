@@ -15,8 +15,11 @@
  */
 package org.dynami.ui.prefs.data;
 
-public class PrefsConstants {
+import org.dynami.ui.DynamiApplication;
 
+public class PrefsConstants {
+	public static final String PREFS_NODE = "org/dynami/prefs";
+	public static final String PREFS_FILE_PATH = DynamiApplication.class.getName();
 	public static final class BASIC {
 		public static final String STRATS_DIR = "basic_strategies-directory";
 	}

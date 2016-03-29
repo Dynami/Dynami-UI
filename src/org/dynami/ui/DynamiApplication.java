@@ -15,14 +15,18 @@
  */
 package org.dynami.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.runtime.handlers.TextFileDataHandler;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
+import org.dynami.ui.prefs.data.PrefsConstants;
 import org.dynami.ui.timer.UITimer;
 
 import javafx.application.Application;
@@ -66,6 +70,7 @@ public class DynamiApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			moveToPreloader();
 			_timer.start();
 
 			_primaryStage = primaryStage;
@@ -81,6 +86,13 @@ public class DynamiApplication extends Application {
 		} catch(Throwable e) {
 			e.printStackTrace();
 			new ExceptionDialog(e).showAndWait();
+		}
+	}
+
+	private void moveToPreloader() throws Exception {
+ 		final File preferencesFile = new File(PrefsConstants.PREFS_FILE_PATH);
+		if(preferencesFile.exists()){
+			Preferences.importPreferences(new FileInputStream(preferencesFile));
 		}
 	}
 

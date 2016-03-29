@@ -43,7 +43,7 @@ public class PriceChartController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		final int MAX_SAMPLES = Preferences.userRoot().node(DynamiApplication.class.getName()).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
+		final int MAX_SAMPLES = Preferences.userRoot().node(PrefsConstants.PREFS_NODE).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
 
 		DynamiApplication.priceLowerBound.bind(yAxis.lowerBoundProperty());
 		DynamiApplication.priceUpperBound.bind(yAxis.upperBoundProperty());

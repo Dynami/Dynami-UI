@@ -18,5 +18,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/extfx-0.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-Runtime"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-TA"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-Core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

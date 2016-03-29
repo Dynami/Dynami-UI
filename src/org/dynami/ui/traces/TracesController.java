@@ -69,7 +69,7 @@ public class TracesController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Preferences appPrefs = Preferences.userRoot().node(DynamiApplication.class.getName());
+		Preferences appPrefs = Preferences.userRoot().node(PrefsConstants.PREFS_NODE);
 		infoColor = new Background(new BackgroundFill(Color.web(appPrefs.get(PrefsConstants.TRACES.COLOR.INFO, Color.BEIGE.toString())), null, null ));
 		debugColor = new Background(new BackgroundFill(Color.web(appPrefs.get(PrefsConstants.TRACES.COLOR.DEBUG, Color.BEIGE.toString())), null, null));
 		warnColor = new Background(new BackgroundFill(Color.web(appPrefs.get(PrefsConstants.TRACES.COLOR.WARN, Color.BEIGE.toString())), null, null));

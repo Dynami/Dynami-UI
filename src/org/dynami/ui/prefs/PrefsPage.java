@@ -129,6 +129,11 @@ public class PrefsPage {
     		super(property);
     		field = new TextField(String.valueOf(property.get()));
     		container.getChildren().add(field);
+    		field.textProperty().addListener(new ChangeListener<String>() {
+    			public void changed(javafx.beans.value.ObservableValue<? extends String> observable, String oldValue, String newValue) {
+    				update();
+    			};
+			});
 		}
 
     	@Override
@@ -189,11 +194,16 @@ public class PrefsPage {
     		Color color = property.get();
     		field = new ColorPicker(color);
     		container.getChildren().add(field);
+    		field.valueProperty().addListener(new ChangeListener<Color>() {
+    			public void changed(javafx.beans.value.ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
+    				update();
+    			};
+			});
 		}
 
     	@Override
     	public void update() {
-    		property.update(String.valueOf(field.getValue()));
+    		property.update(field.getValue());
     	}
     }
 
@@ -209,6 +219,7 @@ public class PrefsPage {
     			File dir = chooser.showDialog(DynamiApplication.getPrimaryStage());
     			if(dir != null){
     				field.setText(dir.getAbsolutePath());
+    				update();
     			}
     		});
     		container.getChildren().addAll(field, button);
@@ -216,7 +227,7 @@ public class PrefsPage {
 
     	@Override
     	public void update() {
-    		property.update(field.getText());
+    		property.update(new File(field.getText()));
     	}
     }
 

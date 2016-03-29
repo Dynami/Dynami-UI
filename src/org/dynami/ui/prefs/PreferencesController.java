@@ -15,13 +15,18 @@
  */
 package org.dynami.ui.prefs;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import org.controlsfx.control.MasterDetailPane;
-import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.prefs.data.Prefs;
+import org.dynami.ui.prefs.data.PrefsConstants;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,7 +47,7 @@ public class PreferencesController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		storedPreferences = Preferences.userRoot().node(DynamiApplication.class.getName());
+		storedPreferences = Preferences.userRoot().node(PrefsConstants.PREFS_NODE);
 		//DynamiPrefs.Basic.prefs().read(preferences);
 		TreeItem<PrefsItem> root = new TreeItem<PrefsItem>(new PrefsItem(null, "General", ""));
 		for(DynamiPrefs p:prefsPages){
@@ -85,6 +90,18 @@ public class PreferencesController implements Initializable {
 	public void saveAll(){
 		for(DynamiPrefs p:prefsPages){
 			p.prefs().write(storedPreferences);
+		}
+		try {
+			try(FileOutputStream output = new FileOutputStream(new File(PrefsConstants.PREFS_FILE_PATH))){
+				storedPreferences.exportNode(output);
+			}
+//			Preferences.userRoot().exportNode();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
 		}
 	}
 
