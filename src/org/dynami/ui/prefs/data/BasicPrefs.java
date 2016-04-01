@@ -25,7 +25,7 @@ public class BasicPrefs extends Prefs {
 			description="System directory where strategy-jars are deployed",
 			config=PrefsConstants.BASIC.STRATS_DIR,
 			type=Prefs.Type.Directory,
-			defaultValue="D:/dynami-repo/Dynami-UI/resources/")
+			defaultValue="./resources/")
 	public File strategyDirectory;
 
 	@Prefs.Parameter(
