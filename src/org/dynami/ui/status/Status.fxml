@@ -9,8 +9,11 @@
 <StatusBar fx:id="statusBar" xmlns="http://javafx.com/javafx/8.0.40"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dynami.ui.status.StatusController">
 	<leftItems>
-		<Label fx:id="messageType" style="-fx-alignment: CENTER-LEFT;"/>
+		<Label fx:id="messageType" style="-fx-alignment: CENTER-LEFT;" />
 	</leftItems>
+	<graphic>
+		<ImageView fx:id="messageIcon" />
+	</graphic>
 	<rightItems>
 		<Button onAction="#displayErrors">
 			<graphic>

@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>Dynami-UI</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Dynami-UI</name>
 	<description>Dynami project user interface programm</description>
 	<build>
@@ -34,10 +34,12 @@
 		<dependency>
 			<groupId>org.dynami</groupId>
 			<artifactId>Dynami-Runtime</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dynami</groupId>
 			<artifactId>Dynami-TA</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reactfx</groupId>
@@ -50,6 +52,11 @@
 		<dependency>
 			<groupId>org.dynami</groupId>
 			<artifactId>Dynami-Core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>extfx</groupId>
+			<artifactId>extfx</artifactId>
 		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
@@ -71,19 +78,11 @@
 				<version>2.0-M4u1</version>
 			</dependency>
 			<dependency>
-				<groupId>org.dynami</groupId>
-				<artifactId>Dynami-Runtime</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.dynami</groupId>
-				<artifactId>Dynami-TA</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.dynami</groupId>
-				<artifactId>Dynami-Core</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<groupId>extfx</groupId>
+				<artifactId>extfx</artifactId>
+				<version>0.3</version>
+				<systemPath>D:\dynami-repo\Dynami-UI\libs\extfx-0.3.jar</systemPath>
+				<scope>system</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

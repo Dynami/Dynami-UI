@@ -23,10 +23,13 @@ import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 import org.controlsfx.control.StatusBar;
 import org.controlsfx.dialog.ExceptionDialog;
+import org.dynami.core.Event;
+import org.dynami.core.Event.Type;
 import org.dynami.core.utils.DUtils;
 import org.dynami.runtime.IServiceBus.ServiceStatus;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
+import org.dynami.ui.UIUtils;
 import org.dynami.ui.errors.ErrorInfo;
 import org.dynami.ui.errors.ErrorsController;
 
@@ -37,17 +40,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class StatusController implements Initializable {
 	final String ERROR_PROMPT = "ERROR: ";
+	final String INFO_PROMPT = "INFO: ";
 	final String INTERNAL_ERROR_PROMPT = "INT-ERROR: ";
+
 	final int LENGHT = 10;
-//	final AtomicReferenceArray<ErrorInfo> errors = new AtomicReferenceArray<>(LENGHT);
-//	final AtomicInteger cursor = new AtomicInteger(-1);
 
 	@FXML StatusBar statusBar;
 	@FXML Label messageType;
+	@FXML ImageView messageIcon;
 
 	private VBox errorsPane;
 	private ErrorsController errorsController;
@@ -58,7 +64,8 @@ public class StatusController implements Initializable {
 		Execution.Manager.msg().subscribe(Topics.SERVICE_STATUS.topic, (last, _msg)->{
 			ServiceStatus s = (ServiceStatus)_msg;
 			Platform.runLater(()->{
-				messageType.setText(INTERNAL_ERROR_PROMPT);
+				statusBar.setBackground(UIUtils.redBackground);
+				messageIcon.imageProperty().set(new Image("icons/_error.gif"));
 				statusBar.setText(s.message);
 			});
 		});
@@ -67,8 +74,8 @@ public class StatusController implements Initializable {
 			Throwable e = (Throwable)_msg;
 			Platform.runLater(()->{
 				errorsController.addErrorInfo(new ErrorInfo(e, ErrorInfo.Type.Internal));
-//				errors.set(cursor.incrementAndGet()%LENGHT, new ErrorInfo(e, ErrorInfo.Type.Unkwon));
-				messageType.setText(ERROR_PROMPT);
+				statusBar.setBackground(UIUtils.redBackground);
+				messageIcon.imageProperty().set(new Image("icons/_error.gif"));
 				statusBar.setText(DUtils.getErrorMessage(e));
 			});
 			e.printStackTrace();
@@ -82,10 +89,24 @@ public class StatusController implements Initializable {
 				errorsController.addErrorInfo(new ErrorInfo(e, ErrorInfo.Type.Strategy));
 
 //				errors.set(cursor.incrementAndGet()%LENGHT, new ErrorInfo(e, ErrorInfo.Type.Strategy));
-				messageType.setText(ERROR_PROMPT);
+				statusBar.setBackground(UIUtils.redBackground);
+				messageIcon.imageProperty().set(new Image("icons/_error.gif"));
+//				messageType.setText(ERROR_PROMPT);
 				statusBar.setText(DUtils.getErrorMessage(e));
 			});
 			e.printStackTrace();
+		});
+
+		Execution.Manager.msg().subscribe(Topics.STRATEGY_EVENT.topic, (last, msg)->{
+			final Event e = (Event)msg;
+			if(e.is(Type.NoMoreData)){
+				Platform.runLater(()->{
+					statusBar.setBackground(UIUtils.greenBackground);
+					messageIcon.imageProperty().set(new Image("icons/_info.gif"));
+//					messageType.setText(INFO_PROMPT);
+					statusBar.setText("No more historical data!!!");
+				});
+			}
 		});
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dynami/ui/errors/Errors.fxml"));

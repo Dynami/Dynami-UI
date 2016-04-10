@@ -104,8 +104,9 @@ public class DynamiApplication extends Application {
 	@Override
 	public void stop() throws Exception {
 		_timer.dispose();
-		Execution.Manager.msg().dispose();
+		Execution.Manager.stop();
 		Execution.Manager.dispose();
+		Execution.Manager.msg().dispose();
 	}
 
 	public static void main(String[] args) {

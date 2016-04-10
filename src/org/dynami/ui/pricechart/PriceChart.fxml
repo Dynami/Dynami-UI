@@ -5,17 +5,29 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import extfx.scene.chart.DateAxis?>
+<?import org.dynami.ui.controls.chart.CandleStickChart?>
 
-<LineChart fx:id="chart" animated="false" legendVisible="false"
-	createSymbols="false" xmlns="http://javafx.com/javafx/8.0.40"
+<!-- 	createSymbols="false" prefHeight="500" animated="false" legendVisible="false" -->
+<VBox
+	xmlns="http://javafx.com/javafx/8.0.40"
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="org.dynami.ui.pricechart.PriceChartController"
 	prefHeight="500"
+	fx:id="vbox"
 	>
-	<xAxis>
-		<DateAxis side="BOTTOM" />
-	</xAxis>
-	<yAxis>
-		<NumberAxis fx:id="yAxis" side="LEFT" />
-	</yAxis>
-</LineChart>
+</VBox>
+
+
+<!-- <CandleStickChart -->
+<!-- 	fx:id="chart" -->
+<!-- 	xmlns:fx="http://javafx.com/fxml/1" -->
+<!-- 	xmlns="http://javafx.com/javafx/8.0.40" -->
+<!-- 	fx:controller="org.dynami.ui.pricechart.PriceChartController" -->
+<!-- 	> -->
+<!-- 		<xAxis> -->
+<!-- 		<DateAxis fx:id="xAxis" side="BOTTOM" /> -->
+<!-- 	</xAxis> -->
+<!-- 	<yAxis> -->
+<!-- 		<NumberAxis fx:id="yAxis" side="LEFT" /> -->
+<!-- 	</yAxis> -->
+<!-- </CandleStickChart> -->

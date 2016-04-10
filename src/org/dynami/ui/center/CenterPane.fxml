@@ -15,7 +15,7 @@
 			<items>
 				<SplitPane dividerPositions="0.6" prefHeight="700.0" prefWidth="200.0" orientation="VERTICAL">
 					<items>
-						<fx:include source="/org/dynami/ui/pricechart/CandleChart.fxml" />
+						<fx:include source="/org/dynami/ui/pricechart/PriceChart.fxml" />
 						<TabPane prefHeight="300.0" prefWidth="200.0" side="BOTTOM"
 							tabClosingPolicy="UNAVAILABLE">
 							<tabs>

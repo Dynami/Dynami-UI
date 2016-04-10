@@ -29,10 +29,12 @@ public class FileFieldParam extends FieldParam {
 		final File f = _prop.get();
 
 		text.setEditable(false);
-		text.setText(f.getAbsolutePath());
+		if(f.exists()){
+			text.setText(f.getAbsolutePath());
+		}
 		button.setOnAction((event)->{
 			FileChooser fileChooser = new FileChooser();
-			if(f != null){
+			if(f != null && f.exists()){
 				fileChooser.setInitialFileName(f.getAbsolutePath());
 				fileChooser.setInitialDirectory(f.getParentFile());
 			}

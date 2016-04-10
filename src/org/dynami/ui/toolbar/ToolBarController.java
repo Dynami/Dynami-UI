@@ -43,12 +43,14 @@ import org.dynami.ui.controls.config.LongSpinnerFieldParam;
 import org.dynami.ui.controls.config.PropertyParam;
 import org.dynami.ui.controls.config.TextFieldParam;
 import org.dynami.ui.controls.config.TimeFrameParam;
+import org.dynami.ui.controls.loading.Loading;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -62,6 +64,7 @@ public class ToolBarController implements Initializable {
 	private final ImageView runIcon = new ImageView("icons/_run.gif");
 	private final ImageView pauseIcon = new ImageView("icons/_pause.gif");
 	private final ImageView resumeIcon = new ImageView("icons/_resume.gif");
+	private final ImageView loadingIcon = new ImageView("icons/_loading.gif");
 	private final String LOAD = "Load", RUN = "Run", RESUME = "Resume", PAUSE = "Pause";
 
 	private boolean isStrategySelected = false;
@@ -74,11 +77,13 @@ public class ToolBarController implements Initializable {
 	@FXML Button execButton, stopButton, confStratButton, confDataServiceButton;
 	@FXML ComboBox<StrategyComponents> strategies;
 	@FXML ComboBox<String> dataHandlers;
-//	@FXML TextField strategyName;
 	@FXML Image execIcon, stopIcon;
 
 	public void exec(ActionEvent e) throws Exception {
 		if(LOAD.equals(execButton.getText())){
+			final Loading loading = new Loading((Node)e.getSource());
+			loading.centerOnScreen();
+			loading.show();
 			if(((IService)handler).isDisposed()){
 				try {
 					String handlerName = dataHandlers.selectionModelProperty().getValue().getSelectedItem();
@@ -87,6 +92,7 @@ public class ToolBarController implements Initializable {
 					Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, ex);
 				}
 			}
+
 			IService oldService = Execution.Manager.getServiceBus().registerService((IService)handler, 100);
 			if(oldService != null){
 				oldService.dispose();
@@ -104,6 +110,7 @@ public class ToolBarController implements Initializable {
 			if(isOk){
 				isOk = Execution.Manager.load();
 			}
+			loading.close();
 		} else if(RUN.equals(execButton.getText())){
 			Execution.Manager.run();
 		} else if(PAUSE.equals(execButton.getText())){
@@ -175,7 +182,7 @@ public class ToolBarController implements Initializable {
 				strategies.setDisable(false);
 				dataHandlers.setDisable(false);
 			} else if(newState.equals(IExecutionManager.State.Selected)){
-				execButton.setGraphic(loadIcon);
+				execButton.setGraphic(loadingIcon);
 				execButton.setText(LOAD);
 				execButton.setDisable(false);
 				strategies.setDisable(false);

@@ -28,22 +28,35 @@ import org.dynami.core.data.Bar;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
+import org.dynami.ui.controls.chart.BarStickChart;
 import org.dynami.ui.prefs.data.PrefsConstants;
 
+import extfx.scene.chart.DateAxis;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.VBox;
 
 public class PriceChartController implements Initializable {
-	@FXML LineChart<Date,Number> chart;
-	@FXML NumberAxis yAxis;
+	@FXML VBox vbox;
+
+	BarStickChart chart;
+	DateAxis xAxis;
+	NumberAxis yAxis;
 	XYChart.Series<Date, Number> series = new XYChart.Series<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(PrefsConstants.PREFS_NODE).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
+		xAxis = new DateAxis();
+//		xAxis.labelProperty().set("Time");
+		yAxis = new NumberAxis();
+//		yAxis.labelProperty().set("Price");
+		chart = new BarStickChart(xAxis, yAxis, FXCollections.observableArrayList());
+		vbox.getChildren().add(chart);
 
 		DynamiApplication.priceLowerBound.bind(yAxis.lowerBoundProperty());
 		DynamiApplication.priceUpperBound.bind(yAxis.upperBoundProperty());
@@ -57,15 +70,26 @@ public class PriceChartController implements Initializable {
 		DynamiApplication.timer().get("bars", Bar.class).addConsumer(bars->{
 			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
 			bars.forEach(bar->{
-				list.add(new XYChart.Data<Date, Number>(new Date(bar.time), bar.close));
+				list.add(new XYChart.Data<Date, Number>(
+						new Date(bar.time),
+						bar.high,
+						bar
+						));
+				;
 			});
 			if(list.size()>0){
-				int exeeding = Math.max(0, series.getData().size()+list.size()-MAX_SAMPLES);
-				if(exeeding  > 0){
-					series.getData().remove(0, exeeding-1);
-				}
-				series.getData().addAll(list);
+				Platform.runLater(()->{
+					final int exeeding = Math.max(0, series.getData().size()+list.size()-MAX_SAMPLES);
+					if(exeeding  > 0){
+						series.getData().remove(0, exeeding-1);
+					}
+					series.getData().addAll(list);
+				});
 			}
+		});
+
+		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
+			Platform.runLater(()->series.getData().clear());
 		});
 
 		Execution.Manager.msg().subscribe(Topics.STRATEGY_EVENT.topic, (last, msg)->{
