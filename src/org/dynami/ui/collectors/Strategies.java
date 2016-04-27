@@ -25,7 +25,6 @@ import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.impl.StrategyClassLoader;
 import org.dynami.runtime.models.StrategyComponents;
 import org.dynami.runtime.topics.Topics;
-import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.prefs.data.PrefsConstants;
 
 import javafx.beans.property.SimpleObjectProperty;
