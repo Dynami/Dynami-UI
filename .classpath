@@ -6,7 +6,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -18,8 +18,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/extfx-0.3.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-Runtime"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-TA"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Dynami-Core"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
