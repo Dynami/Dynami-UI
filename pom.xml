@@ -63,6 +63,11 @@
 			<artifactId>extfx</artifactId>
 			<version>0.3</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tictactec</groupId>
+			<artifactId>ta-lib</artifactId>
+			<version>0.4.0</version>
+		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
 	<dependencyManagement>
