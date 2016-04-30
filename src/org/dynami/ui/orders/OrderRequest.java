@@ -35,7 +35,8 @@ public class OrderRequest {
 	public LongProperty entryTime = new SimpleLongProperty();
 	public StringProperty notes = new SimpleStringProperty();
 	public StringProperty status = new SimpleStringProperty();
-
+	public LongProperty executionTime = new SimpleLongProperty();
+	
 	public OrderRequest() {}
 
 	public OrderRequest(org.dynami.core.orders.OrderRequest wrapper){
@@ -47,6 +48,7 @@ public class OrderRequest {
 		entryTime.set(wrapper.time);
 		notes.set(wrapper.note);
 		status.set(wrapper.getStatus().name());
+		executionTime.set(wrapper.getExecutionTime());
 	}
 
 	public IntegerProperty requestID(){
@@ -142,5 +144,12 @@ public class OrderRequest {
 
 	public void setEntryTime(Long entryTime) {
 		this.entryTime.set(entryTime);
+	}
+	
+	public Long getExecutionTime(){
+		return executionTime.get();
+	}
+	public void setExecutionTime(long time){
+		executionTime.set(time);
 	}
 }

@@ -38,6 +38,7 @@ public class OrderRequestsController implements Initializable {
 	@FXML TableColumn<OrderRequest, Number> quantityColumn;
 	@FXML TableColumn<OrderRequest, Number> entryPriceColumn;
 	@FXML TableColumn<OrderRequest, Number> entryTimeColumn;
+	@FXML TableColumn<OrderRequest, Number> executionTimeColumn;
 	@FXML TableColumn<OrderRequest, String> notesColumn;
 	@FXML TableColumn<OrderRequest, String> statusColumn;
 
@@ -61,9 +62,13 @@ public class OrderRequestsController implements Initializable {
 					if(!r.getStatus().equals(Status.Executed.name())
 							&& !r.getStatus().equals(Status.Cancelled.name())
 							&& !r.getStatus().equals(Status.Rejected.name())){
-						Status status = Execution.Manager.dynami().orders().getOrderStatus(r.getRequestID());
+						org.dynami.core.orders.OrderRequest request = Execution.Manager.dynami().orders().getOrderById(r.getRequestID());
+						Status status = request.getStatus();
 						if(!status.name().equals(r.getStatus())){
-							Platform.runLater(()->r.setStatus(status.name()));
+							Platform.runLater(()->{
+								r.setStatus(status.name());
+								r.setExecutionTime(request.getExecutionTime());
+							});
 						}
 					}
 				});
@@ -100,6 +105,20 @@ public class OrderRequestsController implements Initializable {
 	                setText(null);
 	            } else {
 	                setText(DUtils.LONG_DATE_FORMAT.format(time.longValue()));
+	            }
+	        }
+	    });
+		executionTimeColumn.setCellValueFactory(cell->cell.getValue().executionTime);
+		executionTimeColumn.setCellFactory(col -> new TableCell<OrderRequest, Number>() {
+	        @Override
+	        public void updateItem(Number time, boolean empty) {
+	            super.updateItem(time, empty);
+	            if (empty) {
+	                setText(null);
+	            } else {
+	            	if(time.longValue() > 0){
+	            		setText(DUtils.LONG_DATE_FORMAT.format(time.longValue()));
+	            	}
 	            }
 	        }
 	    });

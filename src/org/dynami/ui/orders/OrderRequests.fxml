@@ -40,6 +40,7 @@
 			<TableColumn fx:id="quantityColumn" prefWidth="40.0" text="Qt" style="-fx-alignment: CENTER-RIGHT;" />
 			<TableColumn fx:id="entryPriceColumn" prefWidth="80.0"	text="Entry price" style="-fx-alignment: CENTER-RIGHT;" />
 			<TableColumn fx:id="entryTimeColumn" prefWidth="120.0" text="Entry Time" />
+			<TableColumn fx:id="executionTimeColumn" prefWidth="120.0" text="Execution Time" />
 			<TableColumn fx:id="notesColumn" prefWidth="250" text="Notes" />
 		</columns>
 	</TableView>
