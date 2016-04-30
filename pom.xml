@@ -5,6 +5,13 @@
 	<version>1.0.0</version>
 	<name>Dynami-UI</name>
 	<description>Dynami project user interface programm</description>
+	<repositories>
+		<repository>
+			<id>dynami-ui-in-project</id>
+			<name>In Project Repo</name>
+			<url>file://${project.basedir}/libs</url>
+		</repository>
+	</repositories>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -38,11 +45,6 @@
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.dynami</groupId>
-			<artifactId>Dynami-TA</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>eu.hansolo</groupId>
 			<artifactId>medusa</artifactId>
 		</dependency>
@@ -50,6 +52,16 @@
 			<groupId>org.dynami</groupId>
 			<artifactId>Dynami-Core</artifactId>
 			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dynami</groupId>
+			<artifactId>Dynami-TA</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>extfx</groupId>
+			<artifactId>extfx</artifactId>
+			<version>0.3</version>
 		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
