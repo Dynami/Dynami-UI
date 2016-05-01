@@ -17,8 +17,9 @@ LineChart {
 .config-stage-title {
 	-fx-text-fill: white;
 	-fx-font-weight: bold;
-	-fx-alignment: center;
 	-fx-background-color: black;
+	-fx-padding: 5px;
+	-fx-background-fills: black;
 }
 
 .simple-bold {

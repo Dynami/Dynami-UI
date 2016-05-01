@@ -24,7 +24,9 @@ import javafx.scene.paint.Color;
 public class UIUtils {
 	public static final Background redBackground = new Background( new BackgroundFill(Color.RED, null, null));
 	public static final Background greenBackground = new Background( new BackgroundFill(Color.LIGHTGREEN, null, null));
+	public static final Background blackBackground = new Background( new BackgroundFill(Color.BLACK, null, null));
 	public static final Background defaultBackground = new Background( new BackgroundFill(Color.WHITE, null, null));
+	
 	
 	public static NumberFormat PERC_NUMBER_FORMAT = NumberFormat.getPercentInstance();
 	static {

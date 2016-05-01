@@ -3,7 +3,7 @@
 	-fx-border-width: 0px 0px 1px 0px;
 	-fx-border-color: #909090;
 	-fx-border-style: solid ;
-	-fx-pref-height: 50px; 
+	-fx-pref-height: 50px;
 }
 .fieldparam-name {
 	-fx-font-weight: bold;
