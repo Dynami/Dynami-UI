@@ -38,7 +38,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
+/* VM args: -Dprism.order=sw -Djavafx.verbose=true -Dprism.verbose=true
+ */
 public class DynamiApplication extends Application {
 	private static final UITimer _timer = new UITimer(250);
 	public static final String RESET_TOPIC = "RESET_UI";

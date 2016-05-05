@@ -204,65 +204,11 @@ public class ToolBarController implements Initializable {
 		});
 	}
 
-
-//	private void applyClassSettings(final VBox vbox, final ClassSettings c) throws Exception {
-//		VBox inner = new VBox();
-//		Label label = new Label(c.getName());
-//		label.getStyleClass().add("config-stage-title");
-//		label.prefWidthProperty().bind(vbox.widthProperty());
-//		inner.getChildren().add(label);
-//		for(ParamSettings ps : c.getParams().values()){
-//			try {
-//				FieldParam param;
-//				String name = ps.getName();
-//				Class<?> type = ps.getParamValue().getType();
-//				String description = ps.getDescription();
-//
-//				if(ps.getInnerType().equals(Config.Type.TimeFrame)){
-//					param = new TimeFrameParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)ps.getMin(), (long)ps.getMax(), (long)ps.getStep());
-//				} else {
-//					if(type.equals(Double.class) || type.equals(double.class)){
-//						param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, c, ps.getFieldName()), ps.getMin(), ps.getMax(), ps.getStep());
-//					} else if(type.equals(Long.class) || type.equals(long.class)){
-//						param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)ps.getMin(), (long)ps.getMax(), (long)ps.getStep());
-//					} else if(type.equals(Integer.class) || type.equals(int.class)){
-//						param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, c, ps.getFieldName()), (int)ps.getMin(), (int)ps.getMax(), (int)ps.getStep());
-//					} else if(type.equals(Boolean.class) || type.equals(boolean.class)){
-//						param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, c, ps.getFieldName()));
-//					} else if(type.equals(File.class)){
-//						param = new FileFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
-//					} else {
-//						param = new TextFieldParam(new PropertyParam<String>(name, description, c, ps.getFieldName()));
-//					}
-//				}
-//				inner.getChildren().add(param);
-//			} catch (Exception e1) {
-//				Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
-//			}
-//		}
-//		vbox.getChildren().add(inner);
-//	}
-
 	public void configStrategy(ActionEvent e) throws Exception {
 		if(strategyComponents == null) return;
 		
 		ConfigDialog dialog = new ConfigDialog(strategyComponents);
 		dialog.showAndWait();
-		
-//		VBox vbox = new VBox();
-//		PopOver popOver = new PopOver(vbox);
-//
-//		applyClassSettings(vbox, strategyComponents.strategySettings.getStrategy());
-//
-//		for(ClassSettings c: strategyComponents.strategySettings.getStagesSettings().values()){
-//			if(c != null && c.getName() != null && !c.getName().equals("")){
-//				applyClassSettings(vbox, c);
-//			}
-//		}
-//
-//		Button b = (Button)e.getSource();
-//		popOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-//		popOver.show(b);
 	}
 
 	public void configDataHandler(ActionEvent e){
@@ -274,51 +220,6 @@ public class ToolBarController implements Initializable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-//		Field[] fields = handler.getClass().getDeclaredFields();
-//		VBox vbox = new VBox(5);
-//		Label label = new Label(handler.getClass().getSimpleName());
-//		label.getStyleClass().add("config-stage-title");
-//		label.prefWidthProperty().bind(vbox.widthProperty());
-//		vbox.getChildren().add(label);
-//		for (Field f : fields) {
-//			Config.Param p = f.getAnnotation(Config.Param.class);
-//			if (p != null) {
-//				try {
-//					FieldParam param;
-//					String name = !p.name().equals("")?p.name():f.getName();
-//					String description = p.description();
-//
-//					if(p.type().equals(Config.Type.TimeFrame)){
-//						param = new TimeFrameParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
-//					} else {
-//						if(f.getType().equals(Double.class) || f.getType().equals(double.class)){
-//							param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, handler, f), p.min(), p.max(), p.step());
-//						} else if(f.getType().equals(Long.class) || f.getType().equals(long.class)){
-//							param = new LongSpinnerFieldParam(new PropertyParam<Long>(name, description, handler, f), (long)p.min(), (long)p.max(), (long)p.step());
-//						} else if(f.getType().equals(Integer.class) || f.getType().equals(int.class)){
-//							param = new IntegerSpinnerFieldParam(new PropertyParam<Integer>(name, description, handler, f), (int)p.min(), (int)p.max(), (int)p.step());
-//						} else if(f.getType().equals(Boolean.class) || f.getType().equals(boolean.class)){
-//							param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, handler, f));
-//						} else if(f.getType().equals(File.class)){
-//							param = new FileFieldParam(new PropertyParam<File>(name, description, handler, f));
-//						} else {
-//							param = new TextFieldParam(new PropertyParam<String>(name, description, handler, f));
-//						}
-//					}
-//
-//					vbox.getChildren().add(param);
-//				} catch (Exception e1) {
-//					Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e1);
-//				}
-//			}
-//		}
-//
-//		PopOver popOver = new PopOver(vbox);
-//		Button b = (Button)e.getSource();
-//
-//		popOver.setArrowLocation(ArrowLocation.TOP_LEFT);
-//		popOver.show(b);
 	}
 }
 

@@ -27,6 +27,12 @@ public class UIUtils {
 	public static final Background blackBackground = new Background( new BackgroundFill(Color.BLACK, null, null));
 	public static final Background defaultBackground = new Background( new BackgroundFill(Color.WHITE, null, null));
 	
+	public static Color randomColor(){
+		int red = (int)Math.random()*255;
+		int green = (int)Math.random()*255;
+		int blue = (int)Math.random()*255;
+		return Color.rgb(red, green, blue);
+	};
 	
 	public static NumberFormat PERC_NUMBER_FORMAT = NumberFormat.getPercentInstance();
 	static {
