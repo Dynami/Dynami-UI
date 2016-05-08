@@ -56,6 +56,7 @@ public class PriceChartController2 implements Initializable {
 		yAxis = new NumberAxis();
 //		yAxis.labelProperty().set("Price");
 		chart = new BarStickChart(xAxis, yAxis, FXCollections.observableArrayList());
+		chart.setLegendVisible(true);
 		vbox.getChildren().add(chart);
 
 		DynamiApplication.priceLowerBound.bind(yAxis.lowerBoundProperty());

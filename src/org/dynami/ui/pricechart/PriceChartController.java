@@ -31,27 +31,30 @@ import org.dynami.runtime.plot.PlotData;
 import org.dynami.runtime.plot.PlottableObject;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.DynamiApplication;
-import org.dynami.ui.controls.chart.BarStickChart;
+import org.dynami.ui.controls.chart.StockChart;
 import org.dynami.ui.prefs.data.PrefsConstants;
 
 import extfx.scene.chart.DateAxis;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.SplitPane;
 
 public class PriceChartController implements Initializable {
-	@FXML VBox vbox;
+	@FXML SplitPane vbox;
 
 	DateAxis xAxis;
 	NumberAxis yAxis;
 	
 	final Map<String, XYChart.Series<Date, Number>> series = new HashMap<>();
 	final Map<String, XYChart<Date, Number>> charts = new HashMap<>();
+	
+	final Map<String, ObservableList<XYChart.Data<Date, Number>>> _data = new HashMap<>();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -66,58 +69,15 @@ public class PriceChartController implements Initializable {
 		yAxis.setForceZeroInRange(false);
 		yAxis.setAutoRanging(true);
 		
-		charts.put(Plot.MAIN_CHART, new BarStickChart(xAxis, yAxis, FXCollections.observableArrayList()));
 		series.put(Plot.MAIN_CHART, new XYChart.Series<Date, Number>("Price", FXCollections.observableArrayList()));
 		
-		charts.get(Plot.MAIN_CHART).getData().add(series.get(Plot.MAIN_CHART));
+		final StockChart chart = new StockChart(xAxis, yAxis, FXCollections.observableArrayList());
+		chart.getData().add(series.get(Plot.MAIN_CHART));
 		
-		vbox.getChildren().add(charts.get(Plot.MAIN_CHART));
+		charts.put(Plot.MAIN_CHART, chart);
 		
-		Execution.Manager.msg().subscribe(Topics.CHART_SIGNAL.topic, (last, msg)->{
-			final PlotData plotData = (PlotData)msg;
-			System.out.println(plotData.data());
-			DynamiApplication.timer().get("plotData", PlotData.class).push(plotData);
-		});
+		vbox.getItems().add(charts.get(Plot.MAIN_CHART));
 		
-		DynamiApplication.timer().get("plotData", PlotData.class).addConsumer(bars->{
-			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
-			final Map<String, List<XYChart.Data<Date,Number>>> seriesLists = new HashMap<>();
-			
-			bars.forEach(data->{
-				list.add(new XYChart.Data<Date, Number>(
-						new Date(data.bar.time),
-						data.bar.high,
-						data.bar
-						));
-				;
-				data.data().forEach( i->{
-					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
-					System.out.println("STEP 2 "+i.key);
-					seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
-				});
-				
-			});
-			if(list.size()>0){
-				System.out.println(series.keySet());
-				Platform.runLater(()->{
-					XYChart.Series<Date, Number> barSeries = series.get(Plot.MAIN_CHART);
-					final int exeeding = Math.max(0, barSeries.getData().size()+list.size()-MAX_SAMPLES);
-					if(exeeding  > 0){
-						barSeries.getData().remove(0, exeeding-1);
-					}
-					barSeries.getData().addAll(list);
-				});
-			}
-			if(seriesLists.size() > 0){
-				seriesLists.forEach((k, v)->{
-					System.out.println("STEP 1 "+k);
-					Platform.runLater(()->{
-						series.get(k).getData().addAll(seriesLists.get(k));
-					});
-				});
-			}
-		});
-
 		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
 //			Platform.runLater(()->{
 //				if(series.get(Plot.MAIN_CHART) == null) return; 
@@ -137,34 +97,69 @@ public class PriceChartController implements Initializable {
 					.map(PlottableObject::on)
 					.distinct()
 					.collect(Collectors.toList());
-			
-			chartPanes.forEach(k->{
-				if(!k.equals(Plot.MAIN_CHART)){
-					Platform.runLater(()->{
-						LineChart<Date, Number> chart = new LineChart<>(xAxis, new NumberAxis(), FXCollections.observableArrayList());
-//						chart.legendVisibleProperty().set(false);
-						charts.put(k, chart);
-					});
-				}
-			});
-			
-			seriesNames.forEach(s->{
-				System.out.println("Series Name "+s);
-				charts.forEach((k, c)->{
-					if(s.startsWith(k)){
-						Platform.runLater(()->{
-							final XYChart.Series<Date, Number> serie = new XYChart.Series<Date, Number>(s, FXCollections.observableArrayList());
-							series.put(s, serie);
-							charts.get(k).getData().add(serie);
-						});
+			Platform.runLater(()->{
+				chartPanes.forEach(k->{
+					if(!k.equals(Plot.MAIN_CHART)){
+						LineChart<Date, Number> _chart = new LineChart<>(xAxis, new NumberAxis());
+						_chart.setAnimated(false);
+						_chart.setCreateSymbols(false);
+						charts.put(k, _chart);
+						vbox.getItems().add(_chart);
 					}
 				});
+				seriesNames.forEach(s->{
+					charts.forEach((k, c)->{
+						if(s.startsWith(k)){
+							final XYChart.Series<Date, Number> serie = new XYChart.Series<>(s, FXCollections.observableArrayList());
+							series.put(s, serie);
+							charts.get(k).getData().add(serie);
+						}
+					});
+				});
 			});
-			charts.forEach( (k, v)->{
-				if(!k.equals(Plot.MAIN_CHART))
-					Platform.runLater(()->{
-						vbox.getChildren().add(v);
-					});	
+		});
+		
+		Execution.Manager.msg().subscribe(Topics.CHART_SIGNAL.topic, (last, msg)->{
+			DynamiApplication.timer().get("plotData", PlotData.class).push((PlotData)msg);
+		});
+		
+		DynamiApplication.timer().get("plotData", PlotData.class).addConsumer(bars->{
+			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
+			final Map<String, List<XYChart.Data<Date,Number>>> seriesLists = new HashMap<>();
+			
+			bars.forEach(data->{
+				list.add(new XYChart.Data<Date, Number>(
+						new Date(data.bar.time),
+						data.bar.high,
+						data.bar
+						));
+				data.data().forEach( i->{
+					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
+					seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
+				});
+			});
+			
+			Platform.runLater(()->{
+				if(list.size()>0){
+					XYChart.Series<Date, Number> barSeries = series.get(Plot.MAIN_CHART);
+					final int exeeding = Math.max(0, barSeries.getData().size()+list.size()-MAX_SAMPLES);
+					if(exeeding  > 0){
+						barSeries.getData().remove(0, exeeding-1);
+					}
+					barSeries.getData().addAll(list);
+					if(seriesLists.size() > 0){
+						seriesLists.forEach((k, v)->{
+//							System.out.println(k+" > "+v);
+							XYChart.Series<Date, Number> _barSeries = series.get(k);
+							
+							final int _exeeding = Math.max(0, _barSeries.getData().size()+v.size()-MAX_SAMPLES);
+							if(_exeeding  > 0){
+								_barSeries.getData().remove(0, _exeeding-1);
+							}
+							_barSeries.getData().addAll(v);
+						});
+					}
+				}
 			});
 		});
 	}
