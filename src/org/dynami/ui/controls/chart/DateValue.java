@@ -1,5 +1,7 @@
 package org.dynami.ui.controls.chart;
 
+import java.util.Date;
+
 public class DateValue extends Number implements Comparable<DateValue> {
 	private static final long serialVersionUID = 1201792937767567318L;
 	private final long time;
@@ -8,6 +10,14 @@ public class DateValue extends Number implements Comparable<DateValue> {
 	public DateValue(int id, long time){
 		this.id = id;
 		this.time = time;
+	}
+	
+	public long getTime(){
+		return time;
+	}
+	
+	public Date getDate() {
+		return new Date(time);
 	}
 	
 	@Override

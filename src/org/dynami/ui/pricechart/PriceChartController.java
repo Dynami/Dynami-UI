@@ -72,6 +72,7 @@ public class PriceChartController implements Initializable {
 		series.put(Plot.MAIN_CHART, new XYChart.Series<Date, Number>("Price", FXCollections.observableArrayList()));
 		
 		final StockChart chart = new StockChart(xAxis, yAxis, FXCollections.observableArrayList());
+		chart.setLegendVisible(true);
 		chart.getData().add(series.get(Plot.MAIN_CHART));
 		
 		charts.put(Plot.MAIN_CHART, chart);
@@ -87,11 +88,7 @@ public class PriceChartController implements Initializable {
 
 		Execution.Manager.msg().subscribe(Topics.NEW_STAGE.topic, (last, msg)->{
 			@SuppressWarnings("unchecked")
-			List<PlottableObject> plottableObjects = (List<PlottableObject>)msg;
-			final List<String> seriesNames = new ArrayList<>();
-			plottableObjects.forEach(po->{
-				seriesNames.addAll(po.keys());
-			});
+			final List<PlottableObject> plottableObjects = (List<PlottableObject>)msg;
 			
 			List<String> chartPanes = plottableObjects.stream()
 					.map(PlottableObject::on)
@@ -107,13 +104,17 @@ public class PriceChartController implements Initializable {
 						vbox.getItems().add(_chart);
 					}
 				});
-				seriesNames.forEach(s->{
-					charts.forEach((k, c)->{
-						if(s.startsWith(k)){
-							final XYChart.Series<Date, Number> serie = new XYChart.Series<>(s, FXCollections.observableArrayList());
-							series.put(s, serie);
-							charts.get(k).getData().add(serie);
-						}
+				plottableObjects.forEach(po->{
+					po.keys().forEach(s->{
+						charts.forEach((k, c)->{
+							if(s.startsWith(k)){
+								final XYChart.Series<Date, Number> serie = new XYChart.Series<>(s, FXCollections.observableArrayList());
+								series.put(s, serie);
+								charts.get(k).getData().add(serie);
+								chart.setPlotFormat(s, po.meta);
+							}
+						});
+						System.out.println("Loaded Series>> "+s);
 					});
 				});
 			});
@@ -134,8 +135,11 @@ public class PriceChartController implements Initializable {
 						data.bar
 						));
 				data.data().forEach( i->{
-					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
-					seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
+//					System.out.println("Data >> "+i.key+"  = "+i.value);
+					if(!Double.isNaN(i.value)){
+						seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
+						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
+					}
 				});
 			});
 			

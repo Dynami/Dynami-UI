@@ -1,11 +1,29 @@
+/*
+ * Copyright 2016 Alessandro Atria - a.atria@gmail.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.dynami.ui.controls.chart;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.dynami.core.data.Bar;
+import org.dynami.core.plot.Plot;
 import org.dynami.core.utils.DUtils;
 
 import javafx.animation.FadeTransition;
@@ -28,13 +46,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 
 
 public class StockChart extends XYChart<Date, Number> {
+	private final Map<String, Plot> seriesFormat = new TreeMap<>();
+	
+	public void setPlotFormat(String seriesName, Plot plot){
+		seriesFormat.put(seriesName, plot);
+	}
+	
 	public StockChart(@NamedArg("xAxis") Axis<Date> xAxis, @NamedArg("yAxis") Axis<Number> yAxis) {
 		super(xAxis, yAxis);
 		setup();
@@ -56,7 +77,7 @@ public class StockChart extends XYChart<Date, Number> {
 
 	@Override
 	protected void dataItemAdded(XYChart.Series<Date, Number> series, int itemIndex, XYChart.Data<Date, Number> item) {
-		Node node = createNode(getData().indexOf(series), item, itemIndex);
+		Node node = createNode(series.getName(), getData().indexOf(series), item, itemIndex);
         if (shouldAnimate()) {
             node.setOpacity(0);
             getPlotChildren().add(node);
@@ -69,7 +90,7 @@ public class StockChart extends XYChart<Date, Number> {
         }
 	}
 	
-	private Node createNode(int seriesIndex, final XYChart.Data<Date, Number> item, int itemIndex) {
+	private Node createNode(String seriesName, int seriesIndex, final XYChart.Data<Date, Number> item, int itemIndex) {
 		Node node = item.getNode();
 		if(node instanceof BarStick || node instanceof Path){
 			return node;
@@ -78,7 +99,7 @@ public class StockChart extends XYChart<Date, Number> {
 			item.setNode(bar);
 			return item.getNode();
 		} else {
-			Segment segment = new Segment(Color.AQUA);
+			Segment segment = new Segment(seriesFormat.get(seriesName));
 			item.setNode(segment);
 			return item.getNode();
 		}
@@ -123,7 +144,6 @@ public class StockChart extends XYChart<Date, Number> {
                 getPlotChildren().add(node);
             }
         }
-		
 	}
 
 	@Override
@@ -183,22 +203,32 @@ public class StockChart extends XYChart<Date, Number> {
                     node.setLayoutY(y);
 
                 } else if(itemNode instanceof Segment){
-                	if (Double.isNaN(x) || Double.isNaN(y)) {
-                        continue;
-                    }
+                	
                     if(prev != null){
                     	double currY = getYAxis().getDisplayPosition(item.getYValue());
                     	double prevY = getYAxis().getDisplayPosition(prev.getYValue());
                     	
                     	double prevX = getXAxis().getDisplayPosition(getCurrentDisplayedXValue(prev));
-                		Segment s = (Segment)itemNode;
-                		s.update(prevX, x, prevY-y, currY-y);
+                    	Plot format = seriesFormat.get(series.getName());
+                		
+                    	Segment s = (Segment)itemNode;
+                		if(format != null){
+                			format.color().toString();
+                		}
+                    	s.update(prevX, x, prevY-y, currY-y);
                 		s.setLayoutY(y);
-                	}
+                		
+                    }
                 } else {
                 	System.out.println("StockChart.layoutPlotChildren() Something wrong happend");
                 }
-				prev = item;
+                if(item.getExtraValue() == null){
+                	if (Double.isNaN(item.getYValue().doubleValue()) || item.getYValue().doubleValue() == 0) {
+                		prev = null;
+                	}  else {
+                		prev = item;
+                	}
+                }
 			}
 		}
 	}
@@ -245,16 +275,24 @@ public class StockChart extends XYChart<Date, Number> {
 
 	public static class Segment extends Group {
     	private Line line = new Line();
-    	private Color color;
-    	public Segment(Color color){
-    		this.color = color;
+		public Segment(Plot format){
     		setAutoSizeChildren(false);
     		getChildren().addAll(line);
-    		((StyleableProperty)line.strokeProperty()).applyStyle(null, color);
-    		line.getStrokeDashArray().addAll(25d, 10d);
+    		setFormat(format);
+//    		line.getStrokeDashArray().addAll(25d, 10d);
     		
 //    		tooltip.setGraphic(new TooltipContent());
 //    		Tooltip.install(this, tooltip);
+    	}
+    	
+    	@SuppressWarnings({ "unchecked", "rawtypes" })
+		public void setFormat(Plot format){
+    		if(format != null){
+    			Color c = Color.web(format.color());
+    			((StyleableProperty)line.strokeProperty()).applyStyle(null, c);
+    		} else {
+    			((StyleableProperty)line.strokeProperty()).applyStyle(null, Color.BLACK);
+    		}
     	}
     	
     	public void update(double time0, double time1, double value0, double value1){
