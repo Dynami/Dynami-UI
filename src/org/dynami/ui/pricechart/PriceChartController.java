@@ -136,9 +136,11 @@ public class PriceChartController implements Initializable {
 						));
 				data.data().forEach( i->{
 //					System.out.println("Data >> "+i.key+"  = "+i.value);
+					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
 					if(!Double.isNaN(i.value)){
-						seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
 						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
+					} else {
+//						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),0));
 					}
 				});
 			});

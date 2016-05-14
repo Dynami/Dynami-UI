@@ -78,16 +78,16 @@ public class StockChart extends XYChart<Date, Number> {
 	@Override
 	protected void dataItemAdded(XYChart.Series<Date, Number> series, int itemIndex, XYChart.Data<Date, Number> item) {
 		Node node = createNode(series.getName(), getData().indexOf(series), item, itemIndex);
-        if (shouldAnimate()) {
-            node.setOpacity(0);
-            getPlotChildren().add(node);
-            // fade in new candle
-            FadeTransition ft = new FadeTransition(Duration.millis(500), node);
-            ft.setToValue(1);
-            ft.play();
-        } else {
-            getPlotChildren().add(node);
-        }
+    	if (shouldAnimate()) {
+    		node.setOpacity(0);
+    		getPlotChildren().add(node);
+    		// fade in new candle
+    		FadeTransition ft = new FadeTransition(Duration.millis(500), node);
+    		ft.setToValue(1);
+    		ft.play();
+    	} else {
+    		getPlotChildren().add(node);
+    	}
 	}
 	
 	private Node createNode(String seriesName, int seriesIndex, final XYChart.Data<Date, Number> item, int itemIndex) {
@@ -156,7 +156,6 @@ public class StockChart extends XYChart<Date, Number> {
                 FadeTransition ft = new FadeTransition(Duration.millis(500), node);
                 ft.setToValue(0);
                 ft.setOnFinished(new EventHandler<ActionEvent>() {
-
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         getPlotChildren().remove(node);
@@ -174,8 +173,6 @@ public class StockChart extends XYChart<Date, Number> {
 		if (getData() == null) {
             return;
         }
-//		final List<LineTo> constructedPath = new ArrayList<>(getDataSize());
-		
 		for (int seriesIndex = 0; seriesIndex < getData().size(); seriesIndex++) {
 			final Series<Date, Number> series = getData().get(seriesIndex);
 			final Iterator<XYChart.Data<Date, Number>> iter = getDisplayedDataIterator(series);
@@ -184,6 +181,11 @@ public class StockChart extends XYChart<Date, Number> {
 			while(iter.hasNext()){
 				item = iter.next();
 				itemNode = item.getNode();
+//				if(Double.isNaN((double)item.getYValue())){
+//					continue;
+//				}
+//				System.out.println("StockChart.layoutPlotChildren() "+series.getName()+" > "+item.getYValue());
+				
 				double x = getXAxis().getDisplayPosition(getCurrentDisplayedXValue(item));
                 double y = getYAxis().getDisplayPosition(getCurrentDisplayedYValue(item));
                 if(itemNode instanceof BarStick){
@@ -223,7 +225,7 @@ public class StockChart extends XYChart<Date, Number> {
                 	System.out.println("StockChart.layoutPlotChildren() Something wrong happend");
                 }
                 if(item.getExtraValue() == null){
-                	if (Double.isNaN(item.getYValue().doubleValue()) || item.getYValue().doubleValue() == 0) {
+                	if (item.getYValue().doubleValue() == 0.0) {
                 		prev = null;
                 	}  else {
                 		prev = item;

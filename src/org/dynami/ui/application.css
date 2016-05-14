@@ -1,5 +1,13 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
+Label {
+/*	-fx-font-family: monospace; */
+}
+
+.table-view .table-cell{
+    -fx-font-family: monospace;
+}
+
 LineChart {
 	/*-fx-background-color: #FFFFFF;*/
 }

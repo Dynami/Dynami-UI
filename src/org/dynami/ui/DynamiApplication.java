@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import javax.swing.plaf.basic.BasicToolBarUI.DockingListener;
+
 import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.runtime.handlers.TextFileDataHandler;
 import org.dynami.runtime.impl.Execution;
@@ -73,9 +75,8 @@ public class DynamiApplication extends Application {
 		try {
 			moveToPreloader();
 			_timer.start();
-
 			_primaryStage = primaryStage;
-
+			
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("/org/dynami/ui/main/MainWindow.fxml"));
 			Scene scene = new Scene(root,1024,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
