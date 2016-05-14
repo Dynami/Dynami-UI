@@ -29,6 +29,11 @@
 										<fx:include source="/org/dynami/ui/vola/VolaChart.fxml" />
 									</content>
 								</Tab>
+								<Tab text="Performance" closable="false">
+									<content>
+										<fx:include source="/org/dynami/ui/perf/PerformanceChart.fxml" />
+									</content>
+								</Tab>
 							</tabs>
 						</TabPane>
 					</items>
