@@ -55,12 +55,12 @@ public class PerformanceController implements Initializable {
 			});
 
 			if(listBuyAndHold.size()>0){
-				int exeeding = Math.max(0, buyAndHold.getData().size()+listBuyAndHold.size()-MAX_SAMPLES);
-				if(exeeding  > 0){
-					buyAndHold.getData().remove(0, exeeding-1);
-					strategy.getData().remove(0,  exeeding-1);
-				}
 				Platform.runLater(()->{
+					int exeeding = Math.max(0, buyAndHold.getData().size()+listBuyAndHold.size()-MAX_SAMPLES);
+					if(exeeding  > 0){
+						buyAndHold.getData().remove(0, exeeding-1);
+						strategy.getData().remove(0,  exeeding-1);
+					}
 					buyAndHold.getData().addAll(listBuyAndHold);
 					strategy.getData().addAll(listStrategy);
 				});

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import javax.jws.soap.SOAPBinding.Style;
+
 import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.runtime.handlers.TextFileDataHandler;
 import org.dynami.runtime.impl.Execution;
@@ -38,6 +40,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 /* VM args: -Dprism.order=sw -Djavafx.verbose=true -Dprism.verbose=true
  */
 public class DynamiApplication extends Application {
@@ -72,6 +75,7 @@ public class DynamiApplication extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			moveToPreloader();
+			setUserAgentStylesheet(STYLESHEET_CASPIAN);
 			_timer.start();
 			_primaryStage = primaryStage;
 			
