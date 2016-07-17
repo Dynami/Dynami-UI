@@ -135,7 +135,7 @@ public class PriceChartController implements Initializable {
 						data.bar
 						));
 				data.data().forEach( i->{
-//					System.out.println("Data >> "+i.key+"  = "+i.value);
+					System.out.println("Data >> "+i.key+"  = "+i.value);
 					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
 					if(!Double.isNaN(i.value)){
 						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
@@ -155,8 +155,8 @@ public class PriceChartController implements Initializable {
 					barSeries.getData().addAll(list);
 					if(seriesLists.size() > 0){
 						seriesLists.forEach((k, v)->{
-//							System.out.println(k+" > "+v);
 							XYChart.Series<Date, Number> _barSeries = series.get(k);
+							System.out.println(k+" > "+v+" on "+_barSeries);
 							
 							final int _exeeding = Math.max(0, _barSeries.getData().size()+v.size()-MAX_SAMPLES);
 							if(_exeeding  > 0){

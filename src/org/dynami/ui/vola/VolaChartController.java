@@ -12,7 +12,7 @@ import org.dynami.core.Event.Type;
 import org.dynami.core.assets.Market;
 import org.dynami.core.data.Bar;
 import org.dynami.core.data.IVolatilityEngine;
-import org.dynami.core.data.vola.CloseToCloseVolatilityEngine;
+import org.dynami.core.data.vola.RogersSatchellVolatilityEngine;
 import org.dynami.runtime.data.BarData;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
@@ -31,7 +31,7 @@ public class VolaChartController implements Initializable {
 	final BarData data = new BarData();
 	final XYChart.Series<Date, Number> histVola = new XYChart.Series<>();
 //	final XYChart.Series<Date, Number> implVola = new XYChart.Series<>();
-	final IVolatilityEngine engine = new CloseToCloseVolatilityEngine();
+	final IVolatilityEngine engine = new RogersSatchellVolatilityEngine();
 	Market market;
 
 
