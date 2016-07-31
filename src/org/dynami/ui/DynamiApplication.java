@@ -38,7 +38,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-/* VM args: -Dprism.order=sw -Djavafx.verbose=true -Dprism.verbose=true
+/* VM args: -Djavafx.verbose=true -Dprism.verbose=true
+ * For Mac Users on run configurations Arguments tab deselect -XstartOnFirstThead check. 
  */
 public class DynamiApplication extends Application {
 	private static final UITimer _timer = new UITimer(250);
@@ -53,6 +54,7 @@ public class DynamiApplication extends Application {
 	private final DynamiActions actions;
 
 	public DynamiApplication(){
+		System.out.println("DynamiApplication.DynamiApplication()");
 		actions = new DynamiActions();
 	}
 
@@ -70,6 +72,7 @@ public class DynamiApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		System.out.println("DynamiApplication.start()");
 		try {
 			moveToPreloader();
 			setUserAgentStylesheet(STYLESHEET_CASPIAN);
