@@ -156,8 +156,7 @@ public class PriceChartController implements Initializable {
 					if(seriesLists.size() > 0){
 						seriesLists.forEach((k, v)->{
 							XYChart.Series<Date, Number> _barSeries = series.get(k);
-							System.out.println(k+" > "+v+" on "+_barSeries);
-							
+							//System.out.println(k+" > "+v+" on "+_barSeries);
 							final int _exeeding = Math.max(0, _barSeries.getData().size()+v.size()-MAX_SAMPLES);
 							if(_exeeding  > 0){
 								_barSeries.getData().remove(0, _exeeding-1);
