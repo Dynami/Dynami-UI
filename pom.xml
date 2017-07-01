@@ -40,11 +40,6 @@
 			<artifactId>controlsfx</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.dynami</groupId>
-			<artifactId>Dynami-Runtime</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>eu.hansolo</groupId>
 			<artifactId>medusa</artifactId>
 		</dependency>
@@ -67,6 +62,11 @@
 			<groupId>com.tictactec</groupId>
 			<artifactId>ta-lib</artifactId>
 			<version>0.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dynami</groupId>
+			<artifactId>Dynami-Runtime</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
