@@ -63,6 +63,7 @@ public class StatusController implements Initializable {
 		statusBar.setText("");
 		Execution.Manager.msg().subscribe(Topics.SERVICE_STATUS.topic, (last, _msg)->{
 			ServiceStatus s = (ServiceStatus)_msg;
+			
 			Platform.runLater(()->{
 				statusBar.setBackground(UIUtils.redBackground);
 				messageIcon.imageProperty().set(new Image("icons/_error.gif"));
