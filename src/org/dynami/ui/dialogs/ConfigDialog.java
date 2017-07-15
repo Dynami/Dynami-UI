@@ -17,6 +17,7 @@ package org.dynami.ui.dialogs;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Date;
 
 import org.dynami.core.config.Config;
 import org.dynami.runtime.config.ClassSettings;
@@ -26,6 +27,7 @@ import org.dynami.runtime.models.StrategyComponents;
 import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.UIUtils;
 import org.dynami.ui.controls.config.BooleanFieldParam;
+import org.dynami.ui.controls.config.DateFieldParam;
 import org.dynami.ui.controls.config.DoubleSpinnerFieldParam;
 import org.dynami.ui.controls.config.FieldParam;
 import org.dynami.ui.controls.config.FileFieldParam;
@@ -45,6 +47,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
+@SuppressWarnings("restriction")
 public class ConfigDialog extends Dialog<Object> {
 	private final Object handler;
 	private final VBox vbox = new VBox();
@@ -112,6 +115,8 @@ public class ConfigDialog extends Dialog<Object> {
 							param = new BooleanFieldParam(new PropertyParam<Boolean>(name, description, c, ps.getFieldName()));
 						} else if(type.equals(File.class)){
 							param = new FileFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
+						} else if(type.equals(Date.class)){
+							param = new DateFieldParam(new PropertyParam<Date>(name, description, c, ps.getFieldName()));
 						} else {
 							param = new TextFieldParam(new PropertyParam<String>(name, description, c, ps.getFieldName()));
 						}
@@ -163,6 +168,8 @@ public class ConfigDialog extends Dialog<Object> {
 										new PropertyParam<Boolean>(name, description, handler, f));
 							} else if (f.getType().equals(File.class)) {
 								param = new FileFieldParam(new PropertyParam<File>(name, description, handler, f));
+							} else if (f.getType().equals(Date.class)) {
+								param = new DateFieldParam(new PropertyParam<Date>(name, description, handler, f));
 							} else {
 								param = new TextFieldParam(new PropertyParam<String>(name, description, handler, f));
 							}

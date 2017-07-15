@@ -26,6 +26,7 @@ import java.util.prefs.Preferences;
 
 import org.dynami.runtime.impl.Execution;
 import org.dynami.runtime.topics.Topics;
+import org.dynami.ui.UIUtils;
 
 import javafx.scene.paint.Color;
 
@@ -51,6 +52,8 @@ public abstract class Prefs {
 						f.set(this, new File(preferences.get(parameter.config(), parameter.defaultValue())));
 					} else if(Type.Color.equals(parameter.type())){
 						f.set(this, Color.web(preferences.get(parameter.config(), parameter.defaultValue())));
+					} else if(Type.Date.equals(parameter.type())){
+						f.set(this, UIUtils.DATE_FORMAT.parse(preferences.get(parameter.config(), parameter.defaultValue())));
 					} else if(Type.File.equals(parameter.type())){
 						f.set(this, new File(preferences.get(parameter.config(), parameter.defaultValue())));
 					} else if(Type.String.equals(parameter.type())){
@@ -121,6 +124,8 @@ public abstract class Prefs {
 						preferences.put(parameter.config(), ((File)f.get(this)).getAbsolutePath());
 					} else if(Type.File.equals(parameter.type())){
 						preferences.put(parameter.config(), ((File)f.get(this)).getAbsolutePath());
+					} else if(Type.Date.equals(parameter.type())){
+						preferences.put(parameter.config(), UIUtils.DATE_FORMAT.format(f.get(this)));
 					} else if(Type.Color.equals(parameter.type())){
 						preferences.put(parameter.config(), String.valueOf(f.get(this)));
 					} else if(Type.String.equals(parameter.type())){
@@ -163,6 +168,7 @@ public abstract class Prefs {
 		Integer,
 		Long,
 		Double,
+		Date,
 		Float,
 		String,
 		Boolean,

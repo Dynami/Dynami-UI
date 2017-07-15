@@ -16,6 +16,7 @@
 package org.dynami.ui;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -33,7 +34,7 @@ public class UIUtils {
 		int blue = (int)Math.random()*255;
 		return Color.rgb(red, green, blue);
 	};
-	
+	public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 	public static NumberFormat PERC_NUMBER_FORMAT = NumberFormat.getPercentInstance();
 	static {
 		PERC_NUMBER_FORMAT.setMinimumFractionDigits(2);
