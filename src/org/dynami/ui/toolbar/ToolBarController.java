@@ -172,7 +172,7 @@ public class ToolBarController implements Initializable {
 				dataHandlers.setDisable(false);
 			} else if(newState.equals(IExecutionManager.State.Initialized)){
 				// do nothing
-			} else if(newState.equals(IExecutionManager.State.Loaded)){
+			} else if(newState.equals(IExecutionManager.State.Loaded) ){
 				execButton.setGraphic(runIcon);
 				execButton.setText(RUN);
 				execButton.setDisable(false);

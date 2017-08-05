@@ -23,7 +23,7 @@ import java.util.prefs.Preferences;
 
 import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.runtime.handlers.TextFileDataHandler;
-import org.dynami.runtime.handlers.TrasiIntradayDataHandler;
+import org.dynami.runtime.handlers.TrasiTestDataHandler;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
@@ -64,7 +64,7 @@ public class DynamiApplication extends Application {
 		super.init();
 		try { Strategies.Register.scanStrategyDirectory(); } catch (Throwable e) { startUpErrors.add(e); }
 		try { DataHandler.Registry.register(TextFileDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
-		try { DataHandler.Registry.register(TrasiIntradayDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
+		try { DataHandler.Registry.register(TrasiTestDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
 		try { Execution.Manager.getServiceBus().registerDefaultServices();} catch (Throwable e) { startUpErrors.add(e); }
 	}
 

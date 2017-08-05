@@ -68,6 +68,11 @@ public class StatusController implements Initializable {
 				statusBar.setBackground(UIUtils.redBackground);
 				messageIcon.imageProperty().set(new Image("icons/_error.gif"));
 				statusBar.setText(s.message);
+				if(s.error != null) {
+					errorsController.addErrorInfo(new ErrorInfo(s.error, ErrorInfo.Type.Internal));
+					s.error.printStackTrace();
+//					new ExceptionDialog(s.error).showAndWait();
+				}
 			});
 		});
 
