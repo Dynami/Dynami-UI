@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE preferences SYSTEM "http://java.sun.com/dtd/preferences.dtd">
+<preferences EXTERNAL_XML_VERSION="1.0">
+  <root type="user">
+    <map/>
+    <node name="org">
+      <map/>
+      <node name="dynami">
+        <map/>
+        <node name="prefs">
+          <map>
+            <entry key="commission_per-contract" value="2.5"/>
+            <entry key="traces_color_error" value="0xff4500ff"/>
+            <entry key="traces_max-rows" value="50"/>
+            <entry key="traces_color_debug" value="0xd3d3d3ff"/>
+            <entry key="time-chart_max-sample-size" value="100"/>
+            <entry key="basic_strategies-directory" value="/Users/Dacia/Documents/02.Ale/workspace/trasi-strategy"/>
+            <entry key="traces_color_info" value="0x87cefaff"/>
+            <entry key="traces_color_warning" value="0xffa500ff"/>
+          </map>
+        </node>
+      </node>
+    </node>
+  </root>
+</preferences>
