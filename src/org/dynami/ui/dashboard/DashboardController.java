@@ -75,8 +75,8 @@ public class DashboardController implements Initializable {
 			if(Execution.Manager.isLoaded()){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
 				double initialBudget = portfolio.getInitialBudget();
-				double realized = portfolio.realised();
-				double unrealized = portfolio.unrealised();
+				double realized = portfolio.realized();
+				double unrealized = portfolio.unrealized();
 				double margin = -portfolio.requiredMargin();
 				double currentExposure = (margin/(initialBudget+realized+unrealized))*100;
 				if(currentExposure > exposure.get()){

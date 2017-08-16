@@ -18,16 +18,14 @@ package org.dynami.ui.orders;
 import org.dynami.core.utils.DUtils;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class OrderRequest {
-	public IntegerProperty requestID = new SimpleIntegerProperty();
+	public LongProperty requestID = new SimpleLongProperty();
 	public StringProperty requestType = new SimpleStringProperty();
 	public StringProperty symbol = new SimpleStringProperty();
 	public LongProperty quantity = new SimpleLongProperty();
@@ -51,7 +49,7 @@ public class OrderRequest {
 		executionTime.set(wrapper.getExecutionTime());
 	}
 
-	public IntegerProperty requestID(){
+	public LongProperty requestID(){
 		return requestID;
 	}
 
@@ -130,7 +128,7 @@ public class OrderRequest {
 		DUtils.threadSafe(()->this.status.set(status));
 	}
 
-	public Integer getRequestID() {
+	public Long getRequestID() {
 		return requestID.get();
 	}
 

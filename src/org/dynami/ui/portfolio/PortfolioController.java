@@ -79,7 +79,7 @@ public class PortfolioController implements Initializable {
 			Platform.runLater(()->{
 				list.forEach(o->{
 					// calculate roi and percent roi
-					final double roi = portfolio.unrealised(o.getSymbol());
+					final double roi = portfolio.unrealized(o.getSymbol());
 					final double percRoi = ((o.getCurrentPrice()/o.getEntryPrice())-1)*((o.getQuantity()>0)?1:-1);
 					// check if Option and in this case add greeks
 					o.setRoi(roi);

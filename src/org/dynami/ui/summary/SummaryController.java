@@ -69,8 +69,8 @@ public class SummaryController implements Initializable {
 				if(_margin < 0 && _margin < _maxMargin.get()){
 					_maxMargin.set(_margin);
 				}
-				double _realized = portfolio.realised();
-				double _unrealized = portfolio.unrealised();
+				double _realized = portfolio.realized();
+				double _unrealized = portfolio.unrealized();
 				double _initialBudget = portfolio.getInitialBudget();
 				double _currentBudget = _initialBudget+_realized+_unrealized;
 				double _roi = (_currentBudget/_initialBudget)-1;

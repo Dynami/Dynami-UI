@@ -83,8 +83,8 @@ public class EquityLineController implements Initializable {
 			final Event e = (Event)msg;
 			if(e.is(Type.OnBarClose)){
 				final IPortfolioService portfolio = Execution.Manager.dynami().portfolio();
-				double realized = portfolio.realised();
-				double unrealized = portfolio.unrealised();
+				double realized = portfolio.realized();
+				double unrealized = portfolio.unrealized();
 
 				DynamiApplication.timer().get("equityLine", EquityLineData.class).push(new EquityLineData(e.bar.time, realized, unrealized));
 			}
