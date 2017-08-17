@@ -54,8 +54,10 @@ public enum Strategies {
 			StrategyClassLoader loader = null;
 			try {
 				loader = new StrategyClassLoader(s.getAbsolutePath(), this.getClass().getClassLoader());
+				loader.getStrategyComponents();
 				this.strategies.add(loader.getStrategyComponents());
 			} catch (Exception e) {
+				e.printStackTrace();
 				Execution.Manager.msg().async(Topics.UI_ERRORS.topic, e);
 			} finally {
 				try { if(loader!=null)loader.close();} catch (Exception e2) {}
