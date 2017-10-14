@@ -60,7 +60,9 @@ public enum Strategies {
 				e.printStackTrace();
 				Execution.Manager.msg().async(Topics.UI_ERRORS.topic, e);
 			} finally {
-				try { if(loader!=null)loader.close();} catch (Exception e2) {}
+				try { if(loader!=null)loader.close();} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 		}
 	}
