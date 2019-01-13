@@ -32,12 +32,21 @@
 					<useProjectReferences>false</useProjectReferences>
 				</configuration>
 			</plugin>
+			<plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>exec-maven-plugin</artifactId>
+	            <version>1.6.0</version>
+	            <configuration>
+	                <mainClass>org.dynami.ui.DynamiApplication</mainClass>
+	            </configuration>
+	        </plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.controlsfx</groupId>
 			<artifactId>controlsfx</artifactId>
+			<version>9.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.hansolo</groupId>
@@ -53,11 +62,11 @@
 			<artifactId>Dynami-TA</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		<dependency>
-			<groupId>extfx</groupId>
-			<artifactId>extfx</artifactId>
-			<version>0.3</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>extfx</groupId> -->
+<!-- 			<artifactId>extfx</artifactId> -->
+<!-- 			<version>0.3</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.tictactec</groupId>
 			<artifactId>ta-lib</artifactId>
@@ -68,15 +77,35 @@
 			<artifactId>Dynami-Runtime</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-controls</artifactId>
+		    <version>11</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-fxml</artifactId>
+		    <version>11.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-base</artifactId>
+		    <version>11.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-graphics</artifactId>
+		    <version>11.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-web</artifactId>
+		    <version>11.0.1</version>
+		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.controlsfx</groupId>
-				<artifactId>controlsfx</artifactId>
-				<version>8.40.9</version>
-			</dependency>
 			<dependency>
 				<groupId>eu.hansolo</groupId>
 				<artifactId>medusa</artifactId>

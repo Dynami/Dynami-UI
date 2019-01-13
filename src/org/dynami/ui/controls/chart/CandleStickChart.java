@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.dynami.core.data.Bar;
 
-import extfx.scene.chart.DateAxis;
+//import javafx.scene.chart.DateAxis;
 import javafx.animation.FadeTransition;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -24,14 +25,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
-public class CandleStickChart extends XYChart<Date, Number> {
+public class CandleStickChart extends XYChart<Number, Number> {
     /**
      * Construct a new CandleStickChart with the given axis.
      *
      * @param xAxis The x axis to use
      * @param yAxis The y axis to use
      */
-    public CandleStickChart(@NamedArg("xAxis") Axis<Date> xAxis, @NamedArg("yAxis") Axis<Number> yAxis) {
+    public CandleStickChart(@NamedArg("xAxis") Axis<Number> xAxis, @NamedArg("yAxis") Axis<Number> yAxis) {
         super(xAxis, yAxis);
         setAnimated(false);
         xAxis.setAnimated(false);
@@ -55,7 +56,7 @@ public class CandleStickChart extends XYChart<Date, Number> {
      * @param yAxis The y axis to use
      * @param data The data to use, this is the actual list used so any changes to it will be reflected in the chart
      */
-    public CandleStickChart(@NamedArg("xAxis") Axis<Date> xAxis, @NamedArg("yAxis") Axis<Number> yAxis, @NamedArg("data") ObservableList<Series<Date, Number>> data) {
+    public CandleStickChart(@NamedArg("xAxis") Axis<Number> xAxis, @NamedArg("yAxis") Axis<Number> yAxis, @NamedArg("data") ObservableList<Series<Number, Number>> data) {
         this(xAxis, yAxis);
         setData(data);
     }
@@ -68,15 +69,15 @@ public class CandleStickChart extends XYChart<Date, Number> {
         }
         // update candle positions
         for (int seriesIndex = 0; seriesIndex < getData().size(); seriesIndex++) {
-            Series<Date, Number> series = getData().get(seriesIndex);
-            Iterator<Data<Date, Number>> iter = getDisplayedDataIterator(series);
+            Series<Number, Number> series = getData().get(seriesIndex);
+            Iterator<Data<Number, Number>> iter = getDisplayedDataIterator(series);
 //            Path seriesPath = null;
 //            if (series.getNode() instanceof Path) {
 //                seriesPath = (Path) series.getNode();
 //                seriesPath.getElements().clear();
 //            }
             while (iter.hasNext()) {
-                Data<Date, Number> item = iter.next();
+                Data<Number, Number> item = iter.next();
                 double x = getXAxis().getDisplayPosition(getCurrentDisplayedXValue(item));
                 double y = getYAxis().getDisplayPosition(getCurrentDisplayedYValue(item));
                 Node itemNode = item.getNode();
@@ -89,8 +90,8 @@ public class CandleStickChart extends XYChart<Date, Number> {
 
                     // calculate candle width
                     double candleWidth = -1;
-                    if (getXAxis() instanceof DateAxis) {
-                    	DateAxis xa = (DateAxis) getXAxis();
+                    if (getXAxis() instanceof NumberAxis) {
+                    	NumberAxis xa = (NumberAxis) getXAxis();
                         candleWidth =  xa.getTickLength() * 0.90; // use 90% width between ticks
                     }
                     // update candle
@@ -113,11 +114,11 @@ public class CandleStickChart extends XYChart<Date, Number> {
     }
 
     @Override
-    protected void dataItemChanged(Data<Date, Number> item) {
+    protected void dataItemChanged(Data<Number, Number> item) {
     }
 
     @Override
-    protected void dataItemAdded(Series<Date, Number> series, int itemIndex, Data<Date, Number> item) {
+    protected void dataItemAdded(Series<Number, Number> series, int itemIndex, Data<Number, Number> item) {
         Node candle = createCandle(getData().indexOf(series), item, itemIndex);
         if (shouldAnimate()) {
             candle.setOpacity(0);
@@ -136,7 +137,7 @@ public class CandleStickChart extends XYChart<Date, Number> {
     }
 
     @Override
-    protected void dataItemRemoved(Data<Date, Number> item, Series<Date, Number> series) {
+    protected void dataItemRemoved(Data<Number, Number> item, Series<Number, Number> series) {
         final Node candle = item.getNode();
         if (shouldAnimate()) {
             // fade out old candle
@@ -156,10 +157,10 @@ public class CandleStickChart extends XYChart<Date, Number> {
     }
 
     @Override
-    protected void seriesAdded(Series<Date, Number> series, int seriesIndex) {
+    protected void seriesAdded(Series<Number, Number> series, int seriesIndex) {
         // handle any data already in series
         for (int j = 0; j < series.getData().size(); j++) {
-            Data<Date, Number> item = series.getData().get(j);
+            Data<Number, Number> item = series.getData().get(j);
             Node candle = createCandle(seriesIndex, item, j);
             if (shouldAnimate()) {
                 candle.setOpacity(0);
@@ -180,9 +181,9 @@ public class CandleStickChart extends XYChart<Date, Number> {
     }
 
     @Override
-    protected void seriesRemoved(Series<Date, Number> series) {
+    protected void seriesRemoved(Series<Number, Number> series) {
         // remove all candle nodes
-        for (XYChart.Data<Date, Number> d : series.getData()) {
+        for (XYChart.Data<Number, Number> d : series.getData()) {
             final Node candle = d.getNode();
             if (shouldAnimate()) {
                 // fade out old candle
@@ -210,7 +211,7 @@ public class CandleStickChart extends XYChart<Date, Number> {
      * @param itemIndex   The index of the data item in the series
      * @return New candle node to represent the give data item
      */
-    private Node createCandle(int seriesIndex, final Data<Date, Number> item, int itemIndex) {
+    private Node createCandle(int seriesIndex, final Data<Number, Number> item, int itemIndex) {
         Node candle = item.getNode();
         // check if candle has already been created
         if (candle instanceof Candle) {
@@ -231,19 +232,19 @@ public class CandleStickChart extends XYChart<Date, Number> {
     protected void updateAxisRange() {
         // For candle stick chart we need to override this method as we need to let the axis know that they need to be able
         // to cover the whole area occupied by the high to low range not just its center data value
-        final Axis<Date> xa = getXAxis();
+        final Axis<Number> xa = getXAxis();
         final Axis<Number> ya = getYAxis();
-        List<Date> xData = null;
+        List<Number> xData = null;
         List<Number> yData = null;
         if (xa.isAutoRanging()) {
-            xData = new ArrayList<Date>();
+            xData = new ArrayList<Number>();
         }
         if (ya.isAutoRanging()) {
             yData = new ArrayList<Number>();
         }
         if (xData != null || yData != null) {
-            for (Series<Date, Number> series : getData()) {
-                for (Data<Date, Number> data : series.getData()) {
+            for (Series<Number, Number> series : getData()) {
+                for (Data<Number, Number> data : series.getData()) {
                     if (xData != null) {
                         xData.add(data.getXValue());
                     }

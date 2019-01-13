@@ -17,6 +17,8 @@ package org.dynami.ui.prefs;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +26,6 @@ import java.util.List;
 import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.prefs.data.Prefs;
 
-import extfx.scene.control.DatePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
@@ -34,6 +35,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
@@ -203,12 +205,15 @@ public class PrefsPage {
 		public ParameterDateField(ParameterProperty<Date> property) {
 			super(property);
 			Date color = property.get();
+			LocalDate local = color.toInstant()
+		      .atZone(ZoneId.systemDefault())
+		      .toLocalDate();
 			field = new DatePicker();
-			field.setValue(color);
+			field.setValue(local);
 			container.getChildren().add(field);
-			field.valueProperty().addListener(new ChangeListener<Date>() {
-				public void changed(javafx.beans.value.ObservableValue<? extends Date> observable, Date oldValue,
-						Date newValue) {
+			field.valueProperty().addListener(new ChangeListener<LocalDate>() {
+				public void changed(javafx.beans.value.ObservableValue<? extends LocalDate> observable, LocalDate oldValue,
+						LocalDate newValue) {
 					update();
 				};
 			});

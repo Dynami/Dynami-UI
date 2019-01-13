@@ -31,11 +31,12 @@ import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.controls.chart.BarStickChart;
 import org.dynami.ui.prefs.data.PrefsConstants;
 
-import extfx.scene.chart.DateAxis;
+//import extfx.scene.chart.DateAxis;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
@@ -44,14 +45,14 @@ public class PriceChartController2 implements Initializable {
 	@FXML VBox vbox;
 
 	BarStickChart chart;
-	DateAxis xAxis;
+	NumberAxis xAxis;
 	NumberAxis yAxis;
-	XYChart.Series<Date, Number> series = new XYChart.Series<>();
+	XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(PrefsConstants.PREFS_NODE).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
-		xAxis = new DateAxis();
+		xAxis = new NumberAxis();
 //		xAxis.labelProperty().set("Time");
 		yAxis = new NumberAxis();
 //		yAxis.labelProperty().set("Price");
@@ -69,10 +70,10 @@ public class PriceChartController2 implements Initializable {
 		yAxis.setAutoRanging(true);
 
 		DynamiApplication.timer().get("bars", Bar.class).addConsumer(bars->{
-			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
+			final List<XYChart.Data<Number,Number>> list = new ArrayList<>();
 			bars.forEach(bar->{
-				list.add(new XYChart.Data<Date, Number>(
-						new Date(bar.time),
+				list.add(new XYChart.Data<Number, Number>(
+						bar.time,
 						bar.high,
 						bar
 						));

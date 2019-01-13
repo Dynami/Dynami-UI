@@ -4,7 +4,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import extfx.scene.chart.DateAxis?>
 
 <LineChart 
 	fx:id="chart"
@@ -13,7 +12,7 @@
 	fx:controller="org.dynami.ui.vola.VolaChartController"
 	>
   <xAxis>
-     <DateAxis side="BOTTOM" />
+     <NumberAxis side="BOTTOM" />
   </xAxis>
   <yAxis>
     <NumberAxis side="LEFT" />

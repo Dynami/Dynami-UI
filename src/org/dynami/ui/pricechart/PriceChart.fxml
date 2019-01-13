@@ -4,7 +4,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import extfx.scene.chart.DateAxis?>
 <?import org.dynami.ui.controls.chart.CandleStickChart?>
 <?import javafx.scene.control.SplitPane?>
 

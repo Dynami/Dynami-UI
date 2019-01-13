@@ -49,19 +49,19 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class StockChart extends XYChart<Date, Number> {
+public class StockChart extends XYChart<Number, Number> {
 	private final Map<String, Plot> seriesFormat = new TreeMap<>();
 	
 	public void setPlotFormat(String seriesName, Plot plot){
 		seriesFormat.put(seriesName, plot);
 	}
 	
-	public StockChart(@NamedArg("xAxis") Axis<Date> xAxis, @NamedArg("yAxis") Axis<Number> yAxis) {
+	public StockChart(@NamedArg("xAxis") Axis<Number> xAxis, @NamedArg("yAxis") Axis<Number> yAxis) {
 		super(xAxis, yAxis);
 		setup();
 	}
 	
-	public StockChart(@NamedArg("xAxis") Axis<Date> xAxis, @NamedArg("yAxis") Axis<Number> yAxis, @NamedArg("data") ObservableList<Series<Date, Number>> data) {
+	public StockChart(@NamedArg("xAxis") Axis<Number> xAxis, @NamedArg("yAxis") Axis<Number> yAxis, @NamedArg("data") ObservableList<Series<Number, Number>> data) {
 		super(xAxis, yAxis);
 		setData(data);
 		setup();
@@ -76,7 +76,7 @@ public class StockChart extends XYChart<Date, Number> {
 	}
 
 	@Override
-	protected void dataItemAdded(XYChart.Series<Date, Number> series, int itemIndex, XYChart.Data<Date, Number> item) {
+	protected void dataItemAdded(XYChart.Series<Number, Number> series, int itemIndex, XYChart.Data<Number, Number> item) {
 		Node node = createNode(series.getName(), getData().indexOf(series), item, itemIndex);
     	if (shouldAnimate()) {
     		node.setOpacity(0);
@@ -90,7 +90,7 @@ public class StockChart extends XYChart<Date, Number> {
     	}
 	}
 	
-	private Node createNode(String seriesName, int seriesIndex, final XYChart.Data<Date, Number> item, int itemIndex) {
+	private Node createNode(String seriesName, int seriesIndex, final XYChart.Data<Number, Number> item, int itemIndex) {
 		Node node = item.getNode();
 		if(node instanceof BarStick || node instanceof Path){
 			return node;
@@ -106,7 +106,7 @@ public class StockChart extends XYChart<Date, Number> {
 	}
 
 	@Override
-	protected void dataItemRemoved(XYChart.Data<Date, Number> item, XYChart.Series<Date, Number> series) {
+	protected void dataItemRemoved(XYChart.Data<Number, Number> item, XYChart.Series<Number, Number> series) {
 		final Node node = item.getNode();
         if (shouldAnimate()) {
             // fade out old candle
@@ -125,13 +125,13 @@ public class StockChart extends XYChart<Date, Number> {
 	}
 
 	@Override
-	protected void dataItemChanged(XYChart.Data<Date, Number> item) {}
+	protected void dataItemChanged(XYChart.Data<Number, Number> item) {}
 
 	@Override
-	protected void seriesAdded(XYChart.Series<Date, Number> series, int seriesIndex) {
+	protected void seriesAdded(XYChart.Series<Number, Number> series, int seriesIndex) {
 		// handle any data already in series
         for (int j = 0; j < series.getData().size(); j++) {
-            Data<Date, Number> item = series.getData().get(j);
+            Data<Number, Number> item = series.getData().get(j);
             Node node = item.getNode(); //createNode(seriesIndex, item, j);
             if (shouldAnimate()) {
                 node.setOpacity(0);
@@ -147,9 +147,9 @@ public class StockChart extends XYChart<Date, Number> {
 	}
 
 	@Override
-	protected void seriesRemoved(XYChart.Series<Date, Number> series) {
+	protected void seriesRemoved(XYChart.Series<Number, Number> series) {
 		// remove all candle nodes
-        for (XYChart.Data<Date, Number> d : series.getData()) {
+        for (XYChart.Data<Number, Number> d : series.getData()) {
             final Node node = d.getNode();
             if (shouldAnimate()) {
                 // fade out old candle
@@ -174,9 +174,9 @@ public class StockChart extends XYChart<Date, Number> {
             return;
         }
 		for (int seriesIndex = 0; seriesIndex < getData().size(); seriesIndex++) {
-			final Series<Date, Number> series = getData().get(seriesIndex);
-			final Iterator<XYChart.Data<Date, Number>> iter = getDisplayedDataIterator(series);
-			XYChart.Data<Date, Number> prev = null, item = null;
+			final Series<Number, Number> series = getData().get(seriesIndex);
+			final Iterator<XYChart.Data<Number, Number>> iter = getDisplayedDataIterator(series);
+			XYChart.Data<Number, Number> prev = null, item = null;
 			Node itemNode;
 			while(iter.hasNext()){
 				item = iter.next();
@@ -239,19 +239,19 @@ public class StockChart extends XYChart<Date, Number> {
     protected void updateAxisRange() {
         // For candle stick chart we need to override this method as we need to let the axis know that they need to be able
         // to cover the whole area occupied by the high to low range not just its center data value
-        final Axis<Date> xa = getXAxis();
+        final Axis<Number> xa = getXAxis();
         final Axis<Number> ya = getYAxis();
-        List<Date> xData = null;
+        List<Number> xData = null;
         List<Number> yData = null;
         if (xa.isAutoRanging()) {
-            xData = new ArrayList<Date>();
+            xData = new ArrayList<Number>();
         }
         if (ya.isAutoRanging()) {
             yData = new ArrayList<Number>();
         }
         if (xData != null || yData != null) {
-            for (Series<Date, Number> series : getData()) {
-                for (Data<Date, Number> data : series.getData()) {
+            for (Series<Number, Number> series : getData()) {
+                for (Data<Number, Number> data : series.getData()) {
                     if (xData != null) {
                         xData.add(data.getXValue());
                     }

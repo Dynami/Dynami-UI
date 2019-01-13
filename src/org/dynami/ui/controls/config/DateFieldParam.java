@@ -15,11 +15,13 @@
  */
 package org.dynami.ui.controls.config;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
-import extfx.scene.control.DatePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.DatePicker;
 
 public class DateFieldParam extends FieldParam {
 	private final DatePicker field = new DatePicker();
@@ -29,11 +31,14 @@ public class DateFieldParam extends FieldParam {
 		prop = _prop;
 		controlsContainer.getChildren().add(field);
 		
-		field.setValue(_prop.get());
-		field.valueProperty().addListener(new ChangeListener<Date>() {
+		field.setValue(_prop.get().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		field.valueProperty().addListener(new ChangeListener<LocalDate>() {
 			@Override
-			public void changed(ObservableValue<? extends Date> observable, Date oldValue, Date newValue) {
-				prop.update(newValue);
+			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+				Date d = java.util.Date.from(newValue.atStartOfDay()
+					      .atZone(ZoneId.systemDefault())
+					      .toInstant());
+				prop.update(d);
 			}
 		});
 	}
