@@ -17,6 +17,7 @@ package org.dynami.ui.pricechart;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +34,12 @@ import org.dynami.ui.DynamiApplication;
 import org.dynami.ui.controls.chart.StockChart;
 import org.dynami.ui.prefs.data.PrefsConstants;
 
-//import extfx.scene.chart.DateAxis;
+import extfx.scene.chart.DateAxis;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -48,18 +48,18 @@ import javafx.scene.control.SplitPane;
 public class PriceChartController implements Initializable {
 	@FXML SplitPane vbox;
 
-	NumberAxis xAxis;
+	DateAxis xAxis;
 	NumberAxis yAxis;
 	
-	final Map<String, XYChart.Series<Number, Number>> series = new HashMap<>();
-	final Map<String, XYChart<Number, Number>> charts = new HashMap<>();
+	final Map<String, XYChart.Series<Date, Number>> series = new HashMap<>();
+	final Map<String, XYChart<Date, Number>> charts = new HashMap<>();
 	
-	final Map<String, ObservableList<XYChart.Data<Number, Number>>> _data = new HashMap<>();
+	final Map<String, ObservableList<XYChart.Data<Date, Number>>> _data = new HashMap<>();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(PrefsConstants.PREFS_NODE).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
-		xAxis = new NumberAxis();
+		xAxis = new DateAxis();
 		yAxis = new NumberAxis();
 
 		DynamiApplication.priceLowerBound.bind(yAxis.lowerBoundProperty());
@@ -69,7 +69,7 @@ public class PriceChartController implements Initializable {
 		yAxis.setForceZeroInRange(false);
 		yAxis.setAutoRanging(true);
 		
-		series.put(Plot.MAIN_CHART, new XYChart.Series<Number, Number>("Price", FXCollections.observableArrayList()));
+		series.put(Plot.MAIN_CHART, new XYChart.Series<Date, Number>("Price", FXCollections.observableArrayList()));
 		
 		final StockChart chart = new StockChart(xAxis, yAxis, FXCollections.observableArrayList());
 		chart.setLegendVisible(true);
@@ -97,7 +97,7 @@ public class PriceChartController implements Initializable {
 			Platform.runLater(()->{
 				chartPanes.forEach(k->{
 					if(!k.equals(Plot.MAIN_CHART)){
-						LineChart<Number, Number> _chart = new LineChart<>(xAxis, new NumberAxis());
+						LineChart<Date, Number> _chart = new LineChart<>(xAxis, new NumberAxis());
 						_chart.setAnimated(false);
 						_chart.setCreateSymbols(false);
 						charts.put(k, _chart);
@@ -108,7 +108,7 @@ public class PriceChartController implements Initializable {
 					po.keys().forEach(s->{
 						charts.forEach((k, c)->{
 							if(s.startsWith(k)){
-								final XYChart.Series<Number, Number> serie = new XYChart.Series<>(s, FXCollections.observableArrayList());
+								final XYChart.Series<Date, Number> serie = new XYChart.Series<>(s, FXCollections.observableArrayList());
 								series.put(s, serie);
 								charts.get(k).getData().add(serie);
 								chart.setPlotFormat(s, po.meta);
@@ -125,29 +125,29 @@ public class PriceChartController implements Initializable {
 		});
 		
 		DynamiApplication.timer().get("plotData", PlotData.class).addConsumer(bars->{
-			final List<XYChart.Data<Number,Number>> list = new ArrayList<>();
-			final Map<String, List<XYChart.Data<Number,Number>>> seriesLists = new HashMap<>();
+			final List<XYChart.Data<Date,Number>> list = new ArrayList<>();
+			final Map<String, List<XYChart.Data<Date,Number>>> seriesLists = new HashMap<>();
 			
 			bars.forEach(data->{
-				list.add(new XYChart.Data<Number, Number>(
-						data.bar.time,
+				list.add(new XYChart.Data<Date, Number>(
+						new Date(data.bar.time),
 						data.bar.high,
 						data.bar
 						));
 				data.data().forEach( i->{
 					System.out.println("Data >> "+i.key+"  = "+i.value);
-					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Number,Number>>());
+					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
 					if(!Double.isNaN(i.value)){
-						seriesLists.get(i.key).add(new XYChart.Data<Number, Number>(data.bar.time,i.value));
+						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));
 					} else {
-//						seriesLists.get(i.key).add(new XYChart.Data<Number, Number>(new Number(data.bar.time),0));
+//						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),0));
 					}
 				});
 			});
 			
 			Platform.runLater(()->{
 				if(list.size()>0){
-					XYChart.Series<Number, Number> barSeries = series.get(Plot.MAIN_CHART);
+					XYChart.Series<Date, Number> barSeries = series.get(Plot.MAIN_CHART);
 					final int exeeding = Math.max(0, barSeries.getData().size()+list.size()-MAX_SAMPLES);
 					if(exeeding  > 0){
 						barSeries.getData().remove(0, exeeding-1);
@@ -155,7 +155,7 @@ public class PriceChartController implements Initializable {
 					barSeries.getData().addAll(list);
 					if(seriesLists.size() > 0){
 						seriesLists.forEach((k, v)->{
-							XYChart.Series<Number, Number> _barSeries = series.get(k);
+							XYChart.Series<Date, Number> _barSeries = series.get(k);
 							//System.out.println(k+" > "+v+" on "+_barSeries);
 							final int _exeeding = Math.max(0, _barSeries.getData().size()+v.size()-MAX_SAMPLES);
 							if(_exeeding  > 0){
