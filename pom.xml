@@ -102,6 +102,20 @@
 		    <artifactId>javafx-web</artifactId>
 		    <version>11.0.1</version>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.quant</groupId> -->
+<!-- 		    <artifactId>jquantlib</artifactId> -->
+<!-- 		    <version>0.2.4</version> -->
+<!-- 		    <scope>system</scope> -->
+<!-- 		    <systemPath>${basedir}/libs/org.quant/jquantlib/0.2.4/jquantlib-0.2.4.jar</systemPath> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.quant</groupId> -->
+<!-- 		    <artifactId>jquantlib-helpers</artifactId> -->
+<!-- 		    <version>0.2.4</version> -->
+<!-- 		    <scope>system</scope> -->
+<!-- 		    <systemPath>${basedir}/libs/org.quant/jquantlib-helpers/0.2.4/jquantlib-helpers-0.2.4.jar</systemPath> -->
+<!-- 		</dependency> -->
 	</dependencies>
 	<groupId>org.dynami</groupId>
 	<dependencyManagement>
