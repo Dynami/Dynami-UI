@@ -24,6 +24,7 @@ import java.util.prefs.Preferences;
 import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.runtime.handlers.TextFileDataHandler;
 import org.dynami.runtime.handlers.TrasiTestDataHandler;
+import org.dynami.runtime.handlers.TrueFXDataHandler;
 import org.dynami.runtime.impl.Execution;
 import org.dynami.ui.collectors.DataHandler;
 import org.dynami.ui.collectors.Strategies;
@@ -51,20 +52,21 @@ public class DynamiApplication extends Application {
 	public static DoubleProperty priceUpperBound = new SimpleDoubleProperty();
 	public static DoubleProperty priceTickUnit = new SimpleDoubleProperty();
 
-	@SuppressWarnings("unused")
-	private final DynamiActions actions;
+//	@SuppressWarnings("unused")
+//	private final DynamiActions actions;
 
 	public DynamiApplication(){
 		System.out.println("DynamiApplication.DynamiApplication()");
-		actions = new DynamiActions();
+//		actions = new DynamiActions();
 	}
 
 	@Override
 	public void init() throws Exception {
 		super.init();
-		try { Strategies.Register.scanStrategyDirectory(); } catch (Throwable e) { startUpErrors.add(e); }
+		try { Strategies.Registry.scanStrategyDirectory(); } catch (Throwable e) { startUpErrors.add(e); }
 		try { DataHandler.Registry.register(TextFileDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
 		try { DataHandler.Registry.register(TrasiTestDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
+		try { DataHandler.Registry.register(TrueFXDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
 		try { Execution.Manager.getServiceBus().registerDefaultServices();} catch (Throwable e) { startUpErrors.add(e); }
 	}
 

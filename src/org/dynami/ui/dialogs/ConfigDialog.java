@@ -28,6 +28,7 @@ import org.dynami.runtime.topics.Topics;
 import org.dynami.ui.UIUtils;
 import org.dynami.ui.controls.config.BooleanFieldParam;
 import org.dynami.ui.controls.config.DateFieldParam;
+import org.dynami.ui.controls.config.DirectoryFieldParam;
 import org.dynami.ui.controls.config.DoubleSpinnerFieldParam;
 import org.dynami.ui.controls.config.FieldParam;
 import org.dynami.ui.controls.config.FileFieldParam;
@@ -101,9 +102,11 @@ public class ConfigDialog extends Dialog<Object> {
 					String name = ps.getName();
 					Class<?> type = ps.getParamValue().getType();
 					String description = ps.getDescription();
-					
+					System.out.println("ConfigDialog.applyClassSettings()"+name+" "+ps.getInnerType());
 					if(ps.getInnerType().equals(Config.Type.TimeFrame)){
 						param = new TimeFrameParam(new PropertyParam<Long>(name, description, c, ps.getFieldName()), (long)ps.getMin(), (long)ps.getMax(), (long)ps.getStep());
+					} else if(ps.getInnerType().equals(Config.Type.Directory)){
+						param = new DirectoryFieldParam(new PropertyParam<File>(name, description, c, ps.getFieldName()));
 					} else {
 						if(type.equals(Double.class) || type.equals(double.class)){
 							param = new DoubleSpinnerFieldParam(new PropertyParam<Double>(name, description, c, ps.getFieldName()), ps.getMin(), ps.getMax(), ps.getStep());
@@ -150,6 +153,9 @@ public class ConfigDialog extends Dialog<Object> {
 						if (p.type().equals(Config.Type.TimeFrame)) {
 							param = new TimeFrameParam(new PropertyParam<Long>(name, description, handler, f),
 									(long) p.min(), (long) p.max(), (long) p.step());
+						} else if (p.type().equals(Config.Type.Directory)) {
+							param = new DirectoryFieldParam(new PropertyParam<File>(name, description, handler, f));
+							
 						} else {
 							if (f.getType().equals(Double.class) || f.getType().equals(double.class)) {
 								param = new DoubleSpinnerFieldParam(

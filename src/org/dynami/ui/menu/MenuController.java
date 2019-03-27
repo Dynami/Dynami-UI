@@ -53,7 +53,7 @@ public class MenuController implements Initializable {
 		saveAsMenuItem.setDisable(true);
 		ActionMap.register(this);
 
-		Strategies.Register.selectedProperty().addListener(new ChangeListener<StrategyComponents>() {
+		Strategies.Registry.selectedProperty().addListener(new ChangeListener<StrategyComponents>() {
 			@Override
 			public void changed(ObservableValue<? extends StrategyComponents> observable, StrategyComponents oldValue, StrategyComponents newValue) {
 				if(newValue != null){

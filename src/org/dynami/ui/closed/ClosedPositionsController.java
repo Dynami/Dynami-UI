@@ -110,7 +110,8 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	setText(String.format("%.2f", price.doubleValue()));
+	            	setText(DUtils.NUMBER_FORMAT.format(price.doubleValue()));
+//	            	setText(String.format("%.2f", price.doubleValue()));
 	            }
 	        }
 	    });
@@ -136,8 +137,8 @@ public class ClosedPositionsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-
-	                setText(String.format("%.2f", price.doubleValue()));
+	            	setText(DUtils.NUMBER_FORMAT.format(price.doubleValue()));
+//	                setText(String.format("%.2f", price.doubleValue()));
 	            }
 	        }
 	    });

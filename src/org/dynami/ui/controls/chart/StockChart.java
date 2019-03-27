@@ -390,10 +390,10 @@ public class StockChart extends XYChart<Date, Number> {
 
     	public void update(Bar bar) {
     		timeValue.setText(DUtils.LONG_DATE_FORMAT.format(bar.time));
-    		openValue.setText(Double.toString(bar.open));
-    		closeValue.setText(Double.toString(bar.close));
-    		highValue.setText(Double.toString(bar.high));
-    		lowValue.setText(Double.toString(bar.low));
+    		openValue.setText(DUtils.NUMBER_FORMAT.format(bar.open));
+    		closeValue.setText(DUtils.NUMBER_FORMAT.format(bar.close));
+    		highValue.setText(DUtils.NUMBER_FORMAT.format(bar.high));
+    		lowValue.setText(DUtils.NUMBER_FORMAT.format(bar.low));
     	}
     }
 }

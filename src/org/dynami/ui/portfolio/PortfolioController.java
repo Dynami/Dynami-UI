@@ -147,8 +147,7 @@ public class PortfolioController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-
-	                setText(String.format("%.2f", value.doubleValue()));
+	            	setText(DUtils.NUMBER_FORMAT.format(value.doubleValue()));
 	            }
 	        }
 	    });
@@ -161,8 +160,7 @@ public class PortfolioController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-
-	                setText(String.format("%.2f", value.doubleValue()));
+	                setText(DUtils.NUMBER_FORMAT.format(value.doubleValue()));
 	            }
 	        }
 	    });
@@ -175,7 +173,8 @@ public class PortfolioController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-	            	setText(UIUtils.PERC_NUMBER_FORMAT.format(value.doubleValue()));
+	            	setText(DUtils.PERCENT_FORMAT.format(value.doubleValue()));
+//	            	setText(UIUtils.PERC_NUMBER_FORMAT.format(value.doubleValue()));
 	            }
 	        }
 	    });

@@ -39,4 +39,5 @@ public class UIUtils {
 	static {
 		PERC_NUMBER_FORMAT.setMinimumFractionDigits(2);
 	}
+	
 }

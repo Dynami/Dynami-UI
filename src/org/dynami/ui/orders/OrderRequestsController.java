@@ -130,8 +130,8 @@ public class OrderRequestsController implements Initializable {
 	            if (empty) {
 	                setText(null);
 	            } else {
-
-	                setText(String.format("%.2f", value.doubleValue()));
+	            	setText(DUtils.NUMBER_FORMAT.format(value.doubleValue()));
+//	                setText(String.format("%.2f", value.doubleValue()));
 	            }
 	        }
 	    });

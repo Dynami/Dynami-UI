@@ -40,6 +40,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -68,6 +69,7 @@ public class PriceChartController implements Initializable {
 
 		yAxis.setForceZeroInRange(false);
 		yAxis.setAutoRanging(true);
+		yAxis.setSide(Side.LEFT);
 		
 		series.put(Plot.MAIN_CHART, new XYChart.Series<Date, Number>("Price", FXCollections.observableArrayList()));
 		
@@ -80,10 +82,10 @@ public class PriceChartController implements Initializable {
 		vbox.getItems().add(charts.get(Plot.MAIN_CHART));
 		
 		Execution.Manager.msg().subscribe(DynamiApplication.RESET_TOPIC, (last, msg)->{
-//			Platform.runLater(()->{
-//				if(series.get(Plot.MAIN_CHART) == null) return; 
-//				series.get(Plot.MAIN_CHART).getData().clear();
-//			});
+			Platform.runLater(()->{
+				if(series.get(Plot.MAIN_CHART) == null) return; 
+				series.get(Plot.MAIN_CHART).getData().clear();
+			});
 		});
 
 		Execution.Manager.msg().subscribe(Topics.NEW_STAGE.topic, (last, msg)->{
@@ -135,7 +137,7 @@ public class PriceChartController implements Initializable {
 						data.bar
 						));
 				data.data().forEach( i->{
-					System.out.println("Data >> "+i.key+"  = "+i.value);
+//					System.out.println("Data >> "+i.key+"  = "+i.value);
 					seriesLists.putIfAbsent(i.key, new ArrayList<XYChart.Data<Date,Number>>());
 					if(!Double.isNaN(i.value)){
 						seriesLists.get(i.key).add(new XYChart.Data<Date, Number>(new Date(data.bar.time),i.value));

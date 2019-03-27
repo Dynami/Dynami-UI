@@ -86,7 +86,7 @@ public class ToolBarController implements Initializable {
 
 			final String strategyJarPath = strategies.getSelectionModel().getSelectedItem().jarName;
 
-			boolean isOk = Execution.Manager.select(Strategies.Register.getSelectedValue().strategySettings, strategyJarPath);
+			boolean isOk = Execution.Manager.select(Strategies.Registry.getSelectedValue().strategySettings, strategyJarPath);
 			if(isOk){
 				isOk = Execution.Manager.init(null);
 			}
@@ -136,7 +136,7 @@ public class ToolBarController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends StrategyComponents> observable, StrategyComponents oldValue, StrategyComponents newValue) {
 				strategyComponents = newValue;
-				Strategies.Register.setSelected(strategyComponents);
+				Strategies.Registry.setSelected(strategyComponents);
 			}
 		});
 
@@ -144,7 +144,7 @@ public class ToolBarController implements Initializable {
 		stopButton.setDisable(true);
 		execButton.setGraphic(loadIcon);
 
-		strategies.getItems().addAll(Strategies.Register.getStrategies());
+		strategies.getItems().addAll(Strategies.Registry.getStrategies());
 		dataHandlers.getItems().addAll(DataHandler.Registry.dataHandlerNames());
 
 		strategies.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{

@@ -33,7 +33,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public enum Strategies {
-	Register;
+	Registry;
 	private final String strategyDir;
 	private final List<StrategyComponents> strategies = new CopyOnWriteArrayList<>();
 //	private final ObservableValue<StrategyComponents> selected = new ObservableValue<>(null);
