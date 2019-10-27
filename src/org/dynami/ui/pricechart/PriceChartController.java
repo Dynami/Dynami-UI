@@ -57,6 +57,7 @@ public class PriceChartController implements Initializable {
 	
 	final Map<String, ObservableList<XYChart.Data<Date, Number>>> _data = new HashMap<>();
 	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		final int MAX_SAMPLES = Preferences.userRoot().node(PrefsConstants.PREFS_NODE).getInt(PrefsConstants.TIME_CHART.MAX_SAMPLE_SIZE, 50);
@@ -108,12 +109,15 @@ public class PriceChartController implements Initializable {
 				});
 				plottableObjects.forEach(po->{
 					po.keys().forEach(s->{
+						
 						charts.forEach((k, c)->{
 							if(s.startsWith(k)){
 								final XYChart.Series<Date, Number> serie = new XYChart.Series<>(s, FXCollections.observableArrayList());
+								
 								series.put(s, serie);
 								charts.get(k).getData().add(serie);
 								chart.setPlotFormat(s, po.meta);
+								
 							}
 						});
 						System.out.println("Loaded Series>> "+s);

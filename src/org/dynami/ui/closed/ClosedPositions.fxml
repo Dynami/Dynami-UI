@@ -36,17 +36,17 @@
 			<TableColumn fx:id="assetColumn" prefWidth="100.0" text="Asset" />
 			<TableColumn fx:id="quantityColumn" prefWidth="40.0"
 				text="Qt" style="-fx-alignment: CENTER-RIGHT;" />
-			<TableColumn fx:id="entryPriceColumn" prefWidth="80.0"
-				text="Entry price" style="-fx-alignment: CENTER-RIGHT;" />
-			<TableColumn fx:id="entryTimeColumn" prefWidth="120.0"
+			<TableColumn fx:id="entryTimeColumn" prefWidth="160.0"
 				text="Entry Time" />
-			<TableColumn fx:id="exitPriceColumn" prefWidth="80.0"
-				text="Exit price" style="-fx-alignment: CENTER-RIGHT;" />
-			<TableColumn fx:id="exitTimeColumn" prefWidth="120.0"
+			<TableColumn fx:id="exitTimeColumn" prefWidth="160.0"
 				text="Exit Time" />
-			<TableColumn fx:id="percReturnColumn" prefWidth="60.0"
+			<TableColumn fx:id="entryPriceColumn" prefWidth="100.0"
+				text="Entry price" style="-fx-alignment: CENTER-RIGHT;" />
+			<TableColumn fx:id="exitPriceColumn" prefWidth="100.0"
+				text="Exit price" style="-fx-alignment: CENTER-RIGHT;" />
+			<TableColumn fx:id="percReturnColumn" prefWidth="80.0"
 				text="\%" style="-fx-alignment: CENTER-RIGHT;" />
-			<TableColumn fx:id="returnColumn" prefWidth="80.0" text="Return"
+			<TableColumn fx:id="returnColumn" prefWidth="100.0" text="Return"
 				style="-fx-alignment: CENTER-RIGHT;" />
 		</columns>
 	</TableView>

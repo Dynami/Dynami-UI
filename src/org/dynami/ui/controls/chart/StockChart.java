@@ -57,7 +57,7 @@ public class StockChart extends XYChart<Date, Number> {
 	}
 	
 	public StockChart(@NamedArg("xAxis") Axis<Date> xAxis, @NamedArg("yAxis") Axis<Number> yAxis) {
-		super(xAxis, yAxis);
+		super(xAxis, yAxis); 
 		setup();
 	}
 	
@@ -167,6 +167,37 @@ public class StockChart extends XYChart<Date, Number> {
             }
         }
 	}
+	
+	static String inLineStyle(Plot plot) {
+		StringBuilder builder = new StringBuilder();
+		if(plot.lineType() != Plot.LineType.None) {
+			builder.append("-fx-stroke:"+plot.color()+";");
+			
+			if(plot.lineType() == Plot.LineType.Dashed) {
+				builder.append("-fx-stroke-dash-array: 12 2 4 2;");
+				builder.append("-fx-stroke-dash-offset: 6;");
+				builder.append("-fx-stroke-line-cap: butt;");
+			}
+			
+		} else {
+			builder.append("-fx-stroke-width: 0;");
+		}
+		
+		
+		if(plot.symbolType() != Plot.SymbolType.None) {
+			builder.append("-fx-background-color: "+plot.color()+";");
+			if(plot.symbolType() == Plot.SymbolType.In) {
+				builder.append("-fx-background-radius: 0;");
+				builder.append("-fx-background-insets: 0;");
+				builder.append("-fx-shape: \"M5,0 L10,9 L5,18 L0,9 Z\";");
+			}
+			if(plot.symbolType() == Plot.SymbolType.Out) {
+				builder.append("-fx-background-radius: 0;");
+			}
+		}
+		
+		return builder.toString();
+	}
 
 	@Override
 	protected void layoutPlotChildren() {
@@ -175,6 +206,8 @@ public class StockChart extends XYChart<Date, Number> {
         }
 		for (int seriesIndex = 0; seriesIndex < getData().size(); seriesIndex++) {
 			final Series<Date, Number> series = getData().get(seriesIndex);
+			final Plot format = seriesFormat.get(series.getName());
+			
 			final Iterator<XYChart.Data<Date, Number>> iter = getDisplayedDataIterator(series);
 			XYChart.Data<Date, Number> prev = null, item = null;
 			Node itemNode;
@@ -211,9 +244,11 @@ public class StockChart extends XYChart<Date, Number> {
                     	double prevY = getYAxis().getDisplayPosition(prev.getYValue());
                     	
                     	double prevX = getXAxis().getDisplayPosition(getCurrentDisplayedXValue(prev));
-                    	Plot format = seriesFormat.get(series.getName());
+//                    	Plot format = seriesFormat.get(series.getName());
+                		Segment s = (Segment)itemNode;
                 		
-                    	Segment s = (Segment)itemNode;
+                		s.setStyle(inLineStyle(format));
+                		
                 		if(format != null){
                 			format.color().toString();
                 		}
@@ -291,6 +326,7 @@ public class StockChart extends XYChart<Date, Number> {
 		public void setFormat(Plot format){
     		if(format != null){
     			Color c = Color.web(format.color());
+    			
     			((StyleableProperty)line.strokeProperty()).applyStyle(null, c);
     		} else {
     			((StyleableProperty)line.strokeProperty()).applyStyle(null, Color.BLACK);
@@ -303,8 +339,6 @@ public class StockChart extends XYChart<Date, Number> {
     		
     		line.setEndX(time1);
     		line.setEndY(value1);
-//    		line.setStyle("-fx-stroke:"+color+";");
-    		
     	}
     }
 	
