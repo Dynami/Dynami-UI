@@ -64,8 +64,8 @@ public class DynamiApplication extends Application {
 	public void init() throws Exception {
 		super.init();
 		try { Strategies.Registry.scanStrategyDirectory(); } catch (Throwable e) { startUpErrors.add(e); }
-//		try { DataHandler.Registry.register(TextFileDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
-//		try { DataHandler.Registry.register(TrasiTestDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
+		try { DataHandler.Registry.register(TextFileDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
+		try { DataHandler.Registry.register(TrasiTestDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
 		try { DataHandler.Registry.register(TrueFXDataHandler.class);} catch (Throwable e) { startUpErrors.add(e); }
 		try { Execution.Manager.getServiceBus().registerDefaultServices();} catch (Throwable e) { startUpErrors.add(e); }
 	}
