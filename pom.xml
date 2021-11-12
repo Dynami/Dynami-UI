@@ -29,7 +29,6 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-					<useProjectReferences>false</useProjectReferences>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -105,7 +104,7 @@
 			<dependency>
 				<groupId>org.controlsfx</groupId>
 				<artifactId>controlsfx</artifactId>
-				<version>8.40.9</version>
+				<version>8.40.11</version>
 			</dependency>
 			<dependency>
 				<groupId>eu.hansolo</groupId>

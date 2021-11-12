@@ -85,7 +85,7 @@ public class StatusController implements Initializable {
 				statusBar.setText(DUtils.getErrorMessage(e));
 			});
 			e.printStackTrace();
-			new ExceptionDialog(e).showAndWait();
+//			new ExceptionDialog(e).showAndWait();
 //			Dialogs.create().showException(e);
 		});
 

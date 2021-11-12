@@ -9,14 +9,14 @@
         <map/>
         <node name="prefs">
           <map>
+            <entry key="basic_strategies-directory" value="/home/ale/java-projects/Dynami/Dynami-Sample-Strategy/target"/>
             <entry key="commission_per-contract" value="2.5"/>
-            <entry key="traces_color_error" value="0xff4500ff"/>
-            <entry key="traces_max-rows" value="50"/>
-            <entry key="traces_color_debug" value="0xd3d3d3ff"/>
             <entry key="time-chart_max-sample-size" value="100"/>
-            <entry key="basic_strategies-directory" value="/Users/Dacia/Documents/02.Ale/workspace/trasi-strategy"/>
+            <entry key="traces_color_debug" value="0xd3d3d3ff"/>
+            <entry key="traces_color_error" value="0xff4500ff"/>
             <entry key="traces_color_info" value="0x87cefaff"/>
             <entry key="traces_color_warning" value="0xffa500ff"/>
+            <entry key="traces_max-rows" value="50"/>
           </map>
         </node>
       </node>
