@@ -15,7 +15,6 @@
  */
 package org.dynami.ui.toolbar;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -126,7 +125,7 @@ public class ToolBarController implements Initializable {
 				if(newValue != null && !newValue.equals("")){
 					try {
 						handler = DataHandler.Registry.getHandler(newValue).getDeclaredConstructor().newInstance();
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					} catch (Exception e) {
 						Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e);
 					}
 				}
