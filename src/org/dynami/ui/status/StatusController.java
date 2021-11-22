@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 import org.controlsfx.control.StatusBar;
-import org.controlsfx.dialog.ExceptionDialog;
 import org.dynami.core.Event;
 import org.dynami.core.Event.Type;
 import org.dynami.core.utils.DUtils;

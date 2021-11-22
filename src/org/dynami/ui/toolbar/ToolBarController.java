@@ -15,6 +15,7 @@
  */
 package org.dynami.ui.toolbar;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -70,7 +71,7 @@ public class ToolBarController implements Initializable {
 			if(((IService)handler).isDisposed()){
 				try {
 					String handlerName = dataHandlers.selectionModelProperty().getValue().getSelectedItem();
-					handler = DataHandler.Registry.getHandler(handlerName).newInstance();
+					handler = DataHandler.Registry.getHandler(handlerName).getDeclaredConstructor().newInstance();
 				} catch (InstantiationException | IllegalAccessException ex) {
 					Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, ex);
 				}
@@ -124,8 +125,8 @@ public class ToolBarController implements Initializable {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(newValue != null && !newValue.equals("")){
 					try {
-						handler = DataHandler.Registry.getHandler(newValue).newInstance();
-					} catch (InstantiationException | IllegalAccessException e) {
+						handler = DataHandler.Registry.getHandler(newValue).getDeclaredConstructor().newInstance();
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 						Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, e);
 					}
 				}
