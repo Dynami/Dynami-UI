@@ -31,12 +31,18 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.8</version>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.controlsfx</groupId>
 			<artifactId>controlsfx</artifactId>
+
 		</dependency>
 		<dependency>
 			<groupId>eu.hansolo</groupId>
@@ -70,32 +76,32 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>11</version>
+			<version>18.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>11</version>
+			<version>18.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>11.0.1</version>
+			<version>18.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>11.0.1</version>
+			<version>18.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-media</artifactId>
-			<version>11.0.1</version>
+			<version>18.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-web</artifactId>
-			<version>11.0.1</version>
+			<version>18.0.2</version>
 		</dependency>
 	</dependencies>
 	<groupId>org.dynami</groupId>
@@ -104,7 +110,7 @@
 			<dependency>
 				<groupId>org.controlsfx</groupId>
 				<artifactId>controlsfx</artifactId>
-				<version>8.40.11</version>
+				<version>11.1.1</version>
 			</dependency>
 			<dependency>
 				<groupId>eu.hansolo</groupId>

@@ -2,6 +2,7 @@ package org.dynami.ui;
 
 import java.io.File;
 
+
 import org.controlsfx.control.action.ActionMap;
 import org.controlsfx.control.action.ActionProxy;
 import org.dynami.runtime.config.StrategySettings;
@@ -23,6 +24,11 @@ public class DynamiActions {
 	
 	@ActionProxy(id="open", text="Open", accelerator="ctrl+o")
 	public void open(ActionEvent e){
+		if(!Strategies.Register.checkStrategiesDirectory()){
+			
+			Execution.Manager.msg().async(Topics.INTERNAL_ERRORS.topic, "Before executing any strategy, check if the strategy directory really exists");
+			return;
+		}
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select *.dynami file");
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Dynami file", "*.dynami"));

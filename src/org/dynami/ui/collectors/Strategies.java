@@ -39,6 +39,11 @@ public enum Strategies {
 //	private final ObservableValue<StrategyComponents> selected = new ObservableValue<>(null);
 	private final SimpleObjectProperty<StrategyComponents> selected = new SimpleObjectProperty<>();
 
+	public boolean checkStrategiesDirectory(){
+		final File dir = new File(strategyDir);
+		return dir.exists();
+	}
+
 	public void scanStrategyDirectory(){
 		File dir = new File(strategyDir);
 		File[] _strategies = dir.listFiles(new FileFilter() {
