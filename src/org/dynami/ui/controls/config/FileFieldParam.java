@@ -29,7 +29,7 @@ public class FileFieldParam extends FieldParam {
 		final File f = _prop.get();
 
 		text.setEditable(false);
-		if(f.exists()){
+		if(f != null && f.exists()){
 			text.setText(f.getAbsolutePath());
 		}
 		button.setOnAction((event)->{

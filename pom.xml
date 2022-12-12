@@ -5,6 +5,7 @@
 	<version>1.0.0</version>
 	<name>Dynami-UI</name>
 	<description>Dynami project user interface programm</description>
+	
 	<repositories>
 		<repository>
 			<id>dynami-ui-in-project</id>
@@ -27,8 +28,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.17</source>
+					<target>1.17</target>
 				</configuration>
 			</plugin>
 			<plugin>
