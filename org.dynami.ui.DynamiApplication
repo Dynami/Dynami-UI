@@ -14,7 +14,7 @@
             <entry key="traces_max-rows" value="50"/>
             <entry key="traces_color_debug" value="0xd3d3d3ff"/>
             <entry key="time-chart_max-sample-size" value="100"/>
-            <entry key="basic_strategies-directory" value="../Dynami-Sample-Strategy/target"/>
+            <entry key="basic_strategies-directory" value="/Users/a.atriagoverno.it/java-projects/Dynami-Sample-Strategy/target"/>
             <entry key="traces_color_info" value="0x87cefaff"/>
             <entry key="traces_color_warning" value="0xffa500ff"/>
           </map>
